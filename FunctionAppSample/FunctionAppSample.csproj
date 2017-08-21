@@ -2,8 +2,16 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\debug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>    
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.2" />    
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />    
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Line.Messaging\Line.Messaging.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

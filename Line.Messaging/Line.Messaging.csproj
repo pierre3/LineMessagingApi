@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <Authors>pierre3</Authors>
+    <Company></Company>
+    <Product>Line Messaging API</Product>
+    <Description>Line Messaging API for .Net</Description>
+    <Version>0.1.0</Version>
+    <Copyright>© 2017 pierre3</Copyright>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+</Project>
