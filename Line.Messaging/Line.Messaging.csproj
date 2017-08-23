@@ -6,11 +6,15 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>Line Messaging API for .Net</Description>
-    <Version>0.1.0</Version>
+    <Version>0.1.0-alpha</Version>
     <Copyright>© 2017 pierre3</Copyright>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageTags />
+    <PackageTags>Line Messaging API;line;bot</PackageTags>
+    <PackageProjectUrl>https://github.com/pierre3/LineMessagingApi/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pierre3/LineMessagingApi/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Alpha Version Release (Work in progress)</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -74,19 +74,19 @@ namespace Line.Messaging
             return _client.GetByteArrayAsync($"https://api.line.me/v2/bot/message/{messageId}/content");
         }
 
-        public async Task<UserProfile> GetGroupMemberProfile(string groupId, string userId)
+        public async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
         {
             var response = await _client.GetStringAsync($"https://api.line.me/v2/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(response);
         }
 
-        public async Task<UserProfile> GetRoomMemberProfile(string roomId, string userId)
+        public async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
         {
             var response = await _client.GetStringAsync($"https://api.line.me/v2/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(response);
         }
 
-        public async Task<GroupMemberIds> GetGroupMemberIds(string groupId, string continuationToken = null)
+        public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken = null)
         {
             var requestUrl = $"https://api.line.me/v2/bot/group/{groupId}/members/ids";
             if (continuationToken != null)
@@ -98,7 +98,7 @@ namespace Line.Messaging
             return JsonConvert.DeserializeObject<GroupMemberIds>(response);
         }
 
-        public async Task<GroupMemberIds> GetRoomMemberIds(string roomId, string continuationToken = null)
+        public async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
         {
             var requestUrl = $"https://api.line.me/v2/bot/room/{roomId}/members/ids";
             if (continuationToken != null)
