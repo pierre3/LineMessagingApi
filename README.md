@@ -3,7 +3,7 @@
 This is a C# implementation of the [LINE Messaging API](https://developers.line.me/messaging-api/overview).
 ## LineMessagingApiClient Class
 
-HttpClient-based asynchronous method.
+HttpClient-based asynchronous methods.
 ```cs
 Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
 Task PushMessageAsync(string to, IList<ISendMessage> messages)
@@ -22,7 +22,7 @@ Task ReaveFromRoomAsync(string roomId)
 
 ## Sample project
 
-- Azure Function Http trigger function sample
+- Azure http trigger function sample
 https://github.com/pierre3/LineMessagingApi/tree/master/FunctionAppSample
 
 ```cs
@@ -45,7 +45,7 @@ namespace FunctionAppSample
         static LineMessagingClient lineMessagingClient;
         static HttpTriggerFunction()
         {
-            //Initialize the Line Messaging API Client
+            //Initialize a LINE Messaging API client
             var channelAccessToken = System.Configuration.ConfigurationManager.AppSettings["ChannelAccessToken"];
             lineMessagingClient = new LineMessagingClient(channelAccessToken);
             var sp = ServicePointManager.FindServicePoint(new Uri("https://api.line.me"));
@@ -64,7 +64,7 @@ namespace FunctionAppSample
             }
             catch (InvalidSignatureException e)
             {
-                //Signature Validation Failed.
+                //Signature validation failed.
                 return req.CreateResponse(HttpStatusCode.Forbidden, new { Message = e.Message });
             }
             
