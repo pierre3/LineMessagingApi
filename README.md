@@ -1,6 +1,24 @@
 # LINE Messaging API
 
 This is a C# implementation of the [LINE Messaging API](https://developers.line.me/messaging-api/overview).
+## LineMessagingApiClient Class
+
+HttpClient-based asynchronous method.
+```cs
+Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
+Task PushMessageAsync(string to, IList<ISendMessage> messages)
+Task MultiCastMessageAsync(IList<string> to, IList<ISendMessage> messages)
+Task<UserProfile> GetUserProfileAsync(string userId)
+Task<Stream> GetContentStreamAsync(string messageId)
+Task<byte[]> GetContentBytesAsync(string messageId)
+Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
+Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
+Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken = null)
+Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
+Task ReaveFromGroupAsync(string groupId)
+Task ReaveFromRoomAsync(string roomId)
+```
+
 
 ## Sample project
 
