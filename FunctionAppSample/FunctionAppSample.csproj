@@ -6,7 +6,7 @@
     <OutputPath>bin\debug\</OutputPath>
   </PropertyGroup>
   <ItemGroup>    
-    <PackageReference Include="Line.Messaging" Version="0.1.0-alpha" />    
+    <PackageReference Include="Line.Messaging" Version="0.2.0-alpha" />    
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.2" />    
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />    
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.0" />
