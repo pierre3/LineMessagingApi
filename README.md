@@ -4,7 +4,7 @@ This is a C# implementation of the [LINE Messaging API](https://developers.line.
 
 ## Getting Started
 - .Net Standard Class Library   
-[NuGet Gallery | Line.Messaging 0.1.0-alpha](https://www.nuget.org/packages/Line.Messaging/0.1.0-alpha)
+[NuGet Gallery | Line.Messaging 0.2.0-alpha](https://www.nuget.org/packages/Line.Messaging/0.2.0-alpha)
 - Azure Function Project Template for Visual Studio 2017  
 [Line Bot Function - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=pierre3.LineBotFunction)
 
