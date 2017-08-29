@@ -1,6 +1,13 @@
 # LINE Messaging API
 
 This is a C# implementation of the [LINE Messaging API](https://developers.line.me/messaging-api/overview).
+
+## Getting Started
+- .Net Standard Class Library   
+[NuGet Gallery | Line.Messaging 0.1.0-alpha](https://www.nuget.org/packages/Line.Messaging/0.1.0-alpha)
+- Azure Function Project Template for Visual Studio 2017  
+[Line Bot Function - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=pierre3.LineBotFunction)
+
 ## LineMessagingApiClient Class
 
 HttpClient-based asynchronous methods.
@@ -20,10 +27,7 @@ Task ReaveFromRoomAsync(string roomId)
 ```
 
 
-## Sample project
-
-- Azure http trigger function sample
-https://github.com/pierre3/LineMessagingApi/tree/master/FunctionAppSample
+## Examples of use in Azure functions 
 
 ```cs
 using Line.Messaging;
