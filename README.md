@@ -27,7 +27,9 @@ Task ReaveFromRoomAsync(string roomId)
 ```
 
 
-## Examples of use in Azure functions 
+## Examples 
+
+Examples of use in Azure functions. 
 
 ```cs
 using Line.Messaging;
