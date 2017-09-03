@@ -4,6 +4,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -38,6 +39,11 @@ namespace Line.Messaging
             response.EnsureSuccessStatusCode();
         }
 
+        public Task ReplyMessageAsync(string replyToken, params string[] messages)
+        {
+            return ReplyMessageAsync(replyToken, messages.Select(msg => new TextMessage(msg)).ToArray());
+        }
+
         public async Task PushMessageAsync(string to, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/push");
@@ -46,6 +52,11 @@ namespace Line.Messaging
 
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
+        }
+
+        public Task PushMessageAsync(string to, params string[] messages)
+        {
+            return PushMessageAsync(to, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
 
         public async Task MultiCastMessageAsync(IList<string> to, IList<ISendMessage> messages)
@@ -57,6 +68,10 @@ namespace Line.Messaging
             response.EnsureSuccessStatusCode();
         }
 
+        public Task MultiCastMessageAsync(IList<string> to, params string[] messages)
+        {
+            return MultiCastMessageAsync(to, messages.Select(msg => new TextMessage(msg)).ToArray());
+        }
 
         public async Task<UserProfile> GetUserProfileAsync(string userId)
         {
