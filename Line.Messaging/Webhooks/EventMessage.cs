@@ -19,7 +19,7 @@ namespace Line.Messaging.Webhooks
         {
             var message = dynamicObject?.message;
             if (message == null) { return null; }
-            if (!Enum.TryParse<EventMessageType>((string)message.type, true, out EventMessageType messageType))
+            if (!Enum.TryParse((string)message.type, true, out EventMessageType messageType))
             {
                 return null;
             }

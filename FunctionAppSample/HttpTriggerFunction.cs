@@ -5,16 +5,18 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FunctionAppSample
 {
+
+
     public static class HttpTriggerFunction
     {
         static LineMessagingClient lineMessagingClient;
+
         static HttpTriggerFunction()
         {
             lineMessagingClient = new LineMessagingClient(System.Configuration.ConfigurationManager.AppSettings["ChannelAccessToken"]);
@@ -35,26 +37,19 @@ namespace FunctionAppSample
                 return req.CreateResponse(HttpStatusCode.Forbidden, new { Message = e.Message });
             }
 
-            foreach (var ev in events.OfType<MessageEvent>())
+            try
             {
-                switch (ev.Message.Type)
-                {
-                    case EventMessageType.Text:
-                        var textMessage = (TextEventMessage)ev.Message;
-                        await lineMessagingClient.ReplyMessageAsync(ev.ReplyToken, new[] { new TextMessage(textMessage.Text) });
-                        break;
-                    case EventMessageType.Image:
-                    case EventMessageType.Audio:
-                    case EventMessageType.Video:
-                    case EventMessageType.File:
-                    case EventMessageType.Location:
-                    case EventMessageType.Sticker:
-                        break;
-                }
+                var tableStorage = await LineBotTableStorage.CreateAsync(System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"]);
+                var dispatcher = new MyWebhookEventDispatcher(lineMessagingClient, tableStorage, log);
+                await dispatcher.DispatchAsync(events);
+            }
+            catch (Exception e)
+            {
+                log.Error(e.ToString());
             }
 
             return req.CreateResponse(HttpStatusCode.OK);
         }
-
     }
+    
 }

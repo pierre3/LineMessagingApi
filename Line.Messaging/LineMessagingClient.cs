@@ -101,8 +101,45 @@ namespace Line.Messaging
             return JsonConvert.DeserializeObject<UserProfile>(response);
         }
 
-        public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken = null)
+        public async Task<IList<UserProfile>> GetGroupMemberProfilesAsync(string groupId)
         {
+            var result = new List<UserProfile>();
+            string continuationToken = null;
+            do
+            {
+                var ids = await GetGroupMemberIdsAsync(groupId, continuationToken);
+
+                var tasks = ids.MemberIds.Select(async userId => await GetGroupMemberProfileAsync(groupId, userId));
+                var profiles = await Task.WhenAll(tasks.ToArray());
+
+                result.AddRange(profiles);
+                continuationToken = ids.Next;
+            }
+            while (continuationToken != null);
+            return result;
+        }
+
+        public async Task<IList<UserProfile>> GetRoomMemberProfilesAsync(string roomId)
+        {
+            var result = new List<UserProfile>();
+            string continuationToken = null;
+            do
+            {
+                var ids = await GetGroupMemberIdsAsync(roomId, continuationToken);
+
+                var tasks = ids.MemberIds.Select(async userId => await GetGroupMemberProfileAsync(roomId, userId));
+                var profiles = await Task.WhenAll(tasks.ToArray());
+
+                result.AddRange(profiles);
+                continuationToken = ids.Next;
+            }
+            while (continuationToken != null);
+            return result;
+        }
+
+        public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
+        {
+
             var requestUrl = $"https://api.line.me/v2/bot/group/{groupId}/members/ids";
             if (continuationToken != null)
             {
@@ -130,6 +167,7 @@ namespace Line.Messaging
             var response = await _client.PostAsync($"https://api.line.me/v2/bot/group/{groupId}/leave", null).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
+
         public async Task ReaveFromRoomAsync(string roomId)
         {
             var response = await _client.PostAsync($"https://api.line.me/v2/bot/room/{roomId}/leave", null).ConfigureAwait(false);
