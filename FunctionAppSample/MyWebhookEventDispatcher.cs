@@ -21,11 +21,6 @@ namespace FunctionAppSample
             Log = log;
         }
 
-        private Task EchoAsync(string replyToken, string userMessage)
-        {
-            return MessagingClient.ReplyMessageAsync(replyToken, userMessage);
-        }
-
         protected override async Task OnMessageAsync(MessageEvent ev)
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, EntryId:{ev.Source.EntryId}, MessageType:{ev.Message.Type}");
@@ -37,8 +32,7 @@ namespace FunctionAppSample
                     var textMessage = (TextEventMessage)ev.Message;
                     if (entry?.Location != null)
                     {
-                        await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"https://www.google.co.jp/maps/search/{textMessage.Text}/{entry.Location}");
-                        await TableStorage.UpdateEntryAsync(new LineEntry(ev.Source.Type.ToString(), ev.Source.EntryId) { Location = null });
+                        await MapSearchAsync(ev, entry, textMessage.Text);
                         break;
                     }
                     await EchoAsync(ev.ReplyToken, textMessage.Text);
@@ -51,12 +45,7 @@ namespace FunctionAppSample
 
                 case EventMessageType.Location:
                     var locMessage = (LocationEventMessage)ev.Message;
-                    await TableStorage.UpdateEntryAsync(
-                        new LineEntry(ev.Source.Type.ToString(), ev.Source.EntryId)
-                        {
-                            Location = $"@{locMessage.Latitude},{locMessage.Longitude}"
-                        });
-                    await MessagingClient.ReplyMessageAsync(ev.ReplyToken, "Input a search word.");
+                    await SaveLocationAsync(ev, locMessage);
                     break;
 
                 case EventMessageType.Sticker:
@@ -107,6 +96,28 @@ namespace FunctionAppSample
         {
             throw new NotImplementedException();
         }
+
+        private Task EchoAsync(string replyToken, string userMessage)
+        {
+            return MessagingClient.ReplyMessageAsync(replyToken, userMessage);
+        }
+
+        private async Task MapSearchAsync(MessageEvent ev, LineEntry entry, string searchWord)
+        {
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"https://www.google.co.jp/maps/search/{searchWord}/{entry.Location}");
+            await TableStorage.UpdateEntryAsync(new LineEntry(ev.Source.Type.ToString(), ev.Source.EntryId) { Location = null });
+        }
+
+        private async Task SaveLocationAsync(MessageEvent ev, LocationEventMessage locMessage)
+        {
+            await TableStorage.UpdateEntryAsync(
+                new LineEntry(ev.Source.Type.ToString(), ev.Source.EntryId)
+                {
+                    Location = $"@{locMessage.Latitude},{locMessage.Longitude}"
+                });
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, "Input a search word.");
+        }
+
     }
 
 
