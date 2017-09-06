@@ -143,7 +143,7 @@ namespace Line.MessagingTest
             Assert.AreEqual(messageEvent.Type.ToString().ToLower(), message_type);
             Assert.AreEqual(messageEvent.Timestamp, message_timestamp);
             Assert.AreEqual(messageEvent.Source.Type.ToString().ToLower(), message_source_type);
-            Assert.AreEqual(messageEvent.Source.UserId, message_source_userId);
+            Assert.AreEqual(messageEvent.Source.EntryId, message_source_userId);
             Assert.AreEqual(messageEvent.Message.Id, message_message_id);
             Assert.AreEqual(messageEvent.Message.Type.ToString().ToLower(), message_message_type);
             Assert.AreEqual(((TextEventMessage)(messageEvent.Message)).Text, message_message_text);
@@ -153,38 +153,38 @@ namespace Line.MessagingTest
             Assert.AreEqual(followEvent.Type.ToString().ToLower(), follow_type);
             Assert.AreEqual(followEvent.Timestamp, follow_timestamp);
             Assert.AreEqual(followEvent.Source.Type.ToString().ToLower(), follow_source_type);
-            Assert.AreEqual(followEvent.Source.UserId, follow_source_userId);
+            Assert.AreEqual(followEvent.Source.EntryId, follow_source_userId);
 
             var unfollowEvent = (UnfollowEvent)events[2];
             Assert.AreEqual(unfollowEvent.Type.ToString().ToLower(), unfollow_type);
             Assert.AreEqual(unfollowEvent.Timestamp, unfollow_timestamp);
             Assert.AreEqual(unfollowEvent.Source.Type.ToString().ToLower(), unfollow_source_type);
-            Assert.AreEqual(unfollowEvent.Source.UserId, unfollow_source_userId);
+            Assert.AreEqual(unfollowEvent.Source.EntryId, unfollow_source_userId);
 
             var joinEvent = (JoinEvent)events[3];
             Assert.AreEqual(joinEvent.Type.ToString().ToLower(), join_type);
             Assert.AreEqual(joinEvent.Timestamp, join_timestamp);
             Assert.AreEqual(joinEvent.Source.Type.ToString().ToLower(), join_source_type);
-            Assert.AreEqual(((SourceGroup)joinEvent.Source).GroupId, join_source_groupId);
+            Assert.AreEqual((joinEvent.Source).EntryId, join_source_groupId);
 
             var leaveEvent = (LeaveEvent)events[4];
             Assert.AreEqual(leaveEvent.Type.ToString().ToLower(), leave_type);
             Assert.AreEqual(leaveEvent.Timestamp, leave_timestamp);
             Assert.AreEqual(leaveEvent.Source.Type.ToString().ToLower(), leave_source_type);
-            Assert.AreEqual(((SourceGroup)leaveEvent.Source).GroupId, leave_source_groupId);
+            Assert.AreEqual((leaveEvent.Source).EntryId, leave_source_groupId);
 
             var bostbackEvent = (PostbackEvent)events[5];
             Assert.AreEqual(bostbackEvent.Type.ToString().ToLower(), postback_type);
             Assert.AreEqual(bostbackEvent.Timestamp, postback_timestamp);
             Assert.AreEqual(bostbackEvent.Source.Type.ToString().ToLower(), postback_source_type);
-            Assert.AreEqual(bostbackEvent.Source.UserId, postback_source_userId);
+            Assert.AreEqual(bostbackEvent.Source.EntryId, postback_source_userId);
             Assert.AreEqual(bostbackEvent.Postback.Data, postback_postback_data);
 
             var beaconEvent = (BeaconEvent)events[6];
             Assert.AreEqual(beaconEvent.Type.ToString().ToLower(), beacon_type);
             Assert.AreEqual(beaconEvent.Timestamp, beacon_timestamp);
             Assert.AreEqual(beaconEvent.Source.Type.ToString().ToLower(), beacon_source_type);
-            Assert.AreEqual(beaconEvent.Source.UserId, beacon_source_userId);
+            Assert.AreEqual(beaconEvent.Source.EntryId, beacon_source_userId);
             Assert.AreEqual(beaconEvent.Beacon.Hwid, beacon_beacon_hwid);
             Assert.AreEqual(beaconEvent.Beacon.Type.ToString().ToLower(), beacon_beacon_type);
             Assert.AreEqual(beaconEvent.Beacon.Dm, beacon_beacon_dm);

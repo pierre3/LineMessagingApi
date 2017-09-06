@@ -2,15 +2,18 @@
 
 namespace Line.Messaging.Webhooks
 {
-    public abstract class WebhookEventSource
+    public class WebhookEventSource
     {
         public EventSourceType Type { get; }
 
+        public string EntryId { get; }
+
         public string UserId { get; }
 
-        public WebhookEventSource(EventSourceType type, string userId)
+        public WebhookEventSource(EventSourceType type, string entryId, string userId)
         {
             Type = type;
+            EntryId = entryId;
             UserId = userId;
         }
 
@@ -22,44 +25,23 @@ namespace Line.Messaging.Webhooks
             {
                 return null;
             }
+            var entryId = "";
             switch (sourceType)
             {
                 case EventSourceType.User:
-                    return new SourceUser(EventSourceType.User, (string)source.userId);
+                    entryId = (string)source.userId;
+                    break;
                 case EventSourceType.Group:
-                    return new SourceGroup(EventSourceType.Group, (string)source.groupId, (string)source.userId);
+                    entryId = (string)source.groupId;
+                    break;
                 case EventSourceType.Room:
-                    return new SourceRoom(EventSourceType.Room, (string)source.roomId, (string)source.userId);
+                    entryId = (string)source.roomId;
+                    break;
                 default:
                     return null;
             }
+            return new WebhookEventSource(sourceType, entryId, (string)source.userId);
         }
     }
 
-    public class SourceUser : WebhookEventSource
-    {
-        public SourceUser(EventSourceType type, string userId) : base(type, userId)
-        {
-        }
-    }
-
-    public class SourceGroup : WebhookEventSource
-    {
-        public string GroupId { get; }
-
-        public SourceGroup(EventSourceType type, string groupId, string userId) : base(type, userId)
-        {
-            GroupId = groupId;
-        }
-    }
-
-    public class SourceRoom : WebhookEventSource
-    {
-        public string RoomId { get; }
-
-        public SourceRoom(EventSourceType type, string roomId, string userId) : base(type, userId)
-        {
-            RoomId = roomId;
-        }
-    }
 }
