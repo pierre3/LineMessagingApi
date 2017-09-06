@@ -6,6 +6,7 @@ namespace FunctionAppSample
 {
     class LineEntry : TableEntity
     {
+        public string Location { get; set; }
         public LineEntry()
         { }
 
@@ -46,6 +47,11 @@ namespace FunctionAppSample
 
             var newItem = new LineEntry(entryType, entryId);
             await _entries.ExecuteAsync(TableOperation.Insert(newItem));
+        }
+
+        public async Task UpdateEntryAsync(LineEntry entry)
+        {
+            await _entries.ExecuteAsync(TableOperation.InsertOrReplace(entry));
         }
 
         public async Task<LineEntry> FindEntryAsync(string entryType, string entryId)

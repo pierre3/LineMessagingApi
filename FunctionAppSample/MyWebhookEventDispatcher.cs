@@ -30,24 +30,35 @@ namespace FunctionAppSample
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, EntryId:{ev.Source.EntryId}, MessageType:{ev.Message.Type}");
 
+            var entry = await TableStorage.FindEntryAsync(ev.Source.Type.ToString(), ev.Source.EntryId);
             switch (ev.Message.Type)
             {
                 case EventMessageType.Text:
                     var textMessage = (TextEventMessage)ev.Message;
-
-
+                    if (entry?.Location != null)
+                    {
+                        await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"https://www.google.co.jp/maps/search/{textMessage.Text}/{entry.Location}");
+                        await TableStorage.UpdateEntryAsync(new LineEntry(ev.Source.Type.ToString(), ev.Source.EntryId) { Location = null });
+                        break;
+                    }
                     await EchoAsync(ev.ReplyToken, textMessage.Text);
-
                     break;
                 case EventMessageType.Image:
                 case EventMessageType.Audio:
                 case EventMessageType.Video:
                 case EventMessageType.File:
                     break;
+
                 case EventMessageType.Location:
                     var locMessage = (LocationEventMessage)ev.Message;
-                    await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"https://www.google.co.jp/maps/@{locMessage.Latitude}.{locMessage.Longitude}");
+                    await TableStorage.UpdateEntryAsync(
+                        new LineEntry(ev.Source.Type.ToString(), ev.Source.EntryId)
+                        {
+                            Location = $"@{locMessage.Latitude},{locMessage.Longitude}"
+                        });
+                    await MessagingClient.ReplyMessageAsync(ev.ReplyToken, "Input a search word.");
                     break;
+
                 case EventMessageType.Sticker:
                     break;
             }
