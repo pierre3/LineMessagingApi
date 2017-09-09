@@ -30,7 +30,8 @@ namespace FunctionAppSample
             IEnumerable<WebhookEvent> events;
             try
             {
-                events = await req.GetWebhookEventsAsync(System.Configuration.ConfigurationManager.AppSettings["ChannelSecret"]);
+                var channelSecret = System.Configuration.ConfigurationManager.AppSettings["ChannelSecret"];
+                events = await req.GetWebhookEventsAsync(channelSecret);
             }
             catch (InvalidSignatureException e)
             {
@@ -39,8 +40,10 @@ namespace FunctionAppSample
 
             try
             {
-                var tableStorage = await LineBotTableStorage.CreateAsync(System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"]);
-                var dispatcher = new MyWebhookEventDispatcher(lineMessagingClient, tableStorage, log);
+                var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
+                var tableStorage = await LineBotTableStorage.CreateAsync(connectionString);
+                var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
+                var dispatcher = new LineBotEventDispatcher(lineMessagingClient, tableStorage, blobStorage, log);
                 await dispatcher.DispatchAsync(events);
             }
             catch (Exception e)
@@ -51,5 +54,5 @@ namespace FunctionAppSample
             return req.CreateResponse(HttpStatusCode.OK);
         }
     }
-    
+
 }

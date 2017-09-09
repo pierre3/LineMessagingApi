@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -79,14 +78,20 @@ namespace Line.Messaging
             return JsonConvert.DeserializeObject<UserProfile>(response);
         }
 
-        public Task<Stream> GetContentStreamAsync(string messageId)
+        public async Task<ContentStream> GetContentStreamAsync(string messageId)
         {
-            return _client.GetStreamAsync($"https://api.line.me/v2/bot/message/{messageId}/content");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
+            var response = await _client.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return new ContentStream(await response.Content.ReadAsStreamAsync(), response.Content.Headers);
         }
 
-        public Task<byte[]> GetContentBytesAsync(string messageId)
+        public async Task<byte[]> GetContentBytesAsync(string messageId)
         {
-            return _client.GetByteArrayAsync($"https://api.line.me/v2/bot/message/{messageId}/content");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
+            var response = await _client.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsByteArrayAsync();
         }
 
         public async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)

@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 namespace FunctionAppSample
 {
-    class LineEntry : TableEntity
+    class LineBotEntry : TableEntity
     {
         public string Location { get; set; }
-        public LineEntry()
+        public LineBotEntry()
         { }
 
-        public LineEntry(string entryType, string entryId)
+        public LineBotEntry(string entryType, string entryId)
         {
             PartitionKey = entryType;
             RowKey = entryId;
@@ -45,21 +45,21 @@ namespace FunctionAppSample
         {
             if ((await FindEntryAsync(entryType, entryId)) != null) { return; }
 
-            var newItem = new LineEntry(entryType, entryId);
+            var newItem = new LineBotEntry(entryType, entryId);
             await _entries.ExecuteAsync(TableOperation.Insert(newItem));
         }
 
-        public async Task UpdateEntryAsync(LineEntry entry)
+        public async Task UpdateEntryAsync(LineBotEntry entry)
         {
             await _entries.ExecuteAsync(TableOperation.InsertOrReplace(entry));
         }
 
-        public async Task<LineEntry> FindEntryAsync(string entryType, string entryId)
+        public async Task<LineBotEntry> FindEntryAsync(string entryType, string entryId)
         {
-            var ope = TableOperation.Retrieve<LineEntry>(entryType, entryId);
+            var ope = TableOperation.Retrieve<LineBotEntry>(entryType, entryId);
             var retrieveResult = await _entries.ExecuteAsync(ope);
             if (retrieveResult.Result == null) { return null; }
-            return (LineEntry)(retrieveResult.Result);
+            return (LineBotEntry)(retrieveResult.Result);
         }
 
         public async Task DeleteEntryAsync(string entryType, string entryId)

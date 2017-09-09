@@ -6,14 +6,14 @@ namespace Line.Messaging.Webhooks
     {
         public EventSourceType Type { get; }
 
-        public string EntryId { get; }
+        public string Id { get; }
 
         public string UserId { get; }
 
-        public WebhookEventSource(EventSourceType type, string entryId, string userId)
+        public WebhookEventSource(EventSourceType type, string sourceId, string userId)
         {
             Type = type;
-            EntryId = entryId;
+            Id = sourceId;
             UserId = userId;
         }
 
@@ -25,22 +25,22 @@ namespace Line.Messaging.Webhooks
             {
                 return null;
             }
-            var entryId = "";
+            var sourceId = "";
             switch (sourceType)
             {
                 case EventSourceType.User:
-                    entryId = (string)source.userId;
+                    sourceId = (string)source.userId;
                     break;
                 case EventSourceType.Group:
-                    entryId = (string)source.groupId;
+                    sourceId = (string)source.groupId;
                     break;
                 case EventSourceType.Room:
-                    entryId = (string)source.roomId;
+                    sourceId = (string)source.roomId;
                     break;
                 default:
                     return null;
             }
-            return new WebhookEventSource(sourceType, entryId, (string)source.userId);
+            return new WebhookEventSource(sourceType, sourceId, (string)source.userId);
         }
     }
 
