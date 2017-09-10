@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Line.Messaging.Webhooks
 {
-    public abstract class WebhookEventDispatcher
+    public abstract class WebhookApplication
     {
-        public async Task DispatchAsync(IEnumerable<WebhookEvent> events)
+        public async Task RunAsync(IEnumerable<WebhookEvent> events)
         {
             foreach (var ev in events)
             {

@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace FunctionAppSample
 {
 
-    class LineBotEventDispatcher : WebhookEventDispatcher
+    class LineBotApp : WebhookApplication
     {
         private LineMessagingClient MessagingClient { get; }
         private LineBotTableStorage TableStorage { get; }
         private BlobStorage BlobStorage { get; }
         private TraceWriter Log { get; }
 
-        public LineBotEventDispatcher(LineMessagingClient lineMessagingClient, LineBotTableStorage tableStorage, BlobStorage blobStorage, TraceWriter log)
+        public LineBotApp(LineMessagingClient lineMessagingClient, LineBotTableStorage tableStorage, BlobStorage blobStorage, TraceWriter log)
         {
             MessagingClient = lineMessagingClient;
             TableStorage = tableStorage;

@@ -43,8 +43,8 @@ namespace FunctionAppSample
                 var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
                 var tableStorage = await LineBotTableStorage.CreateAsync(connectionString);
                 var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-                var dispatcher = new LineBotEventDispatcher(lineMessagingClient, tableStorage, blobStorage, log);
-                await dispatcher.DispatchAsync(events);
+                var app = new LineBotApp(lineMessagingClient, tableStorage, blobStorage, log);
+                await app.RunAsync(events);
             }
             catch (Exception e)
             {
