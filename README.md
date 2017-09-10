@@ -4,7 +4,7 @@ This is a C# implementation of the [LINE Messaging API](https://developers.line.
 
 ## Getting Started
 - .Net Standard Class Library   
-[NuGet Gallery | Line.Messaging 0.3.0-alpha](https://www.nuget.org/packages/Line.Messaging/0.3.0-alpha)
+[NuGet Gallery | Line.Messaging 0.3.1-alpha](https://www.nuget.org/packages/Line.Messaging/0.3.1-alpha)
 - Azure Function Project Template for Visual Studio 2017  
 [Line Bot Function - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=pierre3.LineBotFunction)
 
@@ -37,7 +37,7 @@ Task ReaveFromRoomAsync(string roomId)
 Examples of use in Azure functions. 
 - [FunctionAppSample](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample)
 
-### Parse and Dispatch Webhook-Events
+### Parse and process Webhook-Events
 
 see [FunctionAppSample/HttpTriggerFunction.sc](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/HttpTriggerFunction.cs)
 
@@ -89,9 +89,9 @@ namespace FunctionAppSample
         var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
         var tableStorage = await LineBotTableStorage.CreateAsync(connectionString);
         var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-        
-        var dispatcher = new LineBotEventDispatcher(lineMessagingClient, tableStorage, blobStorage, log);
-        await dispatcher.DispatchAsync(events);
+        //Process the webhook-events
+        var app = new LineBotApp(lineMessagingClient, tableStorage, blobStorage, log);
+        await app.RunAsync(events);
       }
       catch (Exception e)
       {
@@ -104,12 +104,12 @@ namespace FunctionAppSample
 
 }
 ```
-### Dispatch Webhook-Events using the class that inherited the WebhookEventDespatcher class
+### Process Webhook-events using the class that inherited the WebhookApplication class
         
-[Line.Messaging/Webhooks/WebhookEventDispatcher.cs](https://github.com/pierre3/LineMessagingApi/blob/master/Line.Messaging/Webhooks/WebhookEventDispatcher.cs)   
+[Line.Messaging/Webhooks/WebhookApplication.cs](https://github.com/pierre3/LineMessagingApi/blob/master/Line.Messaging/Webhooks/WebhookApplication.cs)   
 
 ```cs
-public abstract class WebhookEventDispatcher
+public abstract class WebhookApplication
 {
   protected virtual Task OnMessageAsync(MessageEvent ev);
   protected virtual Task OnJoinAsync(JoinEvent ev);
@@ -123,12 +123,12 @@ public abstract class WebhookEventDispatcher
 
 
 ```cs
-class MyWebhookEventDispatcher : WebhookEventDispatcher
+class LineBotApp : WebhookApplication
 {
   private LineMessagingClient MessagingClient { get; }
   private TraceWriter Log { get; }
   
-  public MyWebhookEventDispatcher(LineMessagingClient lineMessagingClient,TraceWriter log)
+  public WebhookApplication(LineMessagingClient lineMessagingClient,TraceWriter log)
   {
       MessagingClient = lineMessagingClient;
       Log = log;
@@ -187,4 +187,4 @@ class MyWebhookEventDispatcher : WebhookEventDispatcher
 }
 ```
 
-see also [FunctionAppSample/LineBotEventDispatcher.cs](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/LineBotEventDispatcher.cs)
+see also [FunctionAppSample/LineBotApp.cs](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/LineBotApp.cs)
