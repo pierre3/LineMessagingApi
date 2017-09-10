@@ -104,11 +104,10 @@ namespace FunctionAppSample
 
 }
 ```
-### Dispatch Webhook-Events using a class that inherited a WebhookEventDespatcher class
+### Dispatch Webhook-Events using the class that inherited the WebhookEventDespatcher class
         
 [Line.Messaging/Webhooks/WebhookEventDispatcher.cs](https://github.com/pierre3/LineMessagingApi/blob/master/Line.Messaging/Webhooks/WebhookEventDispatcher.cs)   
 
-see also [FunctionAppSample/LineBotEventDispatcher.cs](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/LineBotEventDispatcher.cs)
 ```cs
 public abstract class WebhookEventDispatcher
 {
@@ -121,6 +120,7 @@ public abstract class WebhookEventDispatcher
   protected virtual Task OnPostbackAsync(PostbackEvent ev);
 }
 ```
+
 
 ```cs
 class MyWebhookEventDispatcher : WebhookEventDispatcher
@@ -139,50 +139,52 @@ class MyWebhookEventDispatcher : WebhookEventDispatcher
     Log.Info($"SourceType:{ev.Source.Type},SourceId:{ev.Source.Id}");
     switch (ev.Message.Type)
     {
-        case EventMessageType.Text:
-            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, ((TextEventMessage)ev.Message).Text);
-            break;
+      case EventMessageType.Text:
+        await MessagingClient.ReplyMessageAsync(ev.ReplyToken, ((TextEventMessage)ev.Message).Text);
+        break;
 
-        case EventMessageType.Image:
-        case EventMessageType.Audio:
-        case EventMessageType.Video:
-        case EventMessageType.File:
-        case EventMessageType.Location:
-        case EventMessageType.Sticker:
-            break;
+      case EventMessageType.Image:
+      case EventMessageType.Audio:
+      case EventMessageType.Video:
+      case EventMessageType.File:
+      case EventMessageType.Location:
+      case EventMessageType.Sticker:
+        break;
 
     }
   }
 
   protected override async Task OnFollowAsync(FollowEvent ev)
   {
-	  throw new NotImplementedException();
+      throw new NotImplementedException();
   }
 
   protected override async Task OnUnfollowAsync(UnfollowEvent ev)
   {
-	  throw new NotImplementedException();
+      throw new NotImplementedException();
   }
 
   protected override async Task OnJoinAsync(JoinEvent ev)
   {
-	  throw new NotImplementedException();
+    throw new NotImplementedException();
   }
 
   protected override async Task OnLeaveAsync(LeaveEvent ev)
   {
-	  throw new NotImplementedException();
+    throw new NotImplementedException();
   }
 
   protected override Task OnBeaconAsync(BeaconEvent ev)
   {
-	  throw new NotImplementedException();
+    throw new NotImplementedException();
   }
 
   protected override async Task OnPostbackAsync(PostbackEvent ev)
   {
-	  throw new NotImplementedException();
+    throw new NotImplementedException();
   }
 
 }
 ```
+
+see also [FunctionAppSample/LineBotEventDispatcher.cs](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/LineBotEventDispatcher.cs)
