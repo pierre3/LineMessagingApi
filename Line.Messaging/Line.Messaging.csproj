@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>Line Messaging API for .Net</Description>
-    <Version>0.3.1-alpha</Version>
+    <Version>0.4.0-alpha</Version>
     <Copyright>© 2017 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,16 +15,10 @@
     <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/pierre3/LineMessagingApi/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>- Simplified webhookEventSource classes. (Subclasses SourceUser,SourceGroup and SourceRoom are Abolished.)
-- Add Methods to LineMessagingClient class
-  - Task&lt;IList&lt;UserProfile&gt;&gt; GetGroupMemberProfilesAsync(string groupId)
-  - Task&lt;IList&lt;UserProfile&gt;&gt; GetRoomMemberProfilesAsync(string roomId)
-  - Task ReplyMessageAsync(string replyToken, params string[] messages)
-  - Task PushMessageAsync(string to, params string[] messages)
-  - Task MultiCastMessageAsync(IList&lt;string&gt; to, params string[] messages)
-- Add WebhookApplication class</PackageReleaseNotes>
-    <AssemblyVersion>0.3.1.0</AssemblyVersion>
-    <FileVersion>0.3.1.0</FileVersion>
+    <PackageReleaseNotes>- Fixed ImagemapActionType value in MessageImagemapAction
+- Renamed class from Line.Messaging.Size to Line.Messaging.ImagemapSize</PackageReleaseNotes>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <FileVersion>0.4.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
