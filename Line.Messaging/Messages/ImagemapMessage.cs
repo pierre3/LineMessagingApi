@@ -12,15 +12,15 @@ namespace Line.Messaging
 
         public string AltText { get; }
 
-        public Size BaseSize { get; }
+        public ImagemapSize BaseSize { get; }
 
         public IList<IImagemapAction> Actions { get; }
 
-        public ImagemapMessage(string baseUrl, string altText, Size baseSize, IList<IImagemapAction> actions)
+        public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions)
         {
             BaseUrl = baseUrl;
             AltText = altText;
-            BaseSize = BaseSize;
+            BaseSize = baseSize;
             Actions = actions;
         }
     }

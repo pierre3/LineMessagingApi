@@ -1,13 +1,13 @@
 ﻿namespace Line.Messaging
 {
 
-    public class Size
+    public class ImagemapSize
     {
         public int Width { get; }
 
         public int Height { get; }
 
-        public Size(int width, int height)
+        public ImagemapSize(int width, int height)
         {
             Width = width;
             Height = height;

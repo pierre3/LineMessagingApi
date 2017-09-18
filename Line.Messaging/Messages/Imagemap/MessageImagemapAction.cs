@@ -2,7 +2,7 @@
 {
     public class MessageImagemapAction : IImagemapAction
     {
-        public ImagemapActionType Type { get; } = ImagemapActionType.Uri;
+        public ImagemapActionType Type { get; } = ImagemapActionType.Message;
 
         public ImagemapArea Area { get; }
 
