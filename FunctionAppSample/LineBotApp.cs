@@ -197,6 +197,12 @@ namespace FunctionAppSample
             var imageStream = await MessagingClient.GetContentStreamAsync(messageId);
             var image = Image.FromStream(imageStream);
 
+            using (var g = Graphics.FromImage(image))
+            {
+                g.DrawLine(Pens.Red, image.Width / 2, 0, image.Width / 2, image.Height);
+                g.DrawLine(Pens.Red, 0, image.Height / 2, image.Width, image.Height / 2);
+            }
+
             var uri = await UploadImageAsync(1040);
             await UploadImageAsync(700);
             await UploadImageAsync(460);
@@ -219,7 +225,7 @@ namespace FunctionAppSample
 
             async Task<Uri> UploadImageAsync(int baseSize)
             {
-                var img = image.GetThumbnailImage(baseSize, image.Height * 1040 / image.Width, () => false, IntPtr.Zero);
+                var img = image.GetThumbnailImage(baseSize, image.Height * baseSize / image.Width, () => false, IntPtr.Zero);
                 return await BlobStorage.UploadImageAsync(img, blobDirectoryName + "/" + messageId, baseSize.ToString());
             }
         }
