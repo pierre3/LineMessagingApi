@@ -4,6 +4,7 @@
     {
         Postback,
         Message,
-        Uri
+        Uri,
+        DatetimePicker,
     }
 }
