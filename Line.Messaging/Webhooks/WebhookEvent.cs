@@ -47,7 +47,12 @@ namespace Line.Messaging.Webhooks
                 case WebhookEventType.Leave:
                     return new LeaveEvent(eventSource, (long)dynamicObject.timestamp);
                 case WebhookEventType.Postback:
-                    return new PostbackEvent(eventSource, (long)dynamicObject.timestamp, (string)dynamicObject.replyToken, (string)dynamicObject.postback.data);
+                    var postback = new Postback(
+                        (string)dynamicObject.postback?.data,
+                        (string)dynamicObject.postback?.@params?.date,
+                        (string)dynamicObject.postback?.@params?.time,
+                        (string)dynamicObject.postback?.@params?.datetime);
+                    return new PostbackEvent(eventSource, (long)dynamicObject.timestamp, (string)dynamicObject.replyToken, postback);
                 case WebhookEventType.Beacon:
                     if (!Enum.TryParse((string)dynamicObject.beacon.type, true, out BeaconType beaconType))
                     {
@@ -120,10 +125,10 @@ namespace Line.Messaging.Webhooks
     {
         public Postback Postback { get; }
 
-        public PostbackEvent(WebhookEventSource source, long timestamp, string replyToken, string postbackData)
+        public PostbackEvent(WebhookEventSource source, long timestamp, string replyToken, Postback postback)
             : base(WebhookEventType.Postback, source, timestamp, replyToken)
         {
-            Postback = new Postback(postbackData);
+            Postback = postback;
         }
     }
 
@@ -141,9 +146,26 @@ namespace Line.Messaging.Webhooks
     public class Postback
     {
         public string Data { get; }
-        public Postback(string data)
+        public PostbackParams Params { get; }
+
+        public Postback(string data, string date, string time, string datetime)
         {
             Data = data;
+            Params = new PostbackParams(date, time, datetime);
+        }
+    }
+
+    public class PostbackParams
+    {
+        public string Date { get; }
+        public string Time { get; }
+        public string DateTime { get; }
+
+        public PostbackParams(string date, string time, string datetime)
+        {
+            Date = date;
+            Time = time;
+            DateTime = datetime;
         }
     }
 

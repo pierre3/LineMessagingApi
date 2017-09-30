@@ -4,7 +4,7 @@ namespace Line.Messaging
 {
     public class DateTimePickerTemplateAction : ITemplateAction
     {
-        public TemplateActionType Type { get; } = TemplateActionType.DatetimePicker;
+        public TemplateActionType Type { get; } = TemplateActionType.Datetimepicker;
 
         public string Label { get; protected set; }
 
@@ -34,7 +34,7 @@ namespace Line.Messaging
                 case DateTimePickerMode.Time:
                     format = "HH:mm";
                     break;
-                case DateTimePickerMode.DateTime:
+                case DateTimePickerMode.Datetime:
                     format = "yyyy-MM-ddTHH:mm";
                     break;
             }

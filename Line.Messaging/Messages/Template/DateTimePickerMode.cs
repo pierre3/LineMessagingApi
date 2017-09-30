@@ -4,6 +4,6 @@
     {
         Time,
         Date,
-        DateTime
+        Datetime
     }
 }

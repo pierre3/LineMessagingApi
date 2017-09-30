@@ -5,6 +5,6 @@
         Postback,
         Message,
         Uri,
-        DatetimePicker,
+        Datetimepicker,
     }
 }
