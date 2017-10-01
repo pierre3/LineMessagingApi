@@ -41,12 +41,12 @@ namespace FunctionAppSample
             try
             {
 
-                //var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
-                //var tableStorage = await LineBotTableStorage.CreateAsync(connectionString);
-                //var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-                //var app = new LineBotApp(lineMessagingClient, tableStorage, blobStorage, log);
+                var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
+                var tableStorage = await LineBotTableStorage.CreateAsync(connectionString);
+                var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
+                var app = new LineBotApp(lineMessagingClient, tableStorage, blobStorage, log);
 
-                var app = new DateTimePickerTestApp(lineMessagingClient, log);
+                //var app = new DateTimePickerTestApp(lineMessagingClient, log);
 
                 await app.RunAsync(events);
 

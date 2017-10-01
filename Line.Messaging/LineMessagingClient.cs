@@ -36,7 +36,7 @@ namespace Line.Messaging
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
         }
 
         public Task ReplyMessageAsync(string replyToken, params string[] messages)
@@ -51,7 +51,7 @@ namespace Line.Messaging
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
         }
 
         public Task PushMessageAsync(string to, params string[] messages)
@@ -65,7 +65,7 @@ namespace Line.Messaging
             var content = JsonConvert.SerializeObject(new { to, messages }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
         }
 
         public Task MultiCastMessageAsync(IList<string> to, params string[] messages)
@@ -75,15 +75,15 @@ namespace Line.Messaging
 
         public async Task<UserProfile> GetUserProfileAsync(string userId)
         {
-            var response = await _client.GetStringAsync($"https://api.line.me/v2/bot/profile/{userId}").ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<UserProfile>(response);
+            var content = await GetStringAsync($"https://api.line.me/v2/bot/profile/{userId}").ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
         public async Task<ContentStream> GetContentStreamAsync(string messageId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
             return new ContentStream(await response.Content.ReadAsStreamAsync(), response.Content.Headers);
         }
 
@@ -91,20 +91,20 @@ namespace Line.Messaging
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
             return await response.Content.ReadAsByteArrayAsync();
         }
 
         public async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
         {
-            var response = await _client.GetStringAsync($"https://api.line.me/v2/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<UserProfile>(response);
+            var content = await GetStringAsync($"https://api.line.me/v2/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
         public async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
         {
-            var response = await _client.GetStringAsync($"https://api.line.me/v2/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<UserProfile>(response);
+            var content = await GetStringAsync($"https://api.line.me/v2/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
         public async Task<IList<UserProfile>> GetGroupMemberProfilesAsync(string groupId)
@@ -152,8 +152,8 @@ namespace Line.Messaging
                 requestUrl += $"?start={continuationToken}";
             }
 
-            var response = await _client.GetStringAsync(requestUrl).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<GroupMemberIds>(response);
+            var content = await GetStringAsync(requestUrl).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GroupMemberIds>(content);
         }
 
         public async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
@@ -164,20 +164,20 @@ namespace Line.Messaging
                 requestUrl += $"?start={continuationToken}";
             }
 
-            var response = await _client.GetStringAsync(requestUrl).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<GroupMemberIds>(response);
+            var content = await GetStringAsync(requestUrl).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GroupMemberIds>(content);
         }
 
-        public async Task ReaveFromGroupAsync(string groupId)
+        public async Task LeaveFromGroupAsync(string groupId)
         {
             var response = await _client.PostAsync($"https://api.line.me/v2/bot/group/{groupId}/leave", null).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
         }
 
-        public async Task ReaveFromRoomAsync(string roomId)
+        public async Task LeaveFromRoomAsync(string roomId)
         {
             var response = await _client.PostAsync($"https://api.line.me/v2/bot/room/{roomId}/leave", null).ConfigureAwait(false);
-            await ThrowIfRequestFailed(response);
+            await ThrowIfRequestFailedAsync(response);
         }
 
         public void Dispose()
@@ -185,13 +185,21 @@ namespace Line.Messaging
             _client?.Dispose();
         }
 
-        private async Task ThrowIfRequestFailed(HttpResponseMessage res)
+        private async Task<string> GetStringAsync(string requestUri)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            var response = await _client.SendAsync(request).ConfigureAwait(false);
+            await ThrowIfRequestFailedAsync(response);
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        }
+
+        private async Task ThrowIfRequestFailedAsync(HttpResponseMessage res)
         {
             if (res.IsSuccessStatusCode) { return; }
             var content = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var errorMessage = JsonConvert.DeserializeObject<ErrorResponseMessage>(content, _jsonSerializerSettings);
             throw new LineResponseException(errorMessage.Message) { StatusCode = res.StatusCode, ResponseMessage = errorMessage };
-
         }
+
     }
 }
