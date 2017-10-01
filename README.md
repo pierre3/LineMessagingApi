@@ -27,8 +27,8 @@ Task<IList<UserProfile>> GetGroupMemberProfilesAsync(string groupId)
 Task<IList<UserProfile>> GetRoomMemberProfilesAsync(string roomId)
 Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
 Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
-Task ReaveFromGroupAsync(string groupId)
-Task ReaveFromRoomAsync(string roomId)
+Task LeaveFromGroupAsync(string groupId)
+Task LeaveFromRoomAsync(string roomId)
 ```
 
 
