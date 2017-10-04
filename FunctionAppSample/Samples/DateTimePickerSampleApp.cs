@@ -1,22 +1,18 @@
 using Line.Messaging;
 using Line.Messaging.Webhooks;
 using Microsoft.Azure.WebJobs.Host;
-using Newtonsoft.Json;
 using System;
-using System.Drawing;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FunctionAppSample
 {
 
-    class DateTimePickerTestApp : WebhookApplication
+    class DateTimePickerSampleApp : WebhookApplication
     {
         private LineMessagingClient MessagingClient { get; }
         private TraceWriter Log { get; }
 
-        public DateTimePickerTestApp(LineMessagingClient lineMessagingClient, TraceWriter log)
+        public DateTimePickerSampleApp(LineMessagingClient lineMessagingClient, TraceWriter log)
         {
             MessagingClient = lineMessagingClient;
             Log = log;

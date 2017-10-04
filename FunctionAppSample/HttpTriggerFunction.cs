@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 namespace FunctionAppSample
 {
-
-
     public static class HttpTriggerFunction
     {
         static LineMessagingClient lineMessagingClient;
@@ -40,13 +38,14 @@ namespace FunctionAppSample
 
             try
             {
-
                 var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
                 var tableStorage = await LineBotTableStorage.CreateAsync(connectionString);
                 var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
                 var app = new LineBotApp(lineMessagingClient, tableStorage, blobStorage, log);
 
-                //var app = new DateTimePickerTestApp(lineMessagingClient, log);
+                //var app = new DateTimePickerSampleApp(lineMessagingClient, log);
+                //var app = new ImagemapSampleApp(lineMessagingClient, blobStorage, log);
+                //var app = new PostbackMessageSampleApp(lineMessagingClient, tableStorage, log);
 
                 await app.RunAsync(events);
 
