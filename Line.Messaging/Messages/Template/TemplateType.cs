@@ -4,6 +4,7 @@
     {
         Buttons,
         Confirm,
-        Carousel
+        Carousel,
+        Image_carousel
     }
 }

@@ -46,6 +46,7 @@ namespace FunctionAppSample
                 //var app = new DateTimePickerSampleApp(lineMessagingClient, log);
                 //var app = new ImagemapSampleApp(lineMessagingClient, blobStorage, log);
                 //var app = new PostbackMessageSampleApp(lineMessagingClient, tableStorage, log);
+                //var app = new ImageCarouselSampleApp(lineMessagingClient, blobStorage, log);
 
                 await app.RunAsync(events);
 

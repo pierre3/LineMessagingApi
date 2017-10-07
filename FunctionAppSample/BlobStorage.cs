@@ -1,7 +1,9 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FunctionAppSample
@@ -67,6 +69,12 @@ namespace FunctionAppSample
             {
                 await blob.DeleteIfExistsAsync();
             }
+        }
+
+        public IEnumerable<Uri> ListBlobUri(string directoryName)
+        {
+            var directory = _blobContainer.GetDirectoryReference(directoryName);
+            return directory.ListBlobs().Select(blob => blob.Uri);
         }
     }
 }
