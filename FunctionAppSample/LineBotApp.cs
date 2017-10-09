@@ -12,14 +12,14 @@ namespace FunctionAppSample
     class LineBotApp : WebhookApplication
     {
         private LineMessagingClient MessagingClient { get; }
-        private LineBotTableStorage TableStorage { get; }
+        private TableStorage<EventSourceState> SourceState { get; }
         private BlobStorage BlobStorage { get; }
         private TraceWriter Log { get; }
 
-        public LineBotApp(LineMessagingClient lineMessagingClient, LineBotTableStorage tableStorage, BlobStorage blobStorage, TraceWriter log)
+        public LineBotApp(LineMessagingClient lineMessagingClient, TableStorage<EventSourceState> tableStorage, BlobStorage blobStorage, TraceWriter log)
         {
             MessagingClient = lineMessagingClient;
-            TableStorage = tableStorage;
+            SourceState = tableStorage;
             BlobStorage = blobStorage;
             Log = log;
         }
@@ -28,7 +28,7 @@ namespace FunctionAppSample
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}, MessageType:{ev.Message.Type}");
 
-            var entry = await TableStorage.FindEntryAsync(ev.Source.Type.ToString(), ev.Source.Id);
+            var entry = await SourceState.FindAsync(ev.Source.Type.ToString(), ev.Source.Id);
             var blobDirectoryName = ev.Source.Type + "_" + ev.Source.Id;
             switch (ev.Message.Type)
             {
@@ -62,7 +62,7 @@ namespace FunctionAppSample
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}");
 
-            await TableStorage.AddEntryAsync(ev.Source.Type.ToString(), ev.Source.Id);
+            await SourceState.AddAsync(ev.Source.Type.ToString(), ev.Source.Id);
 
             var userName = "";
             if (!string.IsNullOrEmpty(ev.Source.Id))
@@ -77,7 +77,7 @@ namespace FunctionAppSample
         protected override async Task OnUnfollowAsync(UnfollowEvent ev)
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}");
-            await TableStorage.DeleteEntryAsync(ev.Source.Type.ToString(), ev.Source.Id);
+            await SourceState.DeleteAsync(ev.Source.Type.ToString(), ev.Source.Id);
         }
 
         protected override async Task OnJoinAsync(JoinEvent ev)
@@ -89,13 +89,26 @@ namespace FunctionAppSample
         protected override async Task OnLeaveAsync(LeaveEvent ev)
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}");
-            await TableStorage.DeleteEntryAsync(ev.Source.Type.ToString(), ev.Source.Id);
+            await SourceState.DeleteAsync(ev.Source.Type.ToString(), ev.Source.Id);
         }
 
         protected override async Task OnBeaconAsync(BeaconEvent ev)
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}");
-            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"Type:{ev.Beacon.Type}, Dm:{ev.Beacon.Dm}, Hwid:{ev.Beacon.Hwid}");
+            var message = "";
+            switch (ev.Beacon.Type)
+            {
+                case BeaconType.Enter:
+                    message = "You entered the beacon area!";
+                    break;
+                case BeaconType.Leave:
+                    message = "You leaved the beacon area!";
+                    break;
+                case BeaconType.Banner:
+                    message = "You tapped the beacon banner!";
+                    break;
+            }
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"{message}(Dm:{ev.Beacon.Dm}, Hwid:{ev.Beacon.Hwid})");
         }
 
         private Task EchoAsync(string replyToken, string userMessage)
@@ -157,5 +170,6 @@ namespace FunctionAppSample
                     return "";
             }
         }
+        
     }
 }
