@@ -25,33 +25,31 @@ namespace FunctionAppSample
         [FunctionName("LineMessagingApiSample")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            IEnumerable<WebhookEvent> events;
             try
             {
                 var channelSecret = System.Configuration.ConfigurationManager.AppSettings["ChannelSecret"];
-                events = await req.GetWebhookEventsAsync(channelSecret);
-            }
-            catch (InvalidSignatureException e)
-            {
-                return req.CreateResponse(HttpStatusCode.Forbidden, new { Message = e.Message });
-            }
+                var events = await req.GetWebhookEventsAsync(channelSecret);
 
-            try
-            {
-                var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
-                var eventSourceState = await TableStorage<EventSourceState>.CreateAsync(connectionString,"eventsourcestate");
-                var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-                var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage, log);
+                //var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
+                //var eventSourceState = await TableStorage<EventSourceState>.CreateAsync(connectionString, "eventsourcestate");
+                //var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
+                //var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage, log);
 
                 //var app = new DateTimePickerSampleApp(lineMessagingClient, log);
                 //var app = new ImagemapSampleApp(lineMessagingClient, blobStorage, log);
                 //var app = new ImageCarouselSampleApp(lineMessagingClient, blobStorage, log);
+
+                var app = new RichMenuSampleApp(lineMessagingClient, log);
 
                 //var eventSourceLocation = await TableStorage<EventSourceLocation>.CreateAsync(connectionString, "eventsourcelocation");
                 //var app = new PostbackMessageSampleApp(lineMessagingClient, eventSourceLocation, log);
 
                 await app.RunAsync(events);
 
+            }
+            catch (InvalidSignatureException e)
+            {
+                return req.CreateResponse(HttpStatusCode.Forbidden, new { Message = e.Message });
             }
             catch (LineResponseException e)
             {
