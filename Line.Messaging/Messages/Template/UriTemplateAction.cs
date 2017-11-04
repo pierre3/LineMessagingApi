@@ -13,5 +13,10 @@
             Label = label;
             Uri = uri;
         }
+
+        public static UriTemplateAction CreateFrom(dynamic dynamicObj)
+        {
+            return new UriTemplateAction((string)dynamicObj?.label, (string)dynamicObj?.uri);
+        }
     }
 }

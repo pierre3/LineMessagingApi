@@ -17,6 +17,7 @@ namespace FunctionAppSample
 
         private TraceWriter Log { get; }
 
+        #region RichMenu definitions
         private static readonly ImagemapSize _richMenuSize = ImagemapSize.RichMenuShort;
         private static readonly int _buttonWidth = _richMenuSize.Width / 4;
         private static readonly int _buttonHeight = _richMenuSize.Height;
@@ -26,31 +27,29 @@ namespace FunctionAppSample
         private static readonly string MenuNameC = "RichMenuC";
         private static readonly string MenuNameD = "RichMenuD";
 
-
         private static readonly IList<ActionArea> _menuActionAreas = new[]
         {
             new ActionArea()
             {
                 Bounds = new ImagemapArea(_buttonWidth * 0, 0, _buttonWidth, _buttonHeight),
-                Action = new PostbackTemplateAction("ButtonA", MenuNameA, "Change To Menu A")
+                Action = new PostbackTemplateAction("ButtonA", MenuNameA, "Menu A")
             },
             new ActionArea()
             {
                 Bounds = new ImagemapArea(_buttonWidth * 1, 0, _buttonWidth, _buttonHeight),
-                Action = new PostbackTemplateAction("ButtonB", MenuNameB, "Change To Menu B")
+                Action = new PostbackTemplateAction("ButtonB", MenuNameB, "Menu B")
             },
             new ActionArea()
             {
                 Bounds = new ImagemapArea(_buttonWidth * 2, 0, _buttonWidth, _buttonHeight),
-                Action = new PostbackTemplateAction("ButtonC", MenuNameC, "Change To Menu C")
+                Action = new PostbackTemplateAction("ButtonC", MenuNameC, "Menu C")
             },
             new ActionArea()
             {
                 Bounds = new ImagemapArea(_buttonWidth * 3, 0, _buttonWidth, _buttonHeight),
-                Action = new PostbackTemplateAction("ButtonD", MenuNameD, "Change To Menu D")
+                Action = new PostbackTemplateAction("ButtonD", MenuNameD, "Menu D")
             },
         };
-        private List<ResponseRichMenu> _richMenus = new List<ResponseRichMenu>();
 
         private static readonly RichMenu RichMenuA = new RichMenu
         {
@@ -84,6 +83,7 @@ namespace FunctionAppSample
             ChatBarText = "Menu D",
             Areas = _menuActionAreas
         };
+        #endregion
 
         public RichMenuSampleApp(LineMessagingClient lineMessagingClient, TraceWriter log)
         {
@@ -91,16 +91,17 @@ namespace FunctionAppSample
             Log = log;
         }
 
-        public async Task CreateRichMenuAsync()
+        public async Task<IList<ResponseRichMenu>> CreateRichMenuAsync()
         {
-            _richMenus.Clear();
+            var menuList = await MessagingClient.GetRichMenuListAsync();
+            //await DeleteRichMenusAsync(menuList);
 
-            var menuList = await MessagingClient.GetRichMenuList();
-
-            _richMenus.Add(await RegisterRichMenuAsync(RichMenuA));
-            _richMenus.Add(await RegisterRichMenuAsync(RichMenuB));
-            _richMenus.Add(await RegisterRichMenuAsync(RichMenuC));
-            _richMenus.Add(await RegisterRichMenuAsync(RichMenuD));
+            var newMenuList = new List<ResponseRichMenu>();
+            newMenuList.Add(await RegisterRichMenuAsync(RichMenuA));
+            newMenuList.Add(await RegisterRichMenuAsync(RichMenuB));
+            newMenuList.Add(await RegisterRichMenuAsync(RichMenuC));
+            newMenuList.Add(await RegisterRichMenuAsync(RichMenuD));
+            return newMenuList;
 
             async Task<ResponseRichMenu> RegisterRichMenuAsync(RichMenu newItem)
             {
@@ -111,10 +112,18 @@ namespace FunctionAppSample
                     var image = CreateRichMenuImage(newItem);
                     await UploadRichMenuImageAsync(image, id);
                     item = newItem.ToResponseRichMenu(id);
-
                 }
                 return item;
             }
+        }
+
+        private async Task DeleteRichMenusAsync(IList<ResponseRichMenu> menuList)
+        {
+            foreach (var menu in menuList)
+            {
+                await MessagingClient.DeleteRichMenuAsync(menu.RichMenuId);
+            }
+            menuList.Clear();
         }
 
         private async Task UploadRichMenuImageAsync(Image image, string richMenuId)
@@ -133,6 +142,7 @@ namespace FunctionAppSample
             var g = Graphics.FromImage(bitmap);
 
             var bkBrush = Brushes.White;
+
             if (menu.Name == RichMenuA.Name)
             {
                 bkBrush = Brushes.Red;
@@ -151,8 +161,8 @@ namespace FunctionAppSample
             }
 
             g.FillRectangle(bkBrush, new Rectangle(0, 0, menu.Size.Width, menu.Size.Height));
-            using (var pen = new Pen(Color.DarkGray, 6.0f))
-            using (var font = new Font(FontFamily.GenericSansSerif, 40))
+            using (var pen = new Pen(Color.DarkGray, 10.0f))
+            using (var font = new Font(FontFamily.GenericSansSerif, 80))
             {
                 foreach (var area in menu.Areas)
                 {
@@ -176,16 +186,30 @@ namespace FunctionAppSample
         {
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}, MessageType:{ev.Message.Type}");
 
-            await MessagingClient.LinkRichMenuToUserAsync(ev.Source.UserId, _richMenus[0].RichMenuId);
-            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, "Open the Rich Menu!");
+            var textMessage = ev.Message as TextEventMessage;
+            if (textMessage?.Text?.StartsWith("Menu") ?? false)
+            {
+                return;
+            }
+
+            var memuList = await CreateRichMenuAsync();
+            var menuA = memuList.FirstOrDefault(m => m.Name == MenuNameA);
+            if (menuA == null) { return; }
+
+            await MessagingClient.LinkRichMenuToUserAsync(ev.Source.UserId, menuA.RichMenuId);
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, "Hello Rich Menu!");
         }
 
         protected override async Task OnPostbackAsync(PostbackEvent ev)
         {
-            var nextMenu = _richMenus.FirstOrDefault(menu => menu.Name == ev.Postback.Data);
+            var menuList = await MessagingClient.GetRichMenuListAsync();
+            var nextMenu = menuList.FirstOrDefault(menu => menu.Name == ev.Postback.Data);
+            if (nextMenu == null)
+            {
+                await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"Error!! {ev.Postback.Data} not found.");
+            }
             await MessagingClient.LinkRichMenuToUserAsync(ev.Source.UserId, nextMenu.RichMenuId);
-            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"Change the rich menu to {nextMenu.ChatBarText}");
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"I changed a rich menu to {nextMenu.ChatBarText}");
         }
-
     }
 }

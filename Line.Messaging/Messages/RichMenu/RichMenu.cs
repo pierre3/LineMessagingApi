@@ -10,7 +10,7 @@ namespace Line.Messaging
         public string ChatBarText { set; get; }
         public IList<ActionArea> Areas { set; get; }
 
-        public ResponseRichMenu ToResponseRichMenu(string richMenuId="")
+        public ResponseRichMenu ToResponseRichMenu(string richMenuId = "")
         {
             return new ResponseRichMenu(richMenuId, this);
         }
@@ -29,6 +29,18 @@ namespace Line.Messaging
             ChatBarText = source.ChatBarText;
             Areas = source.Areas;
         }
-        
+
+        public static ResponseRichMenu CreateFrom(dynamic dynamicObj)
+        {
+            var menu = new RichMenu()
+            {
+                Name = (string)dynamicObj?.name,
+                Size = new ImagemapSize((int)(dynamicObj?.size?.width ?? 0), (int)(dynamicObj?.size?.height ?? 0)),
+                Selected = (bool)(dynamicObj?.selected ?? false),
+                ChatBarText = (string)dynamicObj?.chatBarText
+            };
+            return new ResponseRichMenu((string)dynamicObj?.richMenuId, menu);
+        }
+
     }
 }

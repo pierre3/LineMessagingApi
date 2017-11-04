@@ -16,5 +16,10 @@
             Label = label;
             Text = text;
         }
+
+        public static PostbackTemplateAction CreateFrom(dynamic dynamicObj)
+        {
+            return new PostbackTemplateAction((string)dynamicObj?.label, (string)dynamicObj?.data, (string)dynamicObj?.text);
+        }
     }
 }

@@ -225,7 +225,7 @@ namespace Line.Messaging
 
         public async Task<string> CreateRichMenuAsync(RichMenu richMenu)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/reply");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/richmenu");
             var content = JsonConvert.SerializeObject(richMenu, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
@@ -276,10 +276,26 @@ namespace Line.Messaging
             return UploadRichMenuImageAsync(stream, richMenuId, "image/png");
         }
 
-        public async Task<IList<ResponseRichMenu>> GetRichMenuList()
+        public async Task<IList<ResponseRichMenu>> GetRichMenuListAsync()
         {
-            var json = await GetStringAsync("https://api.line.me/v2/bot/richmenu/list").ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<IList<ResponseRichMenu>>(json, _jsonSerializerSettings);
+            var response = await _client.GetAsync("https://api.line.me/v2/bot/richmenu/list").ConfigureAwait(false);
+            var menus = new List<ResponseRichMenu>();
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return menus;
+            }
+            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            dynamic result = JsonConvert.DeserializeObject(json);
+            if (result == null) { return menus; }
+
+            foreach (var dynamicObj in result.richmenus)
+            {
+                menus.Add(ResponseRichMenu.CreateFrom(dynamicObj));
+            }
+            return menus;
         }
 
         public void Dispose()
@@ -297,10 +313,12 @@ namespace Line.Messaging
         private async Task UploadRichMenuImageAsync(Stream stream, string richMenuId, string mediaType)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"https://api.line.me/v2/bot/richmenu/{richMenuId}/content");
-            request.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             request.Content = new StreamContent(stream);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+            
+            
         }
 
     }

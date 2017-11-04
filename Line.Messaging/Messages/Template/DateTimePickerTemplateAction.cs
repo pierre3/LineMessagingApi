@@ -25,6 +25,22 @@ namespace Line.Messaging
 
         public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, DateTime initial, DateTime min, DateTime max)
         {
+            var format = GetDateTimeFormat(mode);
+            Initialize(label, data, mode, initial.ToString(format), min.ToString(format), max.ToString(format));
+        }
+
+        protected void Initialize(string label, string data, DateTimePickerMode mode, string initial, string min, string max)
+        {
+            Label = label;
+            Data = data;
+            Mode = mode;
+            Initial = initial;
+            Min = min;
+            Max = max;
+        }
+
+        protected static string GetDateTimeFormat(DateTimePickerMode mode)
+        {
             var format = "";
             switch (mode)
             {
@@ -38,17 +54,17 @@ namespace Line.Messaging
                     format = "yyyy-MM-ddTHH:mm";
                     break;
             }
-            Initialize(label, data, mode, initial.ToString(format), min.ToString(format), max.ToString(format));
+            return format;
         }
 
-        protected void Initialize(string label, string data, DateTimePickerMode mode, string initial, string min, string max)
+        public static DateTimePickerTemplateAction CreateFrom(dynamic dynamicObj)
         {
-            Label = label;
-            Data = data;
-            Mode = mode;
-            Initial = initial;
-            Min = min;
-            Max = max;
+            var mode = (DateTimePickerMode)Enum.Parse(typeof(DateTimePickerMode), dynamicObj?.mode);
+            var format = GetDateTimeFormat(mode);
+            var initial = DateTime.ParseExact(dynamicObj?.initial, format, null);
+            var min = DateTime.ParseExact(dynamicObj?.min, format, null);
+            var max = DateTime.ParseExact(dynamicObj?.max, format, null);
+            return new DateTimePickerTemplateAction((string)dynamicObj?.label, (string)dynamicObj?.data, mode, initial, min, max);
         }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -30,17 +29,16 @@ namespace FunctionAppSample
                 var channelSecret = System.Configuration.ConfigurationManager.AppSettings["ChannelSecret"];
                 var events = await req.GetWebhookEventsAsync(channelSecret);
 
-                //var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
-                //var eventSourceState = await TableStorage<EventSourceState>.CreateAsync(connectionString, "eventsourcestate");
-                //var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-                //var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage, log);
+                var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
+                var eventSourceState = await TableStorage<EventSourceState>.CreateAsync(connectionString, "eventsourcestate");
+                var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
+                var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage, log);
 
+                //Samples app
                 //var app = new DateTimePickerSampleApp(lineMessagingClient, log);
                 //var app = new ImagemapSampleApp(lineMessagingClient, blobStorage, log);
                 //var app = new ImageCarouselSampleApp(lineMessagingClient, blobStorage, log);
-
-                var app = new RichMenuSampleApp(lineMessagingClient, log);
-
+                //var app = new RichMenuSampleApp(lineMessagingClient, log);
                 //var eventSourceLocation = await TableStorage<EventSourceLocation>.CreateAsync(connectionString, "eventsourcelocation");
                 //var app = new PostbackMessageSampleApp(lineMessagingClient, eventSourceLocation, log);
 
@@ -63,6 +61,11 @@ namespace FunctionAppSample
             catch (Exception e)
             {
                 log.Error(e.ToString());
+                var debugUserId = System.Configuration.ConfigurationManager.AppSettings["DebugUser"];
+                if (debugUserId != null)
+                {
+                    await lineMessagingClient.PushMessageAsync(debugUserId, e.Message);
+                }
             }
 
             return req.CreateResponse(HttpStatusCode.OK);

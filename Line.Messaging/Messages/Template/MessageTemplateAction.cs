@@ -13,5 +13,10 @@
             Label = label;
             Text = text;
         }
+
+        public static MessageTemplateAction CreateFrom(dynamic dynamicObj)
+        {
+            return new MessageTemplateAction((string)dynamicObj?.label, (string)dynamicObj?.text);
+        }
     }
 }
