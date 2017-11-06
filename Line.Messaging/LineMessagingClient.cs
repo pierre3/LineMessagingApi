@@ -9,15 +9,39 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Line.Messaging
 {
-
+    /// <summary>
+    /// LINE Messaging API client, which handles request/response to LINE server.
+    /// </summary>
     public class LineMessagingClient : IDisposable
     {
         private HttpClient _client;
         private JsonSerializerSettings _jsonSerializerSettings;
 
+        /// <summary>
+        /// Constructor 
+        /// </summary>
+        /// <param name="channelAccessToken">ChannelAccessToken</param>
+        public LineMessagingClient(string channelAccessToken)
+        {
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", channelAccessToken);
+            _jsonSerializerSettings = new CamelCaseJsonSerializerSettings();
+        }
+
+        #region OAuth
+        // https://developers.line.me/en/docs/messaging-api/reference/#oauth
+
+        /// <summary>
+        /// Issues a short-lived channel access token. 
+        /// Up to 30 tokens can be issued. If the maximum is exceeded, existing channel access tokens will be revoked in the order of when they were first issued.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#oauth
+        /// </summary>
+        /// <param name="httpClient">HttpClient</param>
+        /// <param name="channelId">ChannelId</param>
+        /// <param name="channelAccessToken">ChannelAccessToken</param>
+        /// <returns>ChannelAccessToken</returns>
         public static async Task<ChannelAccessToken> IssueChannelAccessTokenAsync(HttpClient httpClient, string channelId, string channelAccessToken)
         {
             var response = await httpClient.PostAsync("https://api.line.me/v2/oauth/accessToken",
@@ -39,6 +63,12 @@ namespace Line.Messaging
                 });
         }
 
+        /// <summary>
+        /// Revokes a channel access token.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#revoke-channel-access-token
+        /// </summary>
+        /// <param name="httpClient">HttpClient</param>
+        /// <param name="channelAccessToken">ChannelAccessToken</param>
         public static async Task RevokeChannelAccessTokenAsync(HttpClient httpClient, string channelAccessToken)
         {
             var response = await httpClient.PostAsync("https://api.line.me/v2/oauth/revoke",
@@ -49,6 +79,13 @@ namespace Line.Messaging
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Instantiate LineMessagingClient by using OAuth.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#oauth
+        /// </summary>
+        /// <param name="channelId">ChannelId</param>
+        /// <param name="channelSecret">ChannelSecret</param>
+        /// <returns></returns>
         public static async Task<LineMessagingClient> CreateAsync(string channelId, string channelSecret)
         {
             if (string.IsNullOrEmpty(channelId)) { throw new ArgumentNullException(nameof(channelId)); }
@@ -60,13 +97,17 @@ namespace Line.Messaging
             }
         }
 
-        public LineMessagingClient(string channelAccessToken)
-        {
-            _client = new HttpClient();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", channelAccessToken);
-            _jsonSerializerSettings = new CamelCaseJsonSerializerSettings();
-        }
+        #endregion
+        
+        #region Message 
+        // https://developers.line.me/en/docs/messaging-api/reference/#message
 
+        /// <summary>
+        /// Respond to events from users, groups, and rooms
+        /// https://developers.line.me/en/docs/messaging-api/reference/#send-reply-message
+        /// </summary>
+        /// <param name="replyToken">ReplyToken</param>
+        /// <param name="messages">Reply messages. Up to 5 messages.</param>
         public async Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/reply");
@@ -77,11 +118,23 @@ namespace Line.Messaging
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Respond to events from users, groups, and rooms
+        /// https://developers.line.me/en/docs/messaging-api/reference/#send-reply-message
+        /// </summary>
+        /// <param name="replyToken">ReplyToken</param>
+        /// <param name="messages">Reply Text messages. Up to 5 messages.</param>
         public Task ReplyMessageAsync(string replyToken, params string[] messages)
         {
             return ReplyMessageAsync(replyToken, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
 
+        /// <summary>
+        /// Send messages to a user, group, or room at any time.
+        /// Note: Use of push messages are limited to certain plans.
+        /// </summary>
+        /// <param name="to">ID of the receiver</param>
+        /// <param name="messages">Reply messages. Up to 5 messages.</param>
         public async Task PushMessageAsync(string to, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/push");
@@ -92,11 +145,24 @@ namespace Line.Messaging
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Send text messages to a user, group, or room at any time.
+        /// Note: Use of push messages are limited to certain plans.
+        /// </summary>
+        /// <param name="to">ID of the receiver</param>
+        /// <param name="messages">Reply text messages. Up to 5 messages.</param>
         public Task PushMessageAsync(string to, params string[] messages)
         {
             return PushMessageAsync(to, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
 
+        /// <summary>
+        /// Send push messages to multiple users at any time.
+        /// Only available for plans which support push messages. Messages cannot be sent to groups or rooms
+        /// https://developers.line.me/en/docs/messaging-api/reference/#send-multicast-messages
+        /// </summary>
+        /// <param name="to">IDs of the receivers. Max: 150 users</param>
+        /// <param name="messages">Reply messages. Up to 5 messages.</param>
         public async Task MultiCastMessageAsync(IList<string> to, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/multicast");
@@ -106,17 +172,25 @@ namespace Line.Messaging
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Send push text messages to multiple users at any time.
+        /// Only available for plans which support push messages. Messages cannot be sent to groups or rooms
+        /// https://developers.line.me/en/docs/messaging-api/reference/#send-multicast-messages
+        /// </summary>
+        /// <param name="to">IDs of the receivers. Max: 150 users</param>
+        /// <param name="messages">Reply text messages. Up to 5 messages.</param>
         public Task MultiCastMessageAsync(IList<string> to, params string[] messages)
         {
             return MultiCastMessageAsync(to, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
 
-        public async Task<UserProfile> GetUserProfileAsync(string userId)
-        {
-            var content = await GetStringAsync($"https://api.line.me/v2/bot/profile/{userId}").ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<UserProfile>(content);
-        }
 
+        /// <summary>
+        /// Retrieve image, video, and audio data sent by users as Stream
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-content
+        /// </summary>
+        /// <param name="messageId">Message ID</param>
+        /// <returns>Content as ContentStream</returns>
         public async Task<ContentStream> GetContentStreamAsync(string messageId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
@@ -125,6 +199,12 @@ namespace Line.Messaging
             return new ContentStream(await response.Content.ReadAsStreamAsync(), response.Content.Headers);
         }
 
+        /// <summary>
+        /// Retrieve image, video, and audio data sent by users as byte array
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-content
+        /// </summary>
+        /// <param name="messageId">Message ID</param>
+        /// <returns>Content as byte array</returns>
         public async Task<byte[]> GetContentBytesAsync(string messageId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
@@ -133,18 +213,71 @@ namespace Line.Messaging
             return await response.Content.ReadAsByteArrayAsync();
         }
 
+        #endregion
+
+        #region Profile
+        // https://developers.line.me/en/docs/messaging-api/reference/#profile
+
+        /// <summary>
+        /// Get user profile information.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-profile
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <returns></returns>
+        public async Task<UserProfile> GetUserProfileAsync(string userId)
+        {
+            var content = await GetStringAsync($"https://api.line.me/v2/bot/profile/{userId}").ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<UserProfile>(content);
+        }
+
+        #endregion
+
+        #region Group
+        // https://developers.line.me/en/docs/messaging-api/reference/#group
+
+        /// <summary>
+        /// Gets the user profile of a member of a group that the bot is in. This includes user profiles of users who have not added the bot as a friend or have blocked the bot.
+        /// Use the group ID and user ID returned in the source object of webhook event objects. Do not use the LINE ID used in the LINE app. 
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-group-member-profile
+        /// </summary>
+        /// <param name="groupId">Identifier of the group</param>
+        /// <param name="userId">Identifier of the user</param>
+        /// <returns>User Profile</returns>
         public async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
         {
             var content = await GetStringAsync($"https://api.line.me/v2/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
-        public async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
+        /// <summary>
+        /// Gets the user IDs of the members of a group that the bot is in. This includes the user IDs of users who have not added the bot as a friend or has blocked the bot.
+        /// This feature is only available for LINE@ Approved accounts or official accounts.
+        /// Use the group Id returned in the source object of webhook event objects. 
+        /// Users who have not agreed to the Official Accounts Terms of Use are not included in memberIds. There is no fixed number of memberIds. 
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-group-member-user-ids
+        /// </summary>
+        /// <param name="groupId">Identifier of the group</param>
+        /// <param name="continuationToken">ContinuationToken</param>
+        /// <returns>GroupMemberIds</returns>
+        public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
         {
-            var content = await GetStringAsync($"https://api.line.me/v2/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<UserProfile>(content);
+            var requestUrl = $"https://api.line.me/v2/bot/group/{groupId}/members/ids";
+            if (continuationToken != null)
+            {
+                requestUrl += $"?start={continuationToken}";
+            }
+
+            var content = await GetStringAsync(requestUrl).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GroupMemberIds>(content);
         }
 
+        /// <summary>
+        /// Gets the user profiles of the members of a group that the bot is in. This includes the user IDs of users who have not added the bot as a friend or has blocked the bot.
+        /// Use the group Id returned in the source object of webhook event objects. 
+        /// This feature is only available for LINE@ Approved accounts or official accounts
+        /// </summary>
+        /// <param name="groupId">Identifier of the group</param>
+        /// <returns>List of UserProfile</returns>
         public async Task<IList<UserProfile>> GetGroupMemberProfilesAsync(string groupId)
         {
             var result = new List<UserProfile>();
@@ -163,6 +296,66 @@ namespace Line.Messaging
             return result;
         }
 
+
+        /// <summary>
+        /// Leave a group.
+        /// Use the ID that is returned via webhook from the source group. 
+        /// https://developers.line.me/en/docs/messaging-api/reference/#leave-group
+        /// </summary>
+        /// <param name="groupId">Group ID</param>
+        /// <returns></returns>
+        public async Task LeaveFromGroupAsync(string groupId)
+        {
+            var response = await _client.PostAsync($"https://api.line.me/v2/bot/group/{groupId}/leave", null).ConfigureAwait(false);
+            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Room
+        // https://developers.line.me/en/docs/messaging-api/reference/#room
+
+        /// <summary>
+        /// Gets the user profile of a member of a room that the bot is in. This includes user profiles of users who have not added the bot as a friend or have blocked the bot.
+        /// Use the room ID and user ID returned in the source object of webhook event objects. Do not use the LINE ID used in the LINE app
+        /// </summary>
+        /// <param name="roomId">Identifier of the room</param>
+        /// <param name="userId">Identifier of the user</param>
+        /// <returns></returns>
+        public async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
+        {
+            var content = await GetStringAsync($"https://api.line.me/v2/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<UserProfile>(content);
+        }
+
+        /// <summary>
+        /// Gets the user IDs of the members of a room that the bot is in. This includes the user IDs of users who have not added the bot as a friend or has blocked the bot.
+        /// Use the room ID returned in the source object of webhook event objects. 
+        /// This feature is only available for LINE@ Approved accounts or official accounts.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-room-member-user-ids
+        /// </summary>
+        /// <param name="roomId">Identifier of the room</param>
+        /// <param name="continuationToken">ContinuationToken</param>
+        /// <returns>GroupMemberIds</returns>
+        public async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
+        {
+            var requestUrl = $"https://api.line.me/v2/bot/room/{roomId}/members/ids";
+            if (continuationToken != null)
+            {
+                requestUrl += $"?start={continuationToken}";
+            }
+
+            var content = await GetStringAsync(requestUrl).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GroupMemberIds>(content);
+        }
+
+        /// <summary>
+        /// Gets the user profiles of the members of a room that the bot is in. This includes the user IDs of users who have not added the bot as a friend or has blocked the bot.
+        /// Use the room ID returned in the source object of webhook event objects. 
+        /// This feature is only available for LINE@ Approved accounts or official accounts.
+        /// </summary>
+        /// <param name="roomId">Identifier of the room<</param>
+        /// <returns>List of UserProfiles</returns>
         public async Task<IList<UserProfile>> GetRoomMemberProfilesAsync(string roomId)
         {
             var result = new List<UserProfile>();
@@ -181,48 +374,42 @@ namespace Line.Messaging
             return result;
         }
 
-        public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
-        {
-            var requestUrl = $"https://api.line.me/v2/bot/group/{groupId}/members/ids";
-            if (continuationToken != null)
-            {
-                requestUrl += $"?start={continuationToken}";
-            }
-
-            var content = await GetStringAsync(requestUrl).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<GroupMemberIds>(content);
-        }
-
-        public async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
-        {
-            var requestUrl = $"https://api.line.me/v2/bot/room/{roomId}/members/ids";
-            if (continuationToken != null)
-            {
-                requestUrl += $"?start={continuationToken}";
-            }
-
-            var content = await GetStringAsync(requestUrl).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<GroupMemberIds>(content);
-        }
-
-        public async Task LeaveFromGroupAsync(string groupId)
-        {
-            var response = await _client.PostAsync($"https://api.line.me/v2/bot/group/{groupId}/leave", null).ConfigureAwait(false);
-            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
-        }
-
+        /// <summary>
+        /// Leave a room.
+        /// Use the ID that is returned via webhook from the source room. 
+        /// </summary>
+        /// <param name="roomId">Room ID</param>
         public async Task LeaveFromRoomAsync(string roomId)
         {
             var response = await _client.PostAsync($"https://api.line.me/v2/bot/room/{roomId}/leave", null).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        #endregion
+
+        #region Rich menu
+        // https://developers.line.me/en/docs/messaging-api/reference/#rich-menu
+
+        /// <summary>
+        /// Gets a rich menu via a rich menu ID.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-rich-menu
+        /// </summary>
+        /// <param name="richMenuId">ID of an uploaded rich menu</param>
+        /// <returns>RichMenu</returns>
         public async Task<RichMenu> GetRichMenuAsync(string richMenuId)
         {
             var json = await GetStringAsync($"https://api.line.me/v2/bot/richmenu/{richMenuId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<ResponseRichMenu>(json);
         }
 
+        /// <summary>
+        /// Creates a rich menu. 
+        /// Note: You must upload a rich menu image and link the rich menu to a user for the rich menu to be displayed.You can create up to 10 rich menus for one bot.
+        /// The rich menu represented as a rich menu object.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#create-rich-menu
+        /// </summary>
+        /// <param name="richMenu">RichMenu</param>
+        /// <returns>RichMenu Id</returns>
         public async Task<string> CreateRichMenuAsync(RichMenu richMenu)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/richmenu");
@@ -235,29 +422,60 @@ namespace Line.Messaging
             return JsonConvert.DeserializeAnonymousType(json, new { richMenuId = "" }).richMenuId;
         }
 
+        /// <summary>
+        /// Deletes a rich menu.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#delete-rich-menu
+        /// </summary>
+        /// <param name="richMenuId">RichMenu Id</param>
         public async Task DeleteRichMenuAsync(string richMenuId)
         {
             var response = await _client.DeleteAsync($"https://api.line.me/v2/bot/richmenu/{richMenuId}");
         }
 
+        /// <summary>
+        /// Gets the ID of the rich menu linked to a user.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-rich-menu-id-of-user
+        /// </summary>
+        /// <param name="userId">ID of the user</param>
+        /// <returns>RichMenu Id</returns>
         public async Task<string> GetRichMenuIdOfUserAsync(string userId)
         {
             var json = await GetStringAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu");
             return JsonConvert.DeserializeAnonymousType(json, new { richMenuId = "" }).richMenuId;
         }
 
+        /// <summary>
+        /// Links a rich menu to a user.
+        /// Note: Only one rich menu can be linked to a user at one time.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#link-rich-menu-to-user
+        /// </summary>
+        /// <param name="userId">ID of the user</param>
+        /// <param name="richMenuId">ID of an uploaded rich menu</param>
+        /// <returns></returns>
         public async Task LinkRichMenuToUserAsync(string userId, string richMenuId)
         {
             var response = await _client.PostAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu/{richMenuId}", null);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Unlinks a rich menu from a user.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#unlink-rich-menu-from-user
+        /// </summary>
+        /// <param name="userId">ID of the user</param>
+        /// <returns></returns>
         public async Task UnLinkRichMenuFromUserAsync(string userId)
         {
-            var res = await _client.DeleteAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu").ConfigureAwait(false);
-            await res.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+            var response = await _client.DeleteAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu").ConfigureAwait(false);
+            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Downloads an image associated with a rich menu.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#download-rich-menu-image
+        /// </summary>
+        /// <param name="richMenuId">RichMenu Id</param>
+        /// <returns>Image as ContentStream</returns>
         public async Task<ContentStream> DownloadRichMenuImageAsync(string richMenuId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/richmenu/{richMenuId}/content");
@@ -266,16 +484,46 @@ namespace Line.Messaging
             return new ContentStream(await response.Content.ReadAsStreamAsync(), response.Content.Headers);
         }
 
+        /// <summary>
+        /// Uploads and attaches a jpeg image to a rich menu.
+        /// Images must have one of the following resolutions: 2500x1686, 2500x843. 
+        /// You cannot replace an image attached to a rich menu.To update your rich menu image, create a new rich menu object and upload another image.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#upload-rich-menu-image
+        /// </summary>
+        /// <param name="stream">Jpeg image for the rich menu</param>
+        /// <param name="richMenuId">The ID of the rich menu to attach the image to.</param>
         public Task UploadRichMenuJpegImageAsync(Stream stream, string richMenuId)
         {
             return UploadRichMenuImageAsync(stream, richMenuId, "image/jpeg");
         }
 
+        /// <summary>
+        /// Uploads and attaches a png image to a rich menu.
+        /// Images must have one of the following resolutions: 2500x1686, 2500x843. 
+        /// You cannot replace an image attached to a rich menu.To update your rich menu image, create a new rich menu object and upload another image.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#upload-rich-menu-image
+        /// </summary>
+        /// <param name="stream">Png image for the rich menu</param>
+        /// <param name="richMenuId">The ID of the rich menu to attach the image to.</param>
         public Task UploadRichMenuPngImageAsync(Stream stream, string richMenuId)
         {
             return UploadRichMenuImageAsync(stream, richMenuId, "image/png");
         }
 
+        private async Task UploadRichMenuImageAsync(Stream stream, string richMenuId, string mediaType)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, $"https://api.line.me/v2/bot/richmenu/{richMenuId}/content");
+            request.Content = new StreamContent(stream);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+            var response = await _client.SendAsync(request).ConfigureAwait(false);
+            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets a list of all uploaded rich menus.
+        /// https://developers.line.me/en/docs/messaging-api/reference/#get-rich-menu-list
+        /// </summary>
+        /// <returns>List of ResponseRichMenu</returns>
         public async Task<IList<ResponseRichMenu>> GetRichMenuListAsync()
         {
             var response = await _client.GetAsync("https://api.line.me/v2/bot/richmenu/list").ConfigureAwait(false);
@@ -291,12 +539,14 @@ namespace Line.Messaging
             dynamic result = JsonConvert.DeserializeObject(json);
             if (result == null) { return menus; }
 
-            foreach (var dynamicObj in result.richmenus)
+            foreach (var dynamicObject in result.richmenus)
             {
-                menus.Add(ResponseRichMenu.CreateFrom(dynamicObj));
+                menus.Add(ResponseRichMenu.CreateFrom(dynamicObject));
             }
             return menus;
         }
+
+        #endregion
 
         public void Dispose()
         {
@@ -309,17 +559,5 @@ namespace Line.Messaging
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
             return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         }
-
-        private async Task UploadRichMenuImageAsync(Stream stream, string richMenuId, string mediaType)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"https://api.line.me/v2/bot/richmenu/{richMenuId}/content");
-            request.Content = new StreamContent(stream);
-            request.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
-            var response = await _client.SendAsync(request).ConfigureAwait(false);
-            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
-            
-            
-        }
-
     }
 }

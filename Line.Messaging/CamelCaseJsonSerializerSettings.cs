@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Line.Messaging
 {
-    public class CamelCaseJsonSerializerSettings : JsonSerializerSettings
+    internal class CamelCaseJsonSerializerSettings : JsonSerializerSettings
     {
         public CamelCaseJsonSerializerSettings()
         {

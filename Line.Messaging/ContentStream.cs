@@ -4,6 +4,9 @@ using System.Net.Http.Headers;
 
 namespace Line.Messaging
 {
+    /// <summary>
+    /// Stream object for content such as image, file, etc.
+    /// </summary>
     public class ContentStream : Stream
     {
         protected Stream _baseStream;
@@ -16,6 +19,7 @@ namespace Line.Messaging
                 return _baseStream;
             }
         }
+
         public HttpContentHeaders ContentHeaders { get; }
 
         public ContentStream(Stream baseStream, HttpContentHeaders contentHeaders)
@@ -53,6 +57,5 @@ namespace Line.Messaging
                 _baseStream = null;
             }
         }
-
     }
 }
