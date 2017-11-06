@@ -2,6 +2,9 @@
 
 namespace Line.Messaging
 {
+    /// <summary>
+    /// Capture Invalid Signature Exception.
+    /// </summary>
     public class InvalidSignatureException : Exception
     {
         public InvalidSignatureException()
@@ -15,6 +18,5 @@ namespace Line.Messaging
         public InvalidSignatureException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
     }
 }

@@ -1,12 +1,34 @@
 ﻿namespace Line.Messaging
 {
-    public class VideoMessage : MediaMessage
+    /// <summary>
+    /// Video
+    /// https://developers.line.me/en/docs/messaging-api/reference/#video
+    /// </summary>
+    public class VideoMessage
     {
+        public MessageType Type { get; } = MessageType.Video;
+
+        /// <summary>
+        /// URL of video file (Max: 1000 characters)
+        /// HTTPS
+        /// mp4
+        /// Less than 1 minute
+        /// Max: 10 MB
+        /// </summary>
+        public string OriginalContentUrl { get; }
+
+        /// <summary>
+        /// URL of preview image (Max: 1000 characters)
+        /// HTTPS
+        /// JPEG
+        /// Max: 240 x 240
+        /// Max: 1 MB
+        /// </summary>
         public string PreviewImageUrl { get; set; }
 
         public VideoMessage(string originalContentUrl, string previerImageUrl)
-            : base(MessageType.Video, originalContentUrl)
         {
+            OriginalContentUrl = originalContentUrl;
             PreviewImageUrl = previerImageUrl;
         }
     }

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Line.Messaging.Webhooks
 {
+    /// <summary>
+    /// Inherit this class to implement LINE Bot. Then override each event handler.
+    /// </summary>
     public abstract class WebhookApplication
     {
         public async Task RunAsync(IEnumerable<WebhookEvent> events)

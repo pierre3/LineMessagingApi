@@ -11,15 +11,20 @@ namespace Line.Messaging.Webhooks
 {
     public static class WebhookRequestMessageHelper
     {
-
-        public static async Task<IEnumerable<WebhookEvent>> GetWebhookEventsAsync(this HttpRequestMessage req, string channelSecret)
+        /// <summary>
+        /// Verify if the request is valid, then returns LINE Webhook events from the request
+        /// </summary>
+        /// <param name="request">HttpRequestMessage</param>
+        /// <param name="channelSecret">ChannelSecret</param>
+        /// <returns>List of WebhookEvent</returns>
+        public static async Task<IEnumerable<WebhookEvent>> GetWebhookEventsAsync(this HttpRequestMessage request, string channelSecret)
         {
-            if (req == null) { throw new ArgumentNullException(nameof(req)); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
             if (channelSecret == null) { throw new ArgumentNullException(nameof(channelSecret)); }
 
-            var content = await req.Content.ReadAsStringAsync();
+            var content = await request.Content.ReadAsStringAsync();
 
-            var xLineSignature = req.Headers.GetValues("X-Line-Signature").FirstOrDefault();
+            var xLineSignature = request.Headers.GetValues("X-Line-Signature").FirstOrDefault();
             if (string.IsNullOrEmpty(xLineSignature) || !VerifySignature(channelSecret, xLineSignature, content))
             {
                 throw new InvalidSignatureException("Signature validation faild.");
@@ -27,7 +32,18 @@ namespace Line.Messaging.Webhooks
             return WebhookEventParser.Parse(content);
         }
 
-        public static bool VerifySignature(string channelSecret, string xLineSignature, string requestBody)
+        /// <summary>
+        /// The signature in the X-Line-Signature request header must be verified to confirm that the request was sent from the LINE Platform.
+        /// Authentication is performed as follows.
+        /// 1. With the channel secret as the secret key, your application retrieves the digest value in the request body created using the HMAC-SHA256 algorithm.
+        /// 2. The server confirms that the signature in the request header matches the digest value which is Base64 encoded
+        /// https://developers.line.me/en/docs/messaging-api/reference/#signature-validation
+        /// </summary>
+        /// <param name="channelSecret">ChannelSecret</param>
+        /// <param name="xLineSignature">X-Line-Signature header</param>
+        /// <param name="requestBody">RequestBody</param>
+        /// <returns></returns>
+        internal static bool VerifySignature(string channelSecret, string xLineSignature, string requestBody)
         {
             try
             {

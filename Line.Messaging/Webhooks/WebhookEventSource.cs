@@ -2,12 +2,21 @@
 
 namespace Line.Messaging.Webhooks
 {
+    /// <summary>
+    /// Webhook Event Source. Source could be User, Group or Room.
+    /// </summary>
     public class WebhookEventSource
     {
         public EventSourceType Type { get; }
 
+        /// <summary>
+        /// User, Group or Room Id
+        /// </summary>
         public string Id { get; }
 
+        /// <summary>
+        /// UserId of the Group or Room
+        /// </summary>
         public string UserId { get; }
 
         public WebhookEventSource(EventSourceType type, string sourceId, string userId)
@@ -17,7 +26,7 @@ namespace Line.Messaging.Webhooks
             UserId = userId;
         }
 
-        public static WebhookEventSource CreateFrom(dynamic dynamicObject)
+        internal static WebhookEventSource CreateFrom(dynamic dynamicObject)
         {
             var source = dynamicObject?.source;
             if (source == null) { return null; }
@@ -43,5 +52,4 @@ namespace Line.Messaging.Webhooks
             return new WebhookEventSource(sourceType, sourceId, (string)source.userId);
         }
     }
-
 }

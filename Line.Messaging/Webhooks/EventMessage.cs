@@ -2,11 +2,19 @@
 
 namespace Line.Messaging.Webhooks
 {
-
+    /// <summary>
+    /// Contents of the message
+    /// </summary>
     public class EventMessage
     {
+        /// <summary>
+        /// Message ID
+        /// </summary>
         public string Id { get; }
 
+        /// <summary>
+        /// EventMessageType
+        /// </summary>
         public EventMessageType Type { get; }
 
         public EventMessage(EventMessageType type, string id)
@@ -15,7 +23,7 @@ namespace Line.Messaging.Webhooks
             Id = id;
         }
 
-        public static EventMessage CreateFrom(dynamic dynamicObject)
+        internal static EventMessage CreateFrom(dynamic dynamicObject)
         {
             var message = dynamicObject?.message;
             if (message == null) { return null; }
@@ -32,7 +40,7 @@ namespace Line.Messaging.Webhooks
                 case EventMessageType.Video:
                     return new EventMessage(messageType, (string)message.id);
                 case EventMessageType.Location:
-                    return new LocationEventMessage((string)message.id, (string)message.title,
+                    return new LocationEventMessage((string)message.id, (string)message.title, (string) message.address,
                         (decimal)message.latitude, (decimal)message.longitude);
                 case EventMessageType.Sticker:
                     return new StickerEventMessage((string)message.id, (string)message.packageId, (string)message.stickerId);
@@ -41,61 +49,6 @@ namespace Line.Messaging.Webhooks
                 default:
                     return null;
             }
-
         }
     }
-
-    public class TextEventMessage : EventMessage
-    {
-        public string Text { get; }
-
-        public TextEventMessage(string id, string text) : base(EventMessageType.Text, id)
-        {
-            Text = text;
-        }
-    }
-
-
-    public class FileEventMessage : EventMessage
-    {
-        public string FileName { get; }
-
-        public long FileSize { get; }
-
-        public FileEventMessage(string id, string fileName, long fileSize) : base(EventMessageType.File, id)
-        {
-            FileName = fileName;
-            FileSize = fileSize;
-        }
-    }
-
-    public class LocationEventMessage : EventMessage
-    {
-        public string Title { get; }
-
-        public decimal Latitude { get; }
-
-        public decimal Longitude { get; }
-
-        public LocationEventMessage(string id, string title, decimal latitude, decimal longitude) : base(EventMessageType.Location, id)
-        {
-            Title = title;
-            Latitude = latitude;
-            Longitude = longitude;
-        }
-    }
-
-    public class StickerEventMessage : EventMessage
-    {
-        public string PacageId { get; }
-
-        public string StickerId { get; }
-
-        public StickerEventMessage(string id, string packageId, string stickerId) : base(EventMessageType.Sticker, id)
-        {
-            PacageId = packageId;
-            StickerId = stickerId;
-        }
-    }
-
 }

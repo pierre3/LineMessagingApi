@@ -7,10 +7,10 @@ namespace Line.Messaging.Webhooks
     {
         public static IEnumerable<WebhookEvent> Parse(string webhookContent)
         {
-            dynamic dynamicObj = JsonConvert.DeserializeObject(webhookContent);
-            if (dynamicObj == null) { yield break; }
+            dynamic dynamicObject = JsonConvert.DeserializeObject(webhookContent);
+            if (dynamicObject == null) { yield break; }
 
-            foreach (var ev in dynamicObj.events)
+            foreach (var ev in dynamicObject.events)
             {
                 var webhookEvent = WebhookEvent.CreateFrom(ev);
                 if (webhookEvent == null) { continue; }
