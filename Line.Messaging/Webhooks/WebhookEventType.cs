@@ -1,5 +1,8 @@
 ﻿namespace Line.Messaging.Webhooks
 {
+    /// <summary>
+    /// Webhook Event Type
+    /// </summary>
     public enum WebhookEventType
     {
         Message,

@@ -1,22 +1,17 @@
-﻿namespace Line.Messaging
+﻿namespace Line.Messaging.Webhooks
 {
     /// <summary>
-    /// Location
-    /// https://developers.line.me/en/docs/messaging-api/reference/#location
+    /// Message object which contains the location data sent from the source.
     /// </summary>
-    public class LocationMessage : ISendMessage
+    public class LocationEventMessage : EventMessage
     {
-        public MessageType Type { get; } = MessageType.Location;
-
         /// <summary>
         /// Title
-        /// Max: 100 characters
         /// </summary>
         public string Title { get; }
 
         /// <summary>
         /// Address
-        /// Max: 100 characters
         /// </summary>
         public string Address { get; }
 
@@ -29,8 +24,8 @@
         /// Longitude
         /// </summary>
         public decimal Longitude { get; }
-        
-        public LocationMessage(string title, string address, decimal latitude, decimal longitude)
+
+        public LocationEventMessage(string id, string title, string address, decimal latitude, decimal longitude) : base(EventMessageType.Location, id)
         {
             Title = title;
             Address = address;
