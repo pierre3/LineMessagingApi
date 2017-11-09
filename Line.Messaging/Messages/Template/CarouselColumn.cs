@@ -38,12 +38,12 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
-        public CarouselColumn(string thumbnailImageUrl, string title, string text, IList<ITemplateAction> actions)
+        public CarouselColumn(string text, string thumbnailImageUrl = null, string title = null,  IList<ITemplateAction> actions = null)
         {
             ThumbnailImageUrl = thumbnailImageUrl;
             Title = title;
             Text = text;
-            Actions = actions;
+            Actions = actions ?? new List<ITemplateAction>();
         }
     }
 }
