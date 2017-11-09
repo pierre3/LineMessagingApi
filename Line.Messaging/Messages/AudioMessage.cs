@@ -4,7 +4,7 @@
     /// Audio
     /// https://developers.line.me/en/docs/messaging-api/reference/#audio
     /// </summary>
-    public class AudioMessage
+    public class AudioMessage : ISendMessage
     {
         public MessageType Type { get; } = MessageType.Audio;
 
