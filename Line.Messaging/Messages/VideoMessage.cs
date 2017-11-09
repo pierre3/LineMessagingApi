@@ -4,7 +4,7 @@
     /// Video
     /// https://developers.line.me/en/docs/messaging-api/reference/#video
     /// </summary>
-    public class VideoMessage
+    public class VideoMessage : ISendMessage
     {
         public MessageType Type { get; } = MessageType.Video;
 
