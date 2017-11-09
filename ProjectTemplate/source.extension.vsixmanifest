@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VsixLineBotFunction.184bd550-2c22-4710-8d5c-d73672f6c509" Version="1.5" Language="ja-JP" Publisher="pierre3" />
-        <DisplayName>Line Bot Function</DisplayName>
-        <Description xml:space="preserve">LINE Messaging API を利用したLINE Bot アプリケーションを簡単に作成できる、Azure Functions のプロジェクトテンプレートです。</Description>
+        <Identity Id="VsixLINEBotCSharpTemplates.184bd550-2c22-4710-8d5c-d73672f6c509" Version="1.6" Language="en-US" Publisher="pierre3" />
+        <DisplayName>LINE Bot C# Template</DisplayName>
+        <Description xml:space="preserve">This package enables C# developer to imeplement LINE Bot by using LINE Messaging API. This contanis:
+- Azure Function template for LINE Bot
+- Web app templates for LINE Bot</Description>
         <MoreInfo>https://github.com/pierre3/LineMessagingApi</MoreInfo>
         <License>LICENSE.txt</License>
         <Tags>Azure Function;LINE Bot</Tags>
@@ -18,6 +20,8 @@
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" TargetVersion="[15.0,16.0)" d:TargetPath="ProjectTemplates\CSharp\Cloud\LineBotFunction.zip" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Cloud\LINEBotApplication.zip" TargetVersion="[15.0,16.0)" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" TargetVersion="[15.0,16.0)" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Cloud\LineWithBotFrameworkApplication.zip" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />

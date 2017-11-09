@@ -11,9 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Line.MessagingTest", "Line.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTemplate", "ProjectTemplate\ProjectTemplate.csproj", "{A0F28E60-35B4-486B-91D2-405AA0DDC69E}"
 EndProject
+<<<<<<< Updated upstream
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppSample", "WebAppSample\WebAppSample.csproj", "{F0BD615E-05EF-490B-AE54-BFF53FCD0A13}"
-EndProject
+=======
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppWithBotFrameworkSample", "WebAppWithBotFrameworkSample\WebAppWithBotFrameworkSample.csproj", "{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}"
+>>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +39,17 @@ Global
 		{A0F28E60-35B4-486B-91D2-405AA0DDC69E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0F28E60-35B4-486B-91D2-405AA0DDC69E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0F28E60-35B4-486B-91D2-405AA0DDC69E}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< Updated upstream
 		{F0BD615E-05EF-490B-AE54-BFF53FCD0A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F0BD615E-05EF-490B-AE54-BFF53FCD0A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0BD615E-05EF-490B-AE54-BFF53FCD0A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0BD615E-05EF-490B-AE54-BFF53FCD0A13}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
