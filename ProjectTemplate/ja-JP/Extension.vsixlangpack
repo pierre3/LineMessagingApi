@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageLanguagePackManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <DisplayName>LINE Bot C# テンプレート</DisplayName>
+    <Description>LINE Messaging API を利用したLINE Bot アプリケーションを簡単に作成できるテンプレートです。このパッケージには以下のテンプレートが含まれます。
+    - Azure Function 用テンプレート
+    - Web App 用テンプレート
+    </Description>
+    <MoreInfo> http://www.contoso.com/products/es/ArbolDeFamilia.htm</MoreInfo>
+    <License>Eula.rtf</License>
+    <ReleaseNotes>ReleaseNotes.rtf</ReleaseNotes>
+    <Icon>Icon.png</Icon>
+  </Metadata>
+</PackageLanguagePackManifest>
