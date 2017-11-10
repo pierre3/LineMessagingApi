@@ -29,7 +29,7 @@
         /// </summary>
         public string Text { get; }
 
-        public PostbackTemplateAction(string label,string data,string text)
+        public PostbackTemplateAction(string label, string data, string text = null)
         {
             Data = data;
             Label = label;

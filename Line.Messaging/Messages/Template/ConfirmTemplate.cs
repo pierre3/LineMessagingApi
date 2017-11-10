@@ -21,10 +21,10 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
-        public ConfirmTemplate(string text, IList<ITemplateAction> actions)
+        public ConfirmTemplate(string text, IList<ITemplateAction> actions = null)
         {
             Text = text;
-            Actions = actions;
+            Actions = actions ?? new List<ITemplateAction>();
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Line.Messaging
         /// </summary>
         public IList<CarouselColumn> Columns { get; }
 
-        public CarouselTemplate(IList<CarouselColumn> columns)
+        public CarouselTemplate(IList<CarouselColumn> columns = null)
         {
-            Columns = columns;
+            Columns = columns ?? new List<CarouselColumn>();
         }
     }
 }
