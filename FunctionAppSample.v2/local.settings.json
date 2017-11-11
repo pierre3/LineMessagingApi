@@ -1,0 +1,8 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "ChannelSecret":"",
+    "ChannelAccessToken":""
+  }
+}
