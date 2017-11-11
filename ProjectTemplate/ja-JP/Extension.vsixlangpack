@@ -6,9 +6,5 @@
     - Azure Function 用テンプレート
     - Web App 用テンプレート
     </Description>
-    <MoreInfo> http://www.contoso.com/products/es/ArbolDeFamilia.htm</MoreInfo>
-    <License>Eula.rtf</License>
-    <ReleaseNotes>ReleaseNotes.rtf</ReleaseNotes>
-    <Icon>Icon.png</Icon>
   </Metadata>
 </PackageLanguagePackManifest>
