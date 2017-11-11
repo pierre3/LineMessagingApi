@@ -21,6 +21,7 @@
     <Assets>
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" TargetVersion="[15.0,16.0)" d:TargetPath="ProjectTemplates\CSharp\Cloud\LineBotFunction.zip" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Cloud\LINEBotApplication.zip" TargetVersion="[15.0,16.0)" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" TargetVersion="[15.0,16.0)" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Cloud\LineWithBotFrameworkApplication.zip" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />

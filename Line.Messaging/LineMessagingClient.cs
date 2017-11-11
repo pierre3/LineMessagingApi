@@ -354,7 +354,7 @@ namespace Line.Messaging
         /// Use the room ID returned in the source object of webhook event objects. 
         /// This feature is only available for LINE@ Approved accounts or official accounts.
         /// </summary>
-        /// <param name="roomId">Identifier of the room<</param>
+        /// <param name="roomId">Identifier of the room</param>
         /// <returns>List of UserProfiles</returns>
         public async Task<IList<UserProfile>> GetRoomMemberProfilesAsync(string roomId)
         {

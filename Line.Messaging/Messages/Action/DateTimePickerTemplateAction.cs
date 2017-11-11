@@ -49,15 +49,18 @@ namespace Line.Messaging
         /// </summary>
         public string Min { get; protected set; }
 
-        public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, string initial, string min, string max)
+        public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, string initial = null, string min = null, string max = null)
         {
             Initialize(label, data, mode, initial, min, max);
         }
 
-        public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, DateTime initial, DateTime min, DateTime max)
+        public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, DateTime? initial = null, DateTime? min = null, DateTime? max = null)
         {
             var format = GetDateTimeFormat(mode);
-            Initialize(label, data, mode, initial.ToString(format), min.ToString(format), max.ToString(format));
+            Initialize(label, data, mode, 
+                initial == null ? null : ((DateTime)initial).ToString(format), 
+                min == null ? null : ((DateTime)min).ToString(format), 
+                max == null ? null : ((DateTime)max).ToString(format));
         }
 
         internal void Initialize(string label, string data, DateTimePickerMode mode, string initial, string min, string max)
