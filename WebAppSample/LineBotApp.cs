@@ -133,9 +133,10 @@ namespace WebAppSample
             if (userMessage == "buttons")
             {
                 replyMessage = new TemplateMessage("Button Template",
-                    new ButtonsTemplate(null, "ButtonsTemplate", "Click Buttons.",
-                    new List<ITemplateAction> {
-                        new MessageTemplateAction("Message Label", "sample data"),                  new PostbackTemplateAction("Postback Label", "sample data", "sample data"),
+                    new ButtonsTemplate(text:"ButtonsTemplate", title:"Click Buttons.",
+                    actions: new List<ITemplateAction> {
+                        new MessageTemplateAction("Message Label", "sample data"),
+                        new PostbackTemplateAction("Postback Label", "sample data", "sample data"),
                     new UriTemplateAction("Uri Label", "https://github.com/kenakamu")
                     }));
             }
@@ -167,10 +168,10 @@ namespace WebAppSample
 
                 replyMessage = new TemplateMessage("Button Template",
                     new CarouselTemplate(new List<CarouselColumn> {
-                        new CarouselColumn("https://github.com/apple-touch-icon.png",
-                        "Casousel 1 Title","Casousel 1 Text", actions1),
-                        new CarouselColumn("https://github.com/apple-touch-icon.png",
-                        "Casousel 1 Title","Casousel 1 Text", actions2)
+                        new CarouselColumn("Casousel 1 Text", "https://github.com/apple-touch-icon.png",
+                        "Casousel 1 Title", actions1),
+                        new CarouselColumn("Casousel 1 Text", "https://github.com/apple-touch-icon.png",
+                        "Casousel 1 Title", actions2)
                     }));
             }
             else if (userMessage == "imagecarousel")
