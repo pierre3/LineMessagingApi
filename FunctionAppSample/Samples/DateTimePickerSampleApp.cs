@@ -23,11 +23,15 @@ namespace FunctionAppSample
             Log.WriteInfo($"SourceType:{ev.Source.Type}, Id:{ev.Source.Id}, MessageType:{ev.Message.Type}");
 
             var template = new TemplateMessage("DataTimePickerTest",
-                new ButtonsTemplate(null, "DateTimePicker TEST", "Select a date or time.", new[] {
-                    new DateTimePickerTemplateAction("Date","Date", DateTimePickerMode.Date, DateTime.Today, new DateTime(2000,1,1), new DateTime(2020,12,31)),
-                    new DateTimePickerTemplateAction("Time","Time", DateTimePickerMode.Time, DateTime.Now.ToString("HH:mm"), "00:00", "23:59"),
-                    new DateTimePickerTemplateAction("DatetTime","DateTime", DateTimePickerMode.Datetime, DateTime.Now, new DateTime(2000,1,1,0,0,0), new DateTime(2020,12,31,23,59,59))
-                }));
+                new ButtonsTemplate(
+                    text: "DateTimePicker TEST",
+                    thumbnailImageUrl: null,
+                    title: "Select a date or time.",
+                    actions: new[] {
+                        new DateTimePickerTemplateAction("Date","Date", DateTimePickerMode.Date, DateTime.Today, new DateTime(2000,1,1), new DateTime(2020,12,31)),
+                        new DateTimePickerTemplateAction("Time","Time", DateTimePickerMode.Time, DateTime.Now.ToString("HH:mm"), "00:00", "23:59"),
+                        new DateTimePickerTemplateAction("DatetTime","DateTime", DateTimePickerMode.Datetime, DateTime.Now, new DateTime(2000,1,1,0,0,0), new DateTime(2020,12,31,23,59,59))
+                    }));
             await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new[] { template });
         }
 

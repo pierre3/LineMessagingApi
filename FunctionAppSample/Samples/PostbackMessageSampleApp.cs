@@ -97,13 +97,13 @@ namespace FunctionAppSample
                                 type = "keyword",
                                 searchWord,
                                 location
-                            }),null),
+                            })),
                         new PostbackTemplateAction("Route",JsonConvert.SerializeObject(
                             new {
                                 type = "route",
                                 searchWord,
                                 location
-                            }),null)
+                            }))
                     }));
             await MessagingClient.ReplyMessageAsync(replyToken, new[] { templateMessage });
         }
