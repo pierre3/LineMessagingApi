@@ -1,5 +1,7 @@
 # LINE Messaging API
 
+[日本語の説明はこちら](./README_JP.md)
+
 This is a C# implementation of the [LINE Messaging API](https://developers.line.me/messaging-api/overview).
 
 ## Getting Started
