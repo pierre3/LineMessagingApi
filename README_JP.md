@@ -1,37 +1,36 @@
 # LINE Messaging API
 
-[日本語の説明はこちら](./README_JP.md)
+[LINE Messaging API](https://developers.line.me/messaging-api/overview) の C# 用 SDK 実装です。
 
-This is a C# implementation of the [LINE Messaging API](https://developers.line.me/messaging-api/overview).
+## はじめに
+このレポジトリには SDK 本体だけでなく、サンプルや Visual Studio 用の各種テンプレートが含まれます。
 
-## Getting Started
-This repository contains SDK itself, as well as base samples and Visual Studio templates.
+### .Net Standard クラスライブラリ   
+NuGet マネージャーなどでプロジェクトに参照可能です。
 
-### .Net Standard Class Library   
-  Use NuGet manager to import the library to your project.
-[NuGet Gallery | Line.Messaging](https://www.nuget.org/packages/Line.Messaging/)  
+[NuGet ギャラリー | Line.Messaging](https://www.nuget.org/packages/Line.Messaging/)  
 
-### Samples
-There are several samples which uses the SDK. You can find detail instructions in each directory.
-- [Azure Function v1 Sample](https://github.com/pierre3/LineMessagingApi/tree/master/FunctionAppSample)
-- [Azure Function v2 Sample](https://github.com/pierre3/LineMessagingApi/tree/master/FunctionAppSample.v2)
-- [Web App (API) Sample](https://github.com/pierre3/LineMessagingApi/tree/master/WebAppSample)
-- [Web App (API) to BotFramework DirectLine Sample](https://github.com/pierre3/LineMessagingApi/tree/master/WebAppWithBotFrameworkSample)
+### サンプル
+SDK を利用するサンプルをいくつか公開しています。詳細はリンク先を参照してください。
+- [Azure ファンクション バージョン 1 サンプル](https://github.com/pierre3/LineMessagingApi/tree/master/FunctionAppSample)
+- [Azure ファンクション バージョン 2 サンプル](https://github.com/pierre3/LineMessagingApi/tree/master/FunctionAppSample.v2)
+- [Web App (API) サンプル](https://github.com/pierre3/LineMessagingApi/tree/master/WebAppSample)
+- [Web App (API) と BotFramework DirectLine 接続のサンプル](https://github.com/pierre3/LineMessagingApi/tree/master/WebAppWithBotFrameworkSample)
 
-### Visual Studio Templates  
-The template can be found in Market Place, but if you want to tweak it, the source is also available.
-- [Line Bot Templates - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=pierre3.LINEBotCSharpTemplate)
-- [Visual Studio Templates Project](https://github.com/pierre3/LineMessagingApi/tree/master/ProjectTemplate)
+### Visual Studio テンプレート  
+テンプレートはマーケットプレースに公開済みですが、中身を変更したい場合はソースも公開しています。
+- [LINE ボットテンプレート - Visual Studio マーケットプレース](https://marketplace.visualstudio.com/items?itemName=pierre3.LINEBotCSharpTemplate)
+- [Visual Studio テンプレートプロジェクト](https://github.com/pierre3/LineMessagingApi/tree/master/ProjectTemplate)
 
-# Usage
-Basically, there are three steps to use the SDK.
-  - Instantiate LineMessagingClient.
-  - Implement a class which inherits WebhookApplication.
-  - Override the method to handle the event.
+# 利用方法
+以下の 3 ステップで SDK を利用します。
+  - LineMessagingClient のインスタンス作成
+  - WebhookApplication を継承したクラスの作成
+  - 各イベント発生時のロジックを実装
 
-## LineMessagingClient Class
+## LineMessagingClient クラス
 
-This is a class to communicate with LINE Messaging API platform. It uses HttpClient-based asynchronous methods such as followings.
+このクラスで LINE Messaging API プラットフォームと通信します。内部で HttpClient ベースの非同期通信を利用しており、以下のような機能を提供します。
 ```cs
 Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
 Task ReplyMessageAsync(string replyToken, params string[] messages)
@@ -52,8 +51,8 @@ Task LeaveFromGroupAsync(string groupId)
 Task LeaveFromRoomAsync(string roomId)
 ```
 
-## Parse and process Webhook-Events
-Use GetWebhookEventsAsync extension method for incoming request to parse the LINE events from the LINE platform. See [FunctionAppSample/HttpTriggerFunction.sc](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/HttpTriggerFunction.cs) as an example.
+## Webhook イベントのパース
+GetWebhookEventsAsync 拡張メソッドを呼び出して、要求から LINE イベントを取得できます。例) [FunctionAppSample/HttpTriggerFunction.sc](https://github.com/pierre3/LineMessagingApi/blob/master/FunctionAppSample/HttpTriggerFunction.cs) 
 
 ```cs
 using Line.Messaging;
@@ -116,8 +115,8 @@ namespace FunctionAppSample
 
 }
 ```
-## Process Webhook-events
-Create a class which inherits WebhookApplication class, then overrides the method you want to handle the LINE evnet in your class.
+## Webhook イベントのハンドル
+WebhookApplication を継承したクラスを作成し、各種イベント発生時のロジックを実装します。
 
 ```cs
 public abstract class WebhookApplication
@@ -133,9 +132,9 @@ public abstract class WebhookApplication
 
 ```
 
-Finally, instantiate the class and run RunAsync method by giving the parsed LINE events as shown above. 
+最後に作成したクラスのインスタンスを作成し、RunAsync メソッドに対してパースした LINE イベントを渡します。
 
-See [Line.Messaging/Webhooks/WebhookApplication.cs](https://github.com/pierre3/LineMessagingApi/blob/master/Line.Messaging/Webhooks/WebhookApplication.cs) as processing event class. 
+例) [Line.Messaging/Webhooks/WebhookApplication.cs](https://github.com/pierre3/LineMessagingApi/blob/master/Line.Messaging/Webhooks/WebhookApplication.cs) 
 
 
 
@@ -204,4 +203,4 @@ class LineBotApp : WebhookApplication
 
 }
 ```
-See each samples for more detail.
+各サンプルでより詳細が確認できます。
