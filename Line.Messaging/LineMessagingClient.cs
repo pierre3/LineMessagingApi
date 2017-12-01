@@ -18,16 +18,18 @@ namespace Line.Messaging
     {
         private HttpClient _client;
         private JsonSerializerSettings _jsonSerializerSettings;
+        static private string _uri;
 
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="channelAccessToken">ChannelAccessToken</param>
-        public LineMessagingClient(string channelAccessToken)
+        public LineMessagingClient(string channelAccessToken, string uri = "https://api.line.me/v2")
         {
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", channelAccessToken);
             _jsonSerializerSettings = new CamelCaseJsonSerializerSettings();
+            _uri = uri;
         }
 
         #region OAuth
@@ -44,7 +46,7 @@ namespace Line.Messaging
         /// <returns>ChannelAccessToken</returns>
         public static async Task<ChannelAccessToken> IssueChannelAccessTokenAsync(HttpClient httpClient, string channelId, string channelAccessToken)
         {
-            var response = await httpClient.PostAsync("https://api.line.me/v2/oauth/accessToken",
+            var response = await httpClient.PostAsync($"{_uri}/oauth/accessToken",
                 new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     ["grant_type"] = "client_credentials",
@@ -71,7 +73,7 @@ namespace Line.Messaging
         /// <param name="channelAccessToken">ChannelAccessToken</param>
         public static async Task RevokeChannelAccessTokenAsync(HttpClient httpClient, string channelAccessToken)
         {
-            var response = await httpClient.PostAsync("https://api.line.me/v2/oauth/revoke",
+            var response = await httpClient.PostAsync($"{_uri}/oauth/revoke",
                 new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     ["access_token"] = channelAccessToken
@@ -110,7 +112,7 @@ namespace Line.Messaging
         /// <param name="messages">Reply messages. Up to 5 messages.</param>
         public async Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/reply");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/reply");
             var content = JsonConvert.SerializeObject(new { replyToken, messages }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
@@ -137,7 +139,7 @@ namespace Line.Messaging
         /// <param name="messages">Reply messages. Up to 5 messages.</param>
         public async Task PushMessageAsync(string to, IList<ISendMessage> messages)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/push");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/push");
             var content = JsonConvert.SerializeObject(new { to, messages }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
@@ -165,7 +167,7 @@ namespace Line.Messaging
         /// <param name="messages">Reply messages. Up to 5 messages.</param>
         public async Task MultiCastMessageAsync(IList<string> to, IList<ISendMessage> messages)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/multicast");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/multicast");
             var content = JsonConvert.SerializeObject(new { to, messages }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -193,7 +195,7 @@ namespace Line.Messaging
         /// <returns>Content as ContentStream</returns>
         public async Task<ContentStream> GetContentStreamAsync(string messageId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{_uri}/bot/message/{messageId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
             return new ContentStream(await response.Content.ReadAsStreamAsync(), response.Content.Headers);
@@ -207,7 +209,7 @@ namespace Line.Messaging
         /// <returns>Content as byte array</returns>
         public async Task<byte[]> GetContentBytesAsync(string messageId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/message/{messageId}/content");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{_uri}/bot/message/{messageId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
             return await response.Content.ReadAsByteArrayAsync();
@@ -226,7 +228,7 @@ namespace Line.Messaging
         /// <returns></returns>
         public async Task<UserProfile> GetUserProfileAsync(string userId)
         {
-            var content = await GetStringAsync($"https://api.line.me/v2/bot/profile/{userId}").ConfigureAwait(false);
+            var content = await GetStringAsync($"{_uri}/bot/profile/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
@@ -245,7 +247,7 @@ namespace Line.Messaging
         /// <returns>User Profile</returns>
         public async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
         {
-            var content = await GetStringAsync($"https://api.line.me/v2/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
+            var content = await GetStringAsync($"{_uri}/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
@@ -261,7 +263,7 @@ namespace Line.Messaging
         /// <returns>GroupMemberIds</returns>
         public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
         {
-            var requestUrl = $"https://api.line.me/v2/bot/group/{groupId}/members/ids";
+            var requestUrl = $"{_uri}/bot/group/{groupId}/members/ids";
             if (continuationToken != null)
             {
                 requestUrl += $"?start={continuationToken}";
@@ -306,7 +308,7 @@ namespace Line.Messaging
         /// <returns></returns>
         public async Task LeaveFromGroupAsync(string groupId)
         {
-            var response = await _client.PostAsync($"https://api.line.me/v2/bot/group/{groupId}/leave", null).ConfigureAwait(false);
+            var response = await _client.PostAsync($"{_uri}/bot/group/{groupId}/leave", null).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
@@ -324,7 +326,7 @@ namespace Line.Messaging
         /// <returns></returns>
         public async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
         {
-            var content = await GetStringAsync($"https://api.line.me/v2/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
+            var content = await GetStringAsync($"{_uri}/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
         }
 
@@ -339,7 +341,7 @@ namespace Line.Messaging
         /// <returns>GroupMemberIds</returns>
         public async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
         {
-            var requestUrl = $"https://api.line.me/v2/bot/room/{roomId}/members/ids";
+            var requestUrl = $"{_uri}/bot/room/{roomId}/members/ids";
             if (continuationToken != null)
             {
                 requestUrl += $"?start={continuationToken}";
@@ -381,7 +383,7 @@ namespace Line.Messaging
         /// <param name="roomId">Room ID</param>
         public async Task LeaveFromRoomAsync(string roomId)
         {
-            var response = await _client.PostAsync($"https://api.line.me/v2/bot/room/{roomId}/leave", null).ConfigureAwait(false);
+            var response = await _client.PostAsync($"{_uri}/bot/room/{roomId}/leave", null).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
@@ -398,7 +400,7 @@ namespace Line.Messaging
         /// <returns>RichMenu</returns>
         public async Task<RichMenu> GetRichMenuAsync(string richMenuId)
         {
-            var json = await GetStringAsync($"https://api.line.me/v2/bot/richmenu/{richMenuId}").ConfigureAwait(false);
+            var json = await GetStringAsync($"{_uri}/bot/richmenu/{richMenuId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<ResponseRichMenu>(json);
         }
 
@@ -412,7 +414,7 @@ namespace Line.Messaging
         /// <returns>RichMenu Id</returns>
         public async Task<string> CreateRichMenuAsync(RichMenu richMenu)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/richmenu");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/richmenu");
             var content = JsonConvert.SerializeObject(richMenu, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
@@ -429,7 +431,7 @@ namespace Line.Messaging
         /// <param name="richMenuId">RichMenu Id</param>
         public async Task DeleteRichMenuAsync(string richMenuId)
         {
-            var response = await _client.DeleteAsync($"https://api.line.me/v2/bot/richmenu/{richMenuId}");
+            var response = await _client.DeleteAsync($"{_uri}/bot/richmenu/{richMenuId}");
         }
 
         /// <summary>
@@ -440,7 +442,7 @@ namespace Line.Messaging
         /// <returns>RichMenu Id</returns>
         public async Task<string> GetRichMenuIdOfUserAsync(string userId)
         {
-            var json = await GetStringAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu");
+            var json = await GetStringAsync($"{_uri}/bot/user/{userId}/richmenu");
             return JsonConvert.DeserializeAnonymousType(json, new { richMenuId = "" }).richMenuId;
         }
 
@@ -454,7 +456,7 @@ namespace Line.Messaging
         /// <returns></returns>
         public async Task LinkRichMenuToUserAsync(string userId, string richMenuId)
         {
-            var response = await _client.PostAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu/{richMenuId}", null);
+            var response = await _client.PostAsync($"{_uri}/bot/user/{userId}/richmenu/{richMenuId}", null);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
@@ -466,7 +468,7 @@ namespace Line.Messaging
         /// <returns></returns>
         public async Task UnLinkRichMenuFromUserAsync(string userId)
         {
-            var response = await _client.DeleteAsync($"https://api.line.me/v2/bot/user/{userId}/richmenu").ConfigureAwait(false);
+            var response = await _client.DeleteAsync($"{_uri}/bot/user/{userId}/richmenu").ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
 
@@ -478,7 +480,7 @@ namespace Line.Messaging
         /// <returns>Image as ContentStream</returns>
         public async Task<ContentStream> DownloadRichMenuImageAsync(string richMenuId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/richmenu/{richMenuId}/content");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{_uri}/bot/richmenu/{richMenuId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
             return new ContentStream(await response.Content.ReadAsStreamAsync(), response.Content.Headers);
@@ -512,7 +514,7 @@ namespace Line.Messaging
 
         private async Task UploadRichMenuImageAsync(Stream stream, string richMenuId, string mediaType)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"https://api.line.me/v2/bot/richmenu/{richMenuId}/content");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/richmenu/{richMenuId}/content");
             request.Content = new StreamContent(stream);
             request.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -526,7 +528,7 @@ namespace Line.Messaging
         /// <returns>List of ResponseRichMenu</returns>
         public async Task<IList<ResponseRichMenu>> GetRichMenuListAsync()
         {
-            var response = await _client.GetAsync("https://api.line.me/v2/bot/richmenu/list").ConfigureAwait(false);
+            var response = await _client.GetAsync($"{_uri}/bot/richmenu/list").ConfigureAwait(false);
             var menus = new List<ResponseRichMenu>();
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
