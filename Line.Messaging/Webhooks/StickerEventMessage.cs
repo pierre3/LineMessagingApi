@@ -5,13 +5,13 @@
     /// </summary>
     public class StickerEventMessage : EventMessage
     {
-        public string PacageId { get; }
+        public string PackageId { get; }
 
         public string StickerId { get; }
 
         public StickerEventMessage(string id, string packageId, string stickerId) : base(EventMessageType.Sticker, id)
         {
-            PacageId = packageId;
+            PackageId = packageId;
             StickerId = stickerId;
         }
     }
