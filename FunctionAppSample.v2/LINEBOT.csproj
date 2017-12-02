@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.0-beta3" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.0-beta3" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.0" />
-    <PackageReference Include="Line.Messaging" Version="1.0.1" />
+    <PackageReference Include="Line.Messaging" Version="1.1.0" />
 
   </ItemGroup>
   <ItemGroup>
