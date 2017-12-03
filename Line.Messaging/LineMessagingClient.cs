@@ -24,6 +24,7 @@ namespace Line.Messaging
         /// Constructor 
         /// </summary>
         /// <param name="channelAccessToken">ChannelAccessToken</param>
+        /// <param name="uri">Request URI</param>
         public LineMessagingClient(string channelAccessToken, string uri = "https://api.line.me/v2")
         {
             _client = new HttpClient();
