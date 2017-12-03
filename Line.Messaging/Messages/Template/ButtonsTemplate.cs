@@ -21,6 +21,27 @@ namespace Line.Messaging
         public string ThumbnailImageUrl { get; }
 
         /// <summary>
+        /// Aspect ratio of the image. Specify one of the following values:
+        /// rectangle: 1.51:1 
+        /// square: 1:1 
+        /// The default value is rectangle.
+        /// </summary>
+        public ImageAspectRatioType ImageAspectRatio { get; }
+
+        /// <summary>
+        /// Size of the image. Specify one of the following values:
+        /// cover: The image fills the entire image area.Parts of the image that do not fit in the area are not displayed.
+        /// contain: The entire image is displayed in the image area.A background is displayed in the unused areas to the left and right of vertical images and in the areas above and below horizontal images.
+        /// The default value is cover.
+        /// </summary>
+        public ImageSizeType ImageSize { get; }
+
+        /// <summary>
+        /// Background color of image. Specify a RGB color value. The default value is #FFFFFF (white).
+        /// </summary>
+        public string ImageBackgroundColor { get; }
+
+        /// <summary>
         /// Title
         /// Max: 40 characters
         /// </summary>
@@ -39,12 +60,16 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
-        public ButtonsTemplate(string text, string thumbnailImageUrl = null, string title = null, IList<ITemplateAction> actions = null)
+        public ButtonsTemplate(string text, string thumbnailImageUrl = null, string title = null, IList<ITemplateAction> actions = null,
+             ImageAspectRatioType imageAspectRatio = ImageAspectRatioType.Rectangle, ImageSizeType imageSize = ImageSizeType.Cover, string imageBackgroundColor = "#FFFFFF")
         {
             ThumbnailImageUrl = thumbnailImageUrl;
             Title = title;
             Text = text;
             Actions = actions ?? new List<ITemplateAction>();
+            ImageAspectRatio = imageAspectRatio;
+            ImageSize = imageSize;
+            ImageBackgroundColor = ImageBackgroundColor;
         }
     }
 }

@@ -20,6 +20,11 @@ namespace Line.Messaging
         public string ThumbnailImageUrl { get; }
 
         /// <summary>
+        /// Background color of image. Specify a RGB color value. The default value is #FFFFFF (white).
+        /// </summary>
+        public string ImageBackgroundColor { get; }
+
+        /// <summary>
         /// Title
         /// Max: 40 characters
         /// </summary>
@@ -38,7 +43,8 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
-        public CarouselColumn(string text, string thumbnailImageUrl = null, string title = null,  IList<ITemplateAction> actions = null)
+        public CarouselColumn(string text, string thumbnailImageUrl = null, string title = null,
+            IList<ITemplateAction> actions = null, string imageBackgroundColor = "#FFFFFF")
         {
             ThumbnailImageUrl = thumbnailImageUrl;
             Title = title;
