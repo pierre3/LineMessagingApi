@@ -1,4 +1,6 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// Text
@@ -16,7 +18,7 @@
 
         public TextMessage(string text)
         {
-            Text = text;
+            Text = text.Substring(0, Math.Min(text.Length, 2000));
         }
     }
 }
