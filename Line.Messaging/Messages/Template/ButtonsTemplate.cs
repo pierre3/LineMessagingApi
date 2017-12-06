@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Line.Messaging
 {
@@ -42,8 +43,8 @@ namespace Line.Messaging
         public ButtonsTemplate(string text, string thumbnailImageUrl = null, string title = null, IList<ITemplateAction> actions = null)
         {
             ThumbnailImageUrl = thumbnailImageUrl;
-            Title = title;
-            Text = text;
+            Title = title.Substring(0, Math.Min(title.Length, 40));
+            Text = (string.IsNullOrEmpty(thumbnailImageUrl) || string.IsNullOrEmpty(title)) ? text.Substring(0, Math.Min(text.Length, 160)) : text.Substring(0, Math.Min(text.Length, 60));
             Actions = actions ?? new List<ITemplateAction>();
         }
     }

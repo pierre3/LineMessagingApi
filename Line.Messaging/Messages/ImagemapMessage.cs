@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Line.Messaging
 {
@@ -37,7 +38,7 @@ namespace Line.Messaging
         public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions)
         {
             BaseUrl = baseUrl;
-            AltText = altText;
+            AltText = altText.Substring(0, Math.Min(altText.Length, 400)); ;
             BaseSize = baseSize;
             Actions = actions;
         }

@@ -1,4 +1,6 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// Object which specifies the actions and tappable regions of an imagemap.
@@ -23,7 +25,7 @@
         public MessageImagemapAction(ImagemapArea area, string text)
         {
             Area = area;
-            Text = text;
+            Text = text.Substring(0, Math.Min(text.Length, 400));
         }
     }
 }
