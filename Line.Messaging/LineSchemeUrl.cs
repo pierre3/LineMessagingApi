@@ -97,7 +97,6 @@ namespace Line.Messaging
         /// <summary>
         /// Opens the "Camera Roll" screen where users can select multiple images to share in the chat.
         /// </summary>
-        /// <returns>String of LINE Scheme URL</returns>
         /// <param name="label">Template action label text</param>
         /// <returns>URI template action object</returns>
         public static UriTemplateAction GetCameraRollMultiUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraRollMultiUrl);
