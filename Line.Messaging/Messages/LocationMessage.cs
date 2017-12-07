@@ -1,4 +1,6 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// Location
@@ -32,8 +34,8 @@
         
         public LocationMessage(string title, string address, decimal latitude, decimal longitude)
         {
-            Title = title;
-            Address = address;
+            Title = title.Substring(0, Math.Min(title.Length, 100));
+            Address = address.Substring(0, Math.Min(address.Length, 100));
             Latitude = latitude;
             Longitude = longitude;
         }

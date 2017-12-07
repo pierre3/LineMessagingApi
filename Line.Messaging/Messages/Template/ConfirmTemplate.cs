@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Line.Messaging
 {
@@ -23,7 +24,7 @@ namespace Line.Messaging
 
         public ConfirmTemplate(string text, IList<ITemplateAction> actions = null)
         {
-            Text = text;
+            Text = text.Substring(0, Math.Min(text.Length, 240));
             Actions = actions ?? new List<ITemplateAction>();
         }
     }

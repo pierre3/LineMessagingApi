@@ -1,4 +1,6 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// Template messages are messages with predefined layouts which you can customize. There are four types of templates available that can be used to interact with users through your bot.
@@ -20,7 +22,7 @@
 
         public TemplateMessage(string altText, ITemplate template)
         {
-            AltText = altText;
+            AltText = altText.Substring(0, Math.Min(altText.Length, 400)); 
             Template = template;
         }
     }
