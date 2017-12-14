@@ -50,6 +50,7 @@ namespace Line.Messaging
             Title = title;
             Text = text;
             Actions = actions ?? new List<ITemplateAction>();
+            ImageBackgroundColor = imageBackgroundColor;
         }
     }
 }
