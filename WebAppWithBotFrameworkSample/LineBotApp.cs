@@ -322,10 +322,10 @@ namespace WebAppWithBotFrameworkSample
                             }
 
                             // Get four buttons per template.
-                            for (int i = 0; i < hcard.Buttons.Count / 4; i++)
+                            for (int i = 0; i < (double)hcard.Buttons.Count / 4; i++)
                             {
                                 ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
-                                title: hcard.Title ?? hcard.Text,
+                                  title: string.IsNullOrEmpty(hcard.Title) ? hcard.Text : hcard.Title,
                                 thumbnailImageUrl: hcard.Images?.FirstOrDefault()?.Url?.Replace("http://", "https://"),
                                 text: hcard.Subtitle ?? hcard.Text
                                 );
@@ -341,6 +341,7 @@ namespace WebAppWithBotFrameworkSample
                                 {
                                     // Action is mandatory, so create from title/subtitle.
                                     var actionLabel = hcard.Title?.Length < hcard.Subtitle?.Length ? hcard.Title : hcard.Subtitle;
+                                    actionLabel = actionLabel.Substring(0, Math.Min(actionLabel.Length, 20));
                                     buttonsTemplate.Actions.Add(new PostbackTemplateAction(actionLabel, actionLabel, actionLabel));
                                 }
 
@@ -473,6 +474,7 @@ namespace WebAppWithBotFrameworkSample
                         {
                             // Action is mandatory, so create from title/subtitle.
                             var actionLabel = hcard.Title?.Length < hcard.Subtitle?.Length ? hcard.Title : hcard.Subtitle;
+                            actionLabel = actionLabel.Substring(0, Math.Min(actionLabel.Length, 20));
                             tColumn.Actions.Add(new PostbackTemplateAction(actionLabel, actionLabel, actionLabel));
                         }
 
@@ -523,7 +525,7 @@ namespace WebAppWithBotFrameworkSample
                 try
                 {
                     // If messages contain more than 5 items, then do reply for first 5, then push the rest.
-                    for (int i = 0; i < messages.Count / 5; i++)
+                    for (int i = 0; i < (double)messages.Count / 5; i++)
                     {
                         if (i == 0)
                             await messagingClient.ReplyMessageAsync(replyToken, messages.Take(5).ToList());
@@ -536,9 +538,9 @@ namespace WebAppWithBotFrameworkSample
                     if (ex.Message == "Invalid reply token")
                         try
                         {
-                            for (int i = 0; i < messages.Count / 5; i++)
+                            for (int i = 0; i < (double)messages.Count / 5; i++)
                             {
-                                await messagingClient.PushMessageAsync(replyToken, messages.Skip(i * 5).Take(5).ToList());
+                                await messagingClient.PushMessageAsync(userId, messages.Skip(i * 5).Take(5).ToList());
                             }
                         }
                         catch (LineResponseException innerEx)
@@ -568,11 +570,11 @@ namespace WebAppWithBotFrameworkSample
                 case "showImage":
                 case "signin":
                 case "downloadFile":
-                    return new UriTemplateAction(button.Title, button.Value.ToString());
+                    return new UriTemplateAction(button.Title.Substring(0, Math.Min(button.Title.Length, 20)), button.Value.ToString());
                 case "imBack":
-                    return new MessageTemplateAction(button.Title, button.Value.ToString());
+                    return new MessageTemplateAction(button.Title.Substring(0, Math.Min(button.Title.Length, 20)), button.Value.ToString());
                 case "postBack":
-                    return new PostbackTemplateAction(button.Title, button.Value.ToString(), button.Value.ToString());
+                    return new PostbackTemplateAction(button.Title.Substring(0, Math.Min(button.Title.Length, 20)), button.Value.ToString(), button.Value.ToString());
                 default:
                     return null;
             }
