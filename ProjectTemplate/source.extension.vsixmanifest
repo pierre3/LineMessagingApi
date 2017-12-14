@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VsixLINEBotCSharpTemplates.184bd550-2c22-4710-8d5c-d73672f6c509" Version="1.6" Language="en-US" Publisher="pierre3" />
+        <Identity Id="VsixLINEBotCSharpTemplates.184bd550-2c22-4710-8d5c-d73672f6c509" Version="2.0" Language="en-US" Publisher="pierre3, kenakamu" />
         <DisplayName>LINE Bot C# Template</DisplayName>
         <Description xml:space="preserve">This package enables C# developer to imeplement LINE Bot by using LINE Messaging API. This contanis:
 - Azure Function template for LINE Bot
