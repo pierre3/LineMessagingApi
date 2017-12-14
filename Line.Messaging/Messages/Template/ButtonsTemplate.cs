@@ -70,7 +70,7 @@ namespace Line.Messaging
             Actions = actions ?? new List<ITemplateAction>();
             ImageAspectRatio = imageAspectRatio;
             ImageSize = imageSize;
-            ImageBackgroundColor = ImageBackgroundColor;
+            ImageBackgroundColor = imageBackgroundColor;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace FunctionAppSample
                 var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
                 var eventSourceState = await TableStorage<EventSourceState>.CreateAsync(connectionString, "eventsourcestate");
                 var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-                var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage, log);
+                //var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage, log);
 
                 //Samples app
                 //var app = new DateTimePickerSampleApp(lineMessagingClient, log);
@@ -41,7 +41,8 @@ namespace FunctionAppSample
                 //var app = new RichMenuSampleApp(lineMessagingClient, log);
                 //var eventSourceLocation = await TableStorage<EventSourceLocation>.CreateAsync(connectionString, "eventsourcelocation");
                 //var app = new PostbackMessageSampleApp(lineMessagingClient, eventSourceLocation, log);
-
+                //var app = new ButtonsTemplateSampleApp(lineMessagingClient, blobStorage, log);
+                var app = new CarouselTemplateSampleApp(lineMessagingClient, blobStorage, log);
                 await app.RunAsync(events);
 
             }
