@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>Line Messaging API for .Net</Description>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Copyright>© 2017 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,8 +18,8 @@
     <PackageReleaseNotes>- Trim the string when it exceeds the limit for messages.
 - Add new options in the Buttons Template and the Carousel Template.
 - Supports the LINE URL scheme.</PackageReleaseNotes>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.1</AssemblyVersion>
+    <FileVersion>1.2.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

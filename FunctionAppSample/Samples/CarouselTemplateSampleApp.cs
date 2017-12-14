@@ -89,9 +89,9 @@ namespace FunctionAppSample
 
                 await MessagingClient.ReplyMessageAsync(replyToken, new[] { templateMessage });
             }
-
         }
-
     }
+
 }
+
 
