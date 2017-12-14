@@ -321,28 +321,32 @@ namespace WebAppWithBotFrameworkSample
                                 hcard = new HeroCard(tCard.Title, tCard.Subtitle, tCard.Text, tCard.Images, tCard.Buttons, null);
                             }
 
-                            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
-                                title: hcard.Title.Substring(0, Math.Min(hcard.Title.Length, 40)),
-                                thumbnailImageUrl: hcard.Images.FirstOrDefault()?.Url?.Replace("http://", "https://"),
-                                text: string.IsNullOrEmpty(hcard.Subtitle) ?
-                                hcard.Text.Substring(0, Math.Min(hcard.Text.Length, 60)) :
-                                hcard.Subtitle.Substring(0, Math.Min(hcard.Subtitle.Length, 60)));                           
-
-                            if (hcard.Buttons != null)
+                            // Get four buttons per template.
+                            for (int i = 0; i < (double)hcard.Buttons.Count / 4; i++)
                             {
-                                foreach (var button in hcard.Buttons)
+                                ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
+                                  title: string.IsNullOrEmpty(hcard.Title) ? hcard.Text : hcard.Title,
+                                thumbnailImageUrl: hcard.Images?.FirstOrDefault()?.Url?.Replace("http://", "https://"),
+                                text: hcard.Subtitle ?? hcard.Text
+                                );
+
+                                if (hcard.Buttons != null)
                                 {
-                                    buttonsTemplate.Actions.Add(GetAction(button));
+                                    foreach (var button in hcard.Buttons.Skip(i * 4).Take(4))
+                                    {
+                                        buttonsTemplate.Actions.Add(GetAction(button));
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                // Action is mandatory, so create from title/subtitle.
-                                var actionLabel = hcard.Title?.Length < hcard.Subtitle?.Length ? hcard.Title : hcard.Subtitle;
-                                buttonsTemplate.Actions.Add(new PostbackTemplateAction(actionLabel, actionLabel, actionLabel));
-                            }
+                                else
+                                {
+                                    // Action is mandatory, so create from title/subtitle.
+                                    var actionLabel = hcard.Title?.Length < hcard.Subtitle?.Length ? hcard.Title : hcard.Subtitle;
+                                    actionLabel = actionLabel.Substring(0, Math.Min(actionLabel.Length, 20));
+                                    buttonsTemplate.Actions.Add(new PostbackTemplateAction(actionLabel, actionLabel, actionLabel));
+                                }
 
-                            messages.Add(new TemplateMessage("Buttons template", buttonsTemplate));
+                                messages.Add(new TemplateMessage("Buttons template", buttonsTemplate));
+                            }
                         }
                         else if (attachment.ContentType.Contains("receipt"))
                         {
@@ -454,15 +458,14 @@ namespace WebAppWithBotFrameworkSample
                             continue;
 
                         CarouselColumn tColumn = new CarouselColumn(
-                            title: hcard.Title.Substring(0, Math.Min(hcard.Title.Length, 40)),
+                            title: hcard.Title,
                             thumbnailImageUrl: hcard.Images.FirstOrDefault()?.Url?.Replace("http://", "https://"),
                             text: string.IsNullOrEmpty(hcard.Subtitle) ? 
-                                hcard.Text.Substring(0, Math.Min(hcard.Text.Length, 60)) : 
-                                hcard.Subtitle.Substring(0, Math.Min(hcard.Subtitle.Length, 60)));
+                                hcard.Text : hcard.Subtitle);
 
                         if (hcard.Buttons != null)
                         {
-                            foreach (var button in hcard.Buttons)
+                            foreach (var button in hcard.Buttons.Take(3))
                             {
                                 tColumn.Actions.Add(GetAction(button));
                             }
@@ -471,6 +474,7 @@ namespace WebAppWithBotFrameworkSample
                         {
                             // Action is mandatory, so create from title/subtitle.
                             var actionLabel = hcard.Title?.Length < hcard.Subtitle?.Length ? hcard.Title : hcard.Subtitle;
+                            actionLabel = actionLabel.Substring(0, Math.Min(actionLabel.Length, 20));
                             tColumn.Actions.Add(new PostbackTemplateAction(actionLabel, actionLabel, actionLabel));
                         }
 
@@ -520,14 +524,24 @@ namespace WebAppWithBotFrameworkSample
 
                 try
                 {
-                    await messagingClient.ReplyMessageAsync(replyToken, messages);
+                    // If messages contain more than 5 items, then do reply for first 5, then push the rest.
+                    for (int i = 0; i < (double)messages.Count / 5; i++)
+                    {
+                        if (i == 0)
+                            await messagingClient.ReplyMessageAsync(replyToken, messages.Take(5).ToList());
+                        else
+                            await messagingClient.PushMessageAsync(replyToken, messages.Skip(i * 5).Take(5).ToList());
+                    }
                 }
                 catch (LineResponseException ex)
                 {
                     if (ex.Message == "Invalid reply token")
                         try
                         {
-                            await messagingClient.PushMessageAsync(userId, messages);
+                            for (int i = 0; i < (double)messages.Count / 5; i++)
+                            {
+                                await messagingClient.PushMessageAsync(userId, messages.Skip(i * 5).Take(5).ToList());
+                            }
                         }
                         catch (LineResponseException innerEx)
                         {
@@ -556,11 +570,11 @@ namespace WebAppWithBotFrameworkSample
                 case "showImage":
                 case "signin":
                 case "downloadFile":
-                    return new UriTemplateAction(button.Title, button.Value.ToString());
+                    return new UriTemplateAction(button.Title.Substring(0, Math.Min(button.Title.Length, 20)), button.Value.ToString());
                 case "imBack":
-                    return new MessageTemplateAction(button.Title, button.Value.ToString());
+                    return new MessageTemplateAction(button.Title.Substring(0, Math.Min(button.Title.Length, 20)), button.Value.ToString());
                 case "postBack":
-                    return new PostbackTemplateAction(button.Title, button.Value.ToString(), button.Value.ToString());
+                    return new PostbackTemplateAction(button.Title.Substring(0, Math.Min(button.Title.Length, 20)), button.Value.ToString(), button.Value.ToString());
                 default:
                     return null;
             }
