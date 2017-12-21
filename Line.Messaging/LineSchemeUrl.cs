@@ -66,40 +66,40 @@ namespace Line.Messaging
         /// Opens the camera screen.
         /// </summary>
         /// <returns>String of LINE Scheme URL</returns>z
-        public static string GetCameraUrl => camera;
+        public static string GetCameraUrl() => camera;
 
         /// <summary>
         /// Opens the camera screen.
         /// </summary>
         /// <param name="label">Template action label text</param>
         /// <returns>URI template action object</returns>
-        public static UriTemplateAction GetCameraUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraUrl);
+        public static UriTemplateAction GetCameraUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraUrl());
 
         /// <summary>
         /// Opens the "Camera Roll" screen where users can select one image to share in the chat.
         /// </summary>
         /// <returns>String of LINE Scheme URL</returns>
-        public static string GetCameraRollSingleUrl => cameraRollSingle;
+        public static string GetCameraRollSingleUrl() => cameraRollSingle;
 
         /// <summary>
         /// Opens the "Camera Roll" screen where users can select one image to share in the chat.
         /// </summary>
         /// <param name="label">Template action label text</param>
         /// <returns>URI template action object</returns>
-        public static UriTemplateAction GetCameraRollSingleUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraRollSingleUrl);
+        public static UriTemplateAction GetCameraRollSingleUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraRollSingleUrl());
 
         /// <summary>
         /// Opens the "Camera Roll" screen where users can select multiple images to share in the chat.
         /// </summary>
         /// <returns>String of LINE Scheme URL</returns>
-        public static string GetCameraRollMultiUrl => cameraRollMulti;
+        public static string GetCameraRollMultiUrl() => cameraRollMulti;
 
         /// <summary>
         /// Opens the "Camera Roll" screen where users can select multiple images to share in the chat.
         /// </summary>
         /// <param name="label">Template action label text</param>
         /// <returns>URI template action object</returns>
-        public static UriTemplateAction GetCameraRollMultiUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraRollMultiUrl);
+        public static UriTemplateAction GetCameraRollMultiUriTemplateAction(string label) => new UriTemplateAction(label, GetCameraRollMultiUrl());
 
         /// <summary>
         /// Opens the "Location" screen. Users can share the current location or drop a pin on the map to select the location they want to share.
@@ -109,7 +109,7 @@ namespace Line.Messaging
         /// Not supported on external apps or other types of LINE chats.
         ///</remarks>
         /// <returns>String of LINE Scheme URL</returns>
-        public static string GetLocationUrl => location;
+        public static string GetLocationUrl() => location;
 
         /// <summary>
         /// Opens the "Location" screen. Users can share the current location or drop a pin on the map to select the location they want to share.
@@ -120,7 +120,7 @@ namespace Line.Messaging
         /// </remarks>
         /// <param name = "label" > Template action label text</param>
         /// <returns>URI template action object</returns>
-        public static UriTemplateAction GetLocationUriTemplateAction(string label) => new UriTemplateAction(label, GetLocationUrl);
+        public static UriTemplateAction GetLocationUriTemplateAction(string label) => new UriTemplateAction(label, GetLocationUrl());
 
         /// <summary>
         /// Opens one of the following screens depending on the user's friendship status with the bot.<para>
