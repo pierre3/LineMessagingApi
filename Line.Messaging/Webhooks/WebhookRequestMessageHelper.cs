@@ -53,14 +53,27 @@ namespace Line.Messaging.Webhooks
                 using (HMACSHA256 hmac = new HMACSHA256(key))
                 {
                     var hash = hmac.ComputeHash(body, 0, body.Length);
-                    var hash64 = Convert.ToBase64String(hash);
-                    return xLineSignature == hash64;
+                    var xLineBytes = Convert.FromBase64String(xLineSignature);
+                    return SlowEquals(xLineBytes, hash);
                 }
             }
             catch
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Compares two-byte arrays in length-constant time. 
+        /// This comparison method is used so that password hashes cannot be extracted from on-line systems using a timing attack and then attacked off-line.
+        /// <remarks> http://bryanavery.co.uk/cryptography-net-avoiding-timing-attack/#comment-85　</remarks>
+        /// </summary>
+        private static bool SlowEquals(byte[] a, byte[] b)
+        {
+            uint diff = (uint)a.Length ^ (uint)b.Length;
+            for (int i = 0; i < a.Length && i < b.Length; i++)
+                diff |= (uint)(a[i] ^ b[i]);
+            return diff == 0;
         }
     }
 }
