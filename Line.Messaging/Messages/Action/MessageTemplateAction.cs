@@ -1,10 +1,12 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// When a control associated with this action is tapped, the string in the text field is sent as a message from the user.
     /// https://developers.line.me/en/docs/messaging-api/reference/#datetime-picker-action
     /// </summary>
-    public class MessageTemplateAction: ITemplateAction
+    public class MessageTemplateAction : ITemplateAction
     {
         public TemplateActionType Type { get; } = TemplateActionType.Message;
 
@@ -22,10 +24,10 @@
         /// </summary>
         public string Text { get; }
 
-        public MessageTemplateAction(string label,string text)
+        public MessageTemplateAction(string label, string text)
         {
-            Label = label;
-            Text = text;
+            Label = label.Substring(0, Math.Min(label.Length, 20));
+            Text = text.Substring(0, Math.Min(text.Length, 300));
         }
 
         internal static MessageTemplateAction CreateFrom(dynamic dynamicObject)
