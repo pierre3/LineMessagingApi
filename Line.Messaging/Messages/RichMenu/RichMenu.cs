@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Line.Messaging
 {
@@ -8,6 +9,9 @@ namespace Line.Messaging
     /// </summary>
     public class RichMenu
     {
+        private string _name;
+        private string _chatBarText;
+
         /// <summary>
         /// size object which contains the width and height of the rich menu displayed in the chat. Rich menu images must be one of the following sizes: 2500x1686, 2500x843.
         /// </summary>
@@ -21,12 +25,26 @@ namespace Line.Messaging
         /// <summary>
         /// Name of the rich menu. This value can be used to help manage your rich menus and is not displayed to users. Maximum of 300 characters.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get =>_name;
+            set
+            {
+                _name = value?.Substring(0, Math.Min(value.Length, 300));
+            }
+        }
 
         /// <summary>
         /// Text displayed in the chat bar. Maximum of 14 characters.
         /// </summary>
-        public string ChatBarText { set; get; }
+        public string ChatBarText
+        {
+            get =>_chatBarText;
+            set
+            {
+                _chatBarText = value?.Substring(0, Math.Min(value.Length, 14));
+            }
+        }
 
         /// <summary>
         /// Array of area objects which define the coordinates and size of tappable areas. Maximum of 20 area objects.

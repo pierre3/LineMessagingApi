@@ -1,4 +1,6 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// When a control associated with this action is tapped, the URI specified in the uri field is opened.
@@ -24,7 +26,7 @@
 
         public UriTemplateAction(string label, string uri)
         {
-            Label = label;
+            Label = label.Substring(0, Math.Min(label.Length, 20));
             Uri = uri;
         }
 

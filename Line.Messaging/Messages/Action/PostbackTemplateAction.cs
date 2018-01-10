@@ -1,11 +1,13 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// When a control associated with this action is tapped, a postback event is returned via webhook with the specified string in the data field.
     /// If you have included the text field, the string in the text field is sent as a message from the user.
     /// https://developers.line.me/en/docs/messaging-api/reference/#postback-action
     /// </summary>
-    public class PostbackTemplateAction: ITemplateAction
+    public class PostbackTemplateAction : ITemplateAction
     {
         public TemplateActionType Type { get; } = TemplateActionType.Postback;
 
@@ -31,9 +33,9 @@
 
         public PostbackTemplateAction(string label, string data, string text = null)
         {
-            Data = data;
-            Label = label;
-            Text = text;
+            Data = data.Substring(0, Math.Min(data.Length, 300));
+            Label = label.Substring(0, Math.Min(label.Length, 20));
+            Text = text?.Substring(0, Math.Min(text.Length, 300));
         }
 
         internal static PostbackTemplateAction CreateFrom(dynamic dynamicObject)

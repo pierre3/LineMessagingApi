@@ -65,8 +65,9 @@ namespace Line.Messaging
              ImageAspectRatioType imageAspectRatio = ImageAspectRatioType.Rectangle, ImageSizeType imageSize = ImageSizeType.Cover, string imageBackgroundColor = "#FFFFFF")
         {
             ThumbnailImageUrl = thumbnailImageUrl;
-            Title = title.Substring(0, Math.Min(title.Length, 40));
-            Text = (string.IsNullOrEmpty(thumbnailImageUrl) || string.IsNullOrEmpty(title)) ? text.Substring(0, Math.Min(text.Length, 160)) : text.Substring(0, Math.Min(text.Length, 60));
+            Title = title?.Substring(0, Math.Min(title.Length, 40));
+            Text = (string.IsNullOrEmpty(thumbnailImageUrl) && string.IsNullOrEmpty(title)) 
+                ? text.Substring(0, Math.Min(text.Length, 160)) : text.Substring(0, Math.Min(text.Length, 60));
             Actions = actions ?? new List<ITemplateAction>();
             ImageAspectRatio = imageAspectRatio;
             ImageSize = imageSize;

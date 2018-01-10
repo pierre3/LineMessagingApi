@@ -24,7 +24,7 @@ namespace Line.Messaging
             {
                 Bounds = new ImagemapArea(
                     (int)(dynamicObject?.bounds?.x ?? 0),
-                    (int)(dynamicObject?.bounds.y ?? 0),
+                    (int)(dynamicObject?.bounds?.y ?? 0),
                     (int)(dynamicObject?.bounds?.width ?? 0),
                     (int)(dynamicObject?.bounds?.height ?? 0)),
                 Action = ParseTemplateAction(dynamicObject?.action)
