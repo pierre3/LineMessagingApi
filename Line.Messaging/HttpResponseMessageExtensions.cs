@@ -19,9 +19,18 @@ namespace Line.Messaging
             }
             else
             {
+                ErrorResponseMessage errorMessage;
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var errorMessage = JsonConvert.DeserializeObject<ErrorResponseMessage>(content, new CamelCaseJsonSerializerSettings());
+                try
+                {
+                    errorMessage = JsonConvert.DeserializeObject<ErrorResponseMessage>(content, new CamelCaseJsonSerializerSettings());
+                }
+                catch
+                {
+                    errorMessage = new ErrorResponseMessage() { Message = content, Details = new ErrorResponseMessage.ErrorDetails[0] };
+                }
                 throw new LineResponseException(errorMessage.Message) { StatusCode = response.StatusCode, ResponseMessage = errorMessage };
+
             }
         }
     }
