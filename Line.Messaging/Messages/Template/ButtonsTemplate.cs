@@ -61,17 +61,24 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
+        /// <summary>
+        /// Action when image is tapped; set for the entire image, title, and text area
+        /// </summary>
+        public ITemplateAction DefaultAction { get; }
+
         public ButtonsTemplate(string text, string thumbnailImageUrl = null, string title = null, IList<ITemplateAction> actions = null,
-             ImageAspectRatioType imageAspectRatio = ImageAspectRatioType.Rectangle, ImageSizeType imageSize = ImageSizeType.Cover, string imageBackgroundColor = "#FFFFFF")
+             ImageAspectRatioType imageAspectRatio = ImageAspectRatioType.Rectangle, ImageSizeType imageSize = ImageSizeType.Cover, string imageBackgroundColor = "#FFFFFF",
+             ITemplateAction defaultAction = null)
         {
             ThumbnailImageUrl = thumbnailImageUrl;
             Title = title?.Substring(0, Math.Min(title.Length, 40));
-            Text = (string.IsNullOrEmpty(thumbnailImageUrl) && string.IsNullOrEmpty(title)) 
+            Text = (string.IsNullOrEmpty(thumbnailImageUrl) && string.IsNullOrEmpty(title))
                 ? text.Substring(0, Math.Min(text.Length, 160)) : text.Substring(0, Math.Min(text.Length, 60));
             Actions = actions ?? new List<ITemplateAction>();
             ImageAspectRatio = imageAspectRatio;
             ImageSize = imageSize;
             ImageBackgroundColor = imageBackgroundColor;
+            DefaultAction = defaultAction;
         }
     }
 }
