@@ -44,8 +44,14 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
+        /// <summary>
+        /// Action when image is tapped; set for the entire image, title, and text area
+        /// </summary>
+        public ITemplateAction DefaultAction { get; }
+
         public CarouselColumn(string text, string thumbnailImageUrl = null, string title = null,
-            IList<ITemplateAction> actions = null, string imageBackgroundColor = "#FFFFFF")
+            IList<ITemplateAction> actions = null, string imageBackgroundColor = "#FFFFFF",
+            ITemplateAction defaultAction = null)
         {
             ThumbnailImageUrl = thumbnailImageUrl;
             Title = title?.Substring(0, Math.Min(title.Length, 40));
@@ -53,6 +59,7 @@ namespace Line.Messaging
                 ? text.Substring(0, Math.Min(text.Length, 120)) : text.Substring(0, Math.Min(text.Length, 60));
             Actions = actions ?? new List<ITemplateAction>();
             ImageBackgroundColor = imageBackgroundColor;
+            DefaultAction = defaultAction;
         }
     }
 }
