@@ -26,21 +26,92 @@ namespace Line.Messaging
         public string Data { get; }
 
         /// <summary>
-        /// Text sent when the action is performed
+        /// Deprecated. Text displayed in the chat as a message sent by the user when the action is performed. Returned from the server through a webhook.
         /// Max: 300 characters
+        /// The displayText and text fields cannot both be used at the same time.
         /// </summary>
         public string Text { get; }
 
-        public PostbackTemplateAction(string label, string data, string text = null)
+        /// <summary>
+        /// Text displayed in the chat as a message sent by the user when the action is performed.
+        /// Max: 300 characters
+        /// The displayText and text fields cannot both be used at the same time.
+        /// </summary>
+        public string DisplayText { get; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="label">
+        /// Label for the action
+        /// Required for templates other than image carousel.Max: 20 characters
+        /// Optional for image carousel templates.Max: 12 characters.
+        /// Not applicable for rich menus.
+        /// </param>
+        /// <param name="data">
+        /// String returned via webhook in the postback.data property of the postback event
+        /// Max: 300 characters
+        /// </param>
+        /// <param name="text">
+        /// Deprecated. Text displayed in the chat as a message sent by the user when the action is performed.
+        /// <para></para>
+        /// </param>
+        /// <param name="displayText">
+        /// Text displayed in the chat as a message sent by the user when the action is performed.
+        /// Max: 300 characters
+        /// The displayText and text fields cannot both be used at the same time.
+        /// </param>
+        [Obsolete("Use the static method \"Create\" .")]
+        public PostbackTemplateAction(string label, string data, string text = null, string displayText=null)
         {
             Data = data.Substring(0, Math.Min(data.Length, 300));
             Label = label.Substring(0, Math.Min(label.Length, 20));
-            Text = text?.Substring(0, Math.Min(text.Length, 300));
+
+            if(displayText!=null)
+            {
+                DisplayText = text.Substring(0, Math.Min(text.Length, 300));
+            }
+            else if(text!=null)
+            {
+                Text = text.Substring(0, Math.Min(text.Length, 300));
+            }
+            
+        }
+#pragma warning disable CS0618
+        /// <summary>
+        /// Create a new instance 
+        /// </summary>
+        /// <param name="label">
+        /// Label for the action
+        /// Required for templates other than image carousel.Max: 20 characters
+        /// Optional for image carousel templates.Max: 12 characters.
+        /// Not applicable for rich menus.
+        /// </param>
+        /// <param name="data">
+        /// String returned via webhook in the postback.data property of the postback event
+        /// Max: 300 characters
+        /// </param>
+        /// <param name="displayText">
+        /// Text displayed in the chat as a message sent by the user when the action is performed.
+        /// Max: 300 characters
+        /// The displayText and text fields cannot both be used at the same time.
+        /// </param>
+        /// <returns>Instance of PostbackTemplateAction</returns>
+        public static PostbackTemplateAction Create(string label,string data, string displayText=null)
+        {
+            return new PostbackTemplateAction(label, data, null, displayText);
         }
 
         internal static PostbackTemplateAction CreateFrom(dynamic dynamicObject)
         {
-            return new PostbackTemplateAction((string)dynamicObject?.label, (string)dynamicObject?.data, (string)dynamicObject?.text);
+            string displayText = dynamicObject?.displayText;
+            string text = null; 
+            if (displayText == null)
+            {
+                text = dynamicObject?.text;
+            }
+            return new PostbackTemplateAction((string)dynamicObject?.label, (string)dynamicObject?.data, text, displayText);
         }
+#pragma warning restore
     }
 }
