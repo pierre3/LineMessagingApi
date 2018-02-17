@@ -53,65 +53,40 @@ namespace Line.Messaging
         /// Max: 300 characters
         /// </param>
         /// <param name="text">
-        /// Deprecated. Text displayed in the chat as a message sent by the user when the action is performed.
-        /// <para></para>
-        /// </param>
-        /// <param name="displayText">
         /// Text displayed in the chat as a message sent by the user when the action is performed.
-        /// Max: 300 characters
-        /// The displayText and text fields cannot both be used at the same time.
+        /// And only when <paramref name="useDisplayText"/> is false, returned from the server through a webhook.
+        /// <para>Max: 300 characters</para>
         /// </param>
-        [Obsolete("Use the static method \"Create\" .")]
-        public PostbackTemplateAction(string label, string data, string text = null, string displayText=null)
+        /// <param name="useDisplayText">
+        /// If set to true, <paramref name="text"/> parameter is set to DisplayText property.
+        /// If set to false, <paramref name="text"/> parameter is set to Text property. However text property is deprecated.
+        /// </param>
+        public PostbackTemplateAction(string label, string data, string text = null, bool useDisplayText = true)
         {
             Data = data.Substring(0, Math.Min(data.Length, 300));
             Label = label.Substring(0, Math.Min(label.Length, 20));
 
-            if(displayText!=null)
+            if (useDisplayText)
             {
-                DisplayText = text.Substring(0, Math.Min(text.Length, 300));
+                DisplayText = text?.Substring(0, Math.Min(text.Length, 300));
             }
-            else if(text!=null)
+            else
             {
-                Text = text.Substring(0, Math.Min(text.Length, 300));
+                Text = text?.Substring(0, Math.Min(text.Length, 300));
             }
-            
-        }
-#pragma warning disable CS0618
-        /// <summary>
-        /// Create a new instance 
-        /// </summary>
-        /// <param name="label">
-        /// Label for the action
-        /// Required for templates other than image carousel.Max: 20 characters
-        /// Optional for image carousel templates.Max: 12 characters.
-        /// Not applicable for rich menus.
-        /// </param>
-        /// <param name="data">
-        /// String returned via webhook in the postback.data property of the postback event
-        /// Max: 300 characters
-        /// </param>
-        /// <param name="displayText">
-        /// Text displayed in the chat as a message sent by the user when the action is performed.
-        /// Max: 300 characters
-        /// The displayText and text fields cannot both be used at the same time.
-        /// </param>
-        /// <returns>Instance of PostbackTemplateAction</returns>
-        public static PostbackTemplateAction Create(string label,string data, string displayText=null)
-        {
-            return new PostbackTemplateAction(label, data, null, displayText);
+
         }
 
         internal static PostbackTemplateAction CreateFrom(dynamic dynamicObject)
         {
-            string displayText = dynamicObject?.displayText;
-            string text = null; 
-            if (displayText == null)
+            bool useDisplayText = true;
+            string text = dynamicObject?.displayText;
+            if (text == null)
             {
                 text = dynamicObject?.text;
+                useDisplayText = false;
             }
-            return new PostbackTemplateAction((string)dynamicObject?.label, (string)dynamicObject?.data, text, displayText);
+            return new PostbackTemplateAction((string)dynamicObject?.label, (string)dynamicObject?.data, text, useDisplayText);
         }
-#pragma warning restore
     }
 }
