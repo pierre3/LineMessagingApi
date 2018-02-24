@@ -12,11 +12,11 @@ namespace FunctionAppSample
     class LineBotApp : WebhookApplication
     {
         private LineMessagingClient MessagingClient { get; }
-        private TableStorage<EventSourceState> SourceState { get; }
+        private TableStorage<BotStatus> SourceState { get; }
         private BlobStorage BlobStorage { get; }
         private TraceWriter Log { get; }
 
-        public LineBotApp(LineMessagingClient lineMessagingClient, TableStorage<EventSourceState> tableStorage, BlobStorage blobStorage, TraceWriter log)
+        public LineBotApp(LineMessagingClient lineMessagingClient, TableStorage<BotStatus> tableStorage, BlobStorage blobStorage, TraceWriter log)
         {
             MessagingClient = lineMessagingClient;
             SourceState = tableStorage;

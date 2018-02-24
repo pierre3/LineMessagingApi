@@ -59,7 +59,7 @@ namespace Line.Messaging
         /// </param>
         /// <param name="useDisplayText">
         /// If set to true, <paramref name="text"/> parameter is set to DisplayText property.
-        /// If set to false, <paramref name="text"/> parameter is set to Text property. However text property is deprecated.
+        /// (Deprecated) If set to false, <paramref name="text"/> parameter is set to Text property. However text property is deprecated.
         /// </param>
         public PostbackTemplateAction(string label, string data, string text = null, bool useDisplayText = true)
         {

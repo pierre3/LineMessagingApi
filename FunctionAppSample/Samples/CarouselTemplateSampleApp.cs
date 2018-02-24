@@ -55,7 +55,7 @@ namespace FunctionAppSample
                 {
                     imageUri = await BlobStorage.UploadImageAsync(Properties.Resources.sample_image, blobDirectoryName, imageName);
                 }
-
+                var defaultAction = new MessageTemplateAction("Default-Action", "Default-Action");
                 var templateMessage = new TemplateMessage("CarouselTemplate",
                     new CarouselTemplate(new[]
                     {
@@ -64,25 +64,29 @@ namespace FunctionAppSample
                             imageUri.ToString(),
                             "Test of thumbnail image settings",
                             new []{ new MessageTemplateAction("Rectangle-Contain", "Rectangle-Contain") },
-                            "#FF0000"),
+                            "#FF0000",
+                            defaultAction),
                         new CarouselColumn(
                             imageAspectRatio + "-" + imageSize,
                             imageUri.ToString(),
                             "Test of thumbnail image settings",
                             new []{ new MessageTemplateAction("Rectangle-Cover", "Rectangle-Cover") },
-                            "#00FF00"),
+                            "#00FF00",
+                            defaultAction),
                         new CarouselColumn(
                             imageAspectRatio + "-" + imageSize,
                             imageUri.ToString(),
                             "Test of thumbnail image settings",
                             new []{ new MessageTemplateAction("Square-Contain", "Square-Contain") },
-                            "#0000FF"),
+                            "#0000FF",
+                            defaultAction),
                         new CarouselColumn(
                             imageAspectRatio + "-" + imageSize,
                             imageUri.ToString(),
                             "Test of thumbnail image settings",
                             new []{ new MessageTemplateAction("Square-Cover", "Square-Cover") },
-                            "#FF00FF")
+                            "#FF00FF",
+                            defaultAction)
                     },
                     imageAspectRatio,
                     imageSize));

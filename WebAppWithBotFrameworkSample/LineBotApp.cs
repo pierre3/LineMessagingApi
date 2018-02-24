@@ -37,7 +37,7 @@ namespace WebAppWithBotFrameworkSample
             {
                 dlClient = new DirectLineClient(directLineSecret);
             }
-            catch (Exception ex)
+            catch (Exception)
             { }
         }
 
@@ -189,7 +189,7 @@ namespace WebAppWithBotFrameworkSample
             {
                 await dlClient.Conversations.PostActivityAsync(conversationId, sendMessage);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

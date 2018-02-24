@@ -71,7 +71,8 @@ namespace FunctionAppSample
                                 actions,
                                 imageAspectRatio,
                                 imageSize,
-                                imageBackgroundColor: "#FF0000"));
+                                imageBackgroundColor: "#FF0000",
+                                defaultAction: new MessageTemplateAction("Default-Action","Default-Action")));
                 await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new[] { templateMessage });
             }
 

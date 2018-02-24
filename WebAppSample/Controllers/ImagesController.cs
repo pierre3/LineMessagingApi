@@ -10,7 +10,7 @@ namespace WebAppSample.Controllers
     public class ImagesController : ApiController
     {
         [HttpGet]
-        public async Task<HttpResponseMessage> Get(string file, string size)
+        public HttpResponseMessage Get(string file, string size)
         {
             var root = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             var path = Path.Combine(root, "Images", file, size + ".png");
