@@ -2,10 +2,11 @@
 
 namespace FunctionAppSample
 {
-    public class EventSourceLocation : EventSourceState
+    public class BotStatus : EventSourceState
     {
         public string Location { get; set; }
+        public string CurrentApp { get; set; }
 
-        public EventSourceLocation() { }
+        public BotStatus() { }
     }
 }

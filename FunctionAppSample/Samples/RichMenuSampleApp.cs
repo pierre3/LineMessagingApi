@@ -91,11 +91,13 @@ namespace FunctionAppSample
             Log = log;
         }
 
-        public async Task<IList<ResponseRichMenu>> CreateRichMenuAsync()
+        public async Task<IList<ResponseRichMenu>> CreateRichMenuAsync(bool isRefresh)
         {
             var menuList = await MessagingClient.GetRichMenuListAsync();
-            //await DeleteRichMenusAsync(menuList);
-
+            if (isRefresh)
+            {
+                await DeleteRichMenusAsync(menuList);
+            }
             var newMenuList = new List<ResponseRichMenu>();
             newMenuList.Add(await RegisterRichMenuAsync(RichMenuA));
             newMenuList.Add(await RegisterRichMenuAsync(RichMenuB));
@@ -169,7 +171,7 @@ namespace FunctionAppSample
                     var action = (PostbackTemplateAction)area.Action;
 
                     g.DrawRectangle(pen, area.Bounds.X, area.Bounds.Y, area.Bounds.Width, area.Bounds.Height);
-                    g.DrawString(action.Text, font, Brushes.Black,
+                    g.DrawString(action.Label, font, Brushes.Black,
                         new RectangleF(area.Bounds.X, area.Bounds.Y, area.Bounds.Width, area.Bounds.Height),
                         new StringFormat()
                         {
@@ -187,12 +189,9 @@ namespace FunctionAppSample
             Log.WriteInfo($"SourceType:{ev.Source.Type}, SourceId:{ev.Source.Id}, MessageType:{ev.Message.Type}");
 
             var textMessage = ev.Message as TextEventMessage;
-            if (textMessage?.Text?.StartsWith("Menu") ?? false)
-            {
-                return;
-            }
+            bool isRefresh = (textMessage?.Text?.Trim()?.ToLower() == "refresh");
 
-            var memuList = await CreateRichMenuAsync();
+            var memuList = await CreateRichMenuAsync(isRefresh);
             var menuA = memuList.FirstOrDefault(m => m.Name == MenuNameA);
             if (menuA == null) { return; }
 

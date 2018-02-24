@@ -12,10 +12,10 @@ namespace FunctionAppSample
     class PostbackMessageSampleApp : WebhookApplication
     {
         private LineMessagingClient MessagingClient { get; }
-        private TableStorage<EventSourceLocation> SourceLocation { get; }
+        private TableStorage<BotStatus> SourceLocation { get; }
         private TraceWriter Log { get; }
 
-        public PostbackMessageSampleApp(LineMessagingClient lineMessagingClient, TableStorage<EventSourceLocation> tableStorage, TraceWriter log)
+        public PostbackMessageSampleApp(LineMessagingClient lineMessagingClient, TableStorage<BotStatus> tableStorage, TraceWriter log)
         {
             MessagingClient = lineMessagingClient;
             SourceLocation = tableStorage;
@@ -30,12 +30,13 @@ namespace FunctionAppSample
             switch (ev.Message.Type)
             {
                 case EventMessageType.Text:
-                    if (state?.Location != null)
+                    var text = ((TextEventMessage)ev.Message).Text;
+                    if (state?.Location != null || text != "use the text parameter")
                     {
-                        await ConfirmMapSearchAsync(ev.ReplyToken, state.Location, ((TextEventMessage)ev.Message).Text);
+                        await ConfirmMapSearchAsync(ev.ReplyToken, state.Location, text);
                         break;
                     }
-                    await EchoAsync(ev.ReplyToken, ((TextEventMessage)ev.Message).Text);
+                    await EchoAsync(ev.ReplyToken, text);
                     break;
 
 
@@ -61,7 +62,7 @@ namespace FunctionAppSample
                 await MessagingClient.ReplyMessageAsync(ev.ReplyToken, $"https://www.google.co.jp/maps/dir/?api=1&origin={data.location}&destination={searchword}");
             }
 
-            await SourceLocation.UpdateAsync(new EventSourceLocation()
+            await SourceLocation.UpdateAsync(new BotStatus()
             {
                 SourceType = ev.Source.Type.ToString(),
                 SourceId = ev.Source.Id,
@@ -77,7 +78,7 @@ namespace FunctionAppSample
         private async Task SaveLocationAsync(MessageEvent ev, LocationEventMessage locMessage)
         {
             await SourceLocation.UpdateAsync(
-                new EventSourceLocation()
+                new BotStatus()
                 {
                     SourceType = ev.Source.Type.ToString(),
                     SourceId = ev.Source.Id,
@@ -97,13 +98,13 @@ namespace FunctionAppSample
                                 type = "keyword",
                                 searchWord,
                                 location
-                            })),
+                            }),"use the displayText parameter",useDisplayText:true),
                         new PostbackTemplateAction("Route",JsonConvert.SerializeObject(
                             new {
                                 type = "route",
                                 searchWord,
                                 location
-                            }))
+                            }),"use the text parameter",useDisplayText:false)
                     }));
             await MessagingClient.ReplyMessageAsync(replyToken, new[] { templateMessage });
         }
