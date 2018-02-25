@@ -1,4 +1,6 @@
-﻿namespace Line.Messaging
+﻿using System;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// Object which specifies the actions and tappable regions of an imagemap.
@@ -20,10 +22,34 @@
         /// </summary>
         public string LinkUri { get; }
 
-        public UriImagemapAction(ImagemapArea area, string linkUri)
+        /// <summary>
+        /// Label for the action. Spoken when the accessibility feature is enabled on the client device. 
+        /// Max: 50 characters
+        /// Supported on LINE iOS version 8.2.0 and later.
+        /// </summary>
+        public string Label { get; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="area">
+        /// Defined tappable area
+        /// </param>
+        /// <param name="linkUri">
+        /// Label for the action. Spoken when the accessibility feature is enabled on the client device. 
+        /// Max: 50 characters
+        /// Supported on LINE iOS version 8.2.0 and later.
+        /// </param>
+        /// <param name="label">
+        /// Label for the action. Spoken when the accessibility feature is enabled on the client device. 
+        /// Max: 50 characters
+        /// Supported on LINE iOS version 8.2.0 and later.
+        /// </param>
+        public UriImagemapAction(ImagemapArea area, string linkUri, string label = null)
         {
             Area = area;
             LinkUri = linkUri;
+            Label = label?.Substring(Math.Min(label.Length, 50));
         }
-    }    
+    }
 }

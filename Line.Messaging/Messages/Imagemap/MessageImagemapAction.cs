@@ -22,10 +22,33 @@ namespace Line.Messaging
         /// </summary>
         public string Text { get; }
 
-        public MessageImagemapAction(ImagemapArea area, string text)
+        /// <summary>
+        /// Label for the action. Spoken when the accessibility feature is enabled on the client device. 
+        /// Max: 50 characters
+        /// Supported on LINE iOS version 8.2.0 and later.
+        /// </summary>
+        public string Label { get; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="area">
+        /// Defined tappable area
+        /// </param>
+        /// <param name="text">
+        /// Message to send
+        /// Max: 400 characters
+        /// </param>
+        /// <param name="label">
+        /// Label for the action. Spoken when the accessibility feature is enabled on the client device. 
+        /// Max: 50 characters
+        /// Supported on LINE iOS version 8.2.0 and later.
+        /// </param>
+        public MessageImagemapAction(ImagemapArea area, string text, string label = null)
         {
             Area = area;
             Text = text.Substring(0, Math.Min(text.Length, 400));
+            Label = label?.Substring(0, Math.Min(label.Length, 50));
         }
     }
 }
