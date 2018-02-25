@@ -49,6 +49,36 @@ namespace Line.Messaging
         /// </summary>
         public ITemplateAction DefaultAction { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="text">
+        /// Message text
+        /// Max: 120 characters(no image or title)
+        /// Max: 60 characters(message with an image or title)
+        /// </param>
+        /// <param name="thumbnailImageUrl">
+        /// Image URL (Max: 1000 characters)
+        /// HTTPS
+        /// JPEG or PNG
+        /// Aspect ratio: 1:1.51
+        /// Max width: 1024px
+        /// Max: 1 MB
+        /// </param>
+        /// <param name="title">
+        /// Title
+        /// Max: 40 characters
+        /// </param>
+        /// <param name="actions">
+        /// Action when tapped
+        /// Max: 3
+        /// </param>
+        /// <param name="imageBackgroundColor">
+        /// Background color of image. Specify a RGB color value. The default value is #FFFFFF (white).
+        /// </param>
+        /// <param name="defaultAction">
+        /// Action when image is tapped; set for the entire image, title, and text area
+        /// </param>
         public CarouselColumn(string text, string thumbnailImageUrl = null, string title = null,
             IList<ITemplateAction> actions = null, string imageBackgroundColor = "#FFFFFF",
             ITemplateAction defaultAction = null)

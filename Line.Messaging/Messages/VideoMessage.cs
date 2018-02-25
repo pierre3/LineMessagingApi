@@ -26,6 +26,23 @@
         /// </summary>
         public string PreviewImageUrl { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="originalContentUrl">
+        /// URL of video file (Max: 1000 characters)
+        /// HTTPS
+        /// mp4
+        /// Less than 1 minute
+        /// Max: 10 MB
+        /// </param>
+        /// <param name="previerImageUrl">
+        /// URL of preview image (Max: 1000 characters)
+        /// HTTPS
+        /// JPEG
+        /// Max: 240 x 240
+        /// Max: 1 MB
+        /// </param>
         public VideoMessage(string originalContentUrl, string previerImageUrl)
         {
             OriginalContentUrl = originalContentUrl;

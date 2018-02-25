@@ -20,6 +20,20 @@
         /// </summary>
         public ITemplateAction Action { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="imageUrl">
+        /// Image URL (Max: 1000 characters)
+        /// HTTPS
+        /// JPEG or PNG
+        /// Aspect ratio: 1:1
+        /// Max width: 1024px
+        /// Max: 1 MB
+        /// </param>
+        /// <param name="action">
+        /// Action when image is tapped
+        /// </param>
         public ImageCarouselColumn(string imageUrl, ITemplateAction action)
         {
             ImageUrl = imageUrl;

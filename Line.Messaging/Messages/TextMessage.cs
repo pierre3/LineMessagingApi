@@ -16,6 +16,13 @@ namespace Line.Messaging
         /// </summary>
         public string Text { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="text">
+        /// Message text
+        /// Max: 2000 characters
+        /// </param>
         public TextMessage(string text)
         {
             Text = text.Substring(0, Math.Min(text.Length, 2000));

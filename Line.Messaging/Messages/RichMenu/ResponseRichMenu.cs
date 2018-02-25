@@ -11,6 +11,15 @@
         /// </summary>
         public string RichMenuId { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="richMenuId">
+        /// Rich menu ID
+        /// </param>
+        /// <param name="source">
+        /// Rich menu object
+        /// </param>
         public ResponseRichMenu(string richMenuId, RichMenu source)
         {
             RichMenuId = richMenuId;

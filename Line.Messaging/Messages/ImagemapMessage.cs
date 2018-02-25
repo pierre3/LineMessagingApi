@@ -35,6 +35,25 @@ namespace Line.Messaging
         /// </summary>
         public IList<IImagemapAction> Actions { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="baseUrl">
+        /// Base URL of image (Max: 1000 characters)
+        /// HTTPS
+        /// </param>
+        /// <param name="altText">
+        /// Alternative text
+        /// Max: 400 characters
+        /// </param>
+        /// <param name="baseSize">
+        /// Width of base image (set to 1040px）
+        /// Height of base image（set to the height that corresponds to a width of 1040px）
+        /// </param>
+        /// <param name="actions">
+        /// Action when tapped.
+        /// Max: 50
+        /// </param>
         public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions)
         {
             BaseUrl = baseUrl;

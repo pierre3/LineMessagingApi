@@ -46,7 +46,7 @@ namespace Line.Messaging
         /// Label for the action
         /// Required for templates other than image carousel.Max: 20 characters
         /// Optional for image carousel templates.Max: 12 characters.
-        /// Not applicable for rich menus.
+        /// Optional for rich menus. Spoken when the accessibility feature is enabled on the client device. Max: 20 characters. Supported on LINE iOS version 8.2.0 and later.
         /// </param>
         /// <param name="data">
         /// String returned via webhook in the postback.data property of the postback event

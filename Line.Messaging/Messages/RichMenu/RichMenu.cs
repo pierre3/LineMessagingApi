@@ -27,7 +27,7 @@ namespace Line.Messaging
         /// </summary>
         public string Name
         {
-            get =>_name;
+            get => _name;
             set
             {
                 _name = value?.Substring(0, Math.Min(value.Length, 300));
@@ -39,7 +39,7 @@ namespace Line.Messaging
         /// </summary>
         public string ChatBarText
         {
-            get =>_chatBarText;
+            get => _chatBarText;
             set
             {
                 _chatBarText = value?.Substring(0, Math.Min(value.Length, 14));
@@ -51,6 +51,13 @@ namespace Line.Messaging
         /// </summary>
         public IList<ActionArea> Areas { set; get; }
 
+        /// <summary>
+        /// Converts from RichMenu to ResponseRichMenu
+        /// </summary>
+        /// <param name="richMenuId">
+        /// Rich menu ID
+        /// </param>
+        /// <returns>ResponseRichMenu object</returns>
         public ResponseRichMenu ToResponseRichMenu(string richMenuId = "")
         {
             return new ResponseRichMenu(richMenuId, this);

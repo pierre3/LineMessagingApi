@@ -31,7 +31,24 @@ namespace Line.Messaging
         /// Longitude
         /// </summary>
         public decimal Longitude { get; }
-        
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="title">
+        /// Title
+        /// Max: 100 characters
+        /// </param>
+        /// <param name="address">
+        /// Address
+        /// Max: 100 characters
+        /// </param>
+        /// <param name="latitude">
+        /// Latitude
+        /// </param>
+        /// <param name="longitude">
+        /// Longitude
+        /// </param>
         public LocationMessage(string title, string address, decimal latitude, decimal longitude)
         {
             Title = title.Substring(0, Math.Min(title.Length, 100));

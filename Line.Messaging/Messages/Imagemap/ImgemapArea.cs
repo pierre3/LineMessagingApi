@@ -23,6 +23,21 @@
         /// </summary>
         public int Height { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="x">
+        /// Horizontal position relative to the top-left corner of the area.
+        /// </param>
+        /// <param name="y">
+        /// Vertical position relative to the top-left corner of the area.
+        /// </param>
+        /// <param name="width">
+        /// Width of the tappable area
+        /// </param>
+        /// <param name="height">
+        /// Height of the tappable area
+        /// </param>
         public ImagemapArea(int x, int y, int width, int height)
         {
             X = x;

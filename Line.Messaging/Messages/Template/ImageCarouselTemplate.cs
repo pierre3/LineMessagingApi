@@ -16,6 +16,13 @@ namespace Line.Messaging
         /// </summary>
         public IList<ImageCarouselColumn> Columns { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="columns">
+        /// Array of columns
+        /// Max: 10
+        /// </param>
         public ImageCarouselTemplate(IList<ImageCarouselColumn> columns = null)
         {
             Columns = columns ?? new List<ImageCarouselColumn>();

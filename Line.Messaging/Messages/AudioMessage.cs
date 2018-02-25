@@ -22,6 +22,19 @@
         /// </summary>
         public long Duration { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="originalContentUrl">
+        /// URL of audio file (Max: 1000 characters)
+        /// HTTPS
+        /// m4a
+        /// Less than 1 minute
+        /// Max 10 MB
+        /// </param>
+        /// <param name="duration">
+        /// Length of audio file (milliseconds)
+        /// </param>
         public AudioMessage(string originalContentUrl, long duration)
         {
             OriginalContentUrl = originalContentUrl;

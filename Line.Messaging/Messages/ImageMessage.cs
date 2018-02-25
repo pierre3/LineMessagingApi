@@ -26,6 +26,23 @@
         /// </summary>
         public string PreviewImageUrl { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="originalContentUrl">
+        /// Image URL (Max: 1000 characters)
+        /// HTTPS
+        /// JPEG
+        /// Max: 1024 x 1024
+        /// Max: 1 MB
+        /// </param>
+        /// <param name="previerImageUrl">
+        /// Preview image URL (Max: 1000 characters)
+        /// HTTPS
+        /// JPEG
+        /// Max: 240 x 240
+        /// Max: 1 MB
+        /// </param>
         public ImageMessage(string originalContentUrl, string previerImageUrl)
         {
             OriginalContentUrl = originalContentUrl;

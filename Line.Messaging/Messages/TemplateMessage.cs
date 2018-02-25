@@ -20,9 +20,19 @@ namespace Line.Messaging
         /// </summary>
         public string AltText { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="altText">
+        /// Alternative text.
+        /// Max: 400 characters
+        ///</param>
+        /// <param name="template">
+        /// A Buttons, Confirm, Carousel, or Image Carousel object.
+        /// </param>
         public TemplateMessage(string altText, ITemplate template)
         {
-            AltText = altText.Substring(0, Math.Min(altText.Length, 400)); 
+            AltText = altText.Substring(0, Math.Min(altText.Length, 400));
             Template = template;
         }
     }

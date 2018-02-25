@@ -24,6 +24,19 @@ namespace Line.Messaging
         /// </summary>
         public string Text { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="label">
+        /// Label for the action
+        /// Required for templates other than image carousel.Max: 20 characters
+        /// Optional for image carousel templates.Max: 12 characters.
+        /// Optional for rich menus. Spoken when the accessibility feature is enabled on the client device. Max: 20 characters. Supported on LINE iOS version 8.2.0 and later.
+        /// </param>
+        /// <param name="text">
+        /// Text sent when the action is performed
+        /// Max: 300 characters
+        /// </param>
         public MessageTemplateAction(string label, string text)
         {
             Label = label.Substring(0, Math.Min(label.Length, 20));

@@ -22,6 +22,18 @@ namespace Line.Messaging
         /// </summary>
         public IList<ITemplateAction> Actions { get; }
 
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="text">
+        /// Message text
+        /// Max: 240 characters
+        /// </param>
+        /// <param name="actions">
+        /// Action when tapped
+        /// Set 2 actions for the 2 buttons
+        /// </param>
         public ConfirmTemplate(string text, IList<ITemplateAction> actions = null)
         {
             Text = text.Substring(0, Math.Min(text.Length, 240));

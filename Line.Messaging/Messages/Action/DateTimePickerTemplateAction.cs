@@ -49,12 +49,71 @@ namespace Line.Messaging
         /// </summary>
         public string Min { get; protected set; }
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="label">
+        /// Label for the action
+        /// Required for templates other than image carousel.Max: 20 characters
+        /// Optional for image carousel templates.Max: 12 characters.
+        /// Optional for rich menus.Spoken when the accessibility feature is enabled on the client device.Max: 20 characters.Supported on LINE iOS version 8.2.0 and later.
+        /// </param>
+        /// <param name="data">
+        /// String returned via webhook in the postback.data property of the postback event
+        /// Max: 300 characters
+        /// </param>
+        /// <param name="mode">
+        /// Action mode
+        /// date: Pick date
+        /// time: Pick time
+        /// datetime: Pick date and time
+        /// </param>
+        /// <param name="initial">
+        /// Initial value of date or time
+        /// </param>
+        /// <param name="min">
+        /// Smallest date or time value that can be selected.
+        /// Must be less than the max value.
+        /// </param>
+        /// <param name="max">
+        /// Largest date or time value that can be selected.
+        /// Must be greater than the min value.
+        /// </param>
         public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, string initial = null, string min = null, string max = null)
         {
             Initialize(label, data, mode, initial, min, max);
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="label">
+        /// Label for the action
+        /// Required for templates other than image carousel.Max: 20 characters
+        /// Optional for image carousel templates.Max: 12 characters.
+        /// Optional for rich menus.Spoken when the accessibility feature is enabled on the client device.Max: 20 characters.Supported on LINE iOS version 8.2.0 and later.
+        /// </param>
+        /// <param name="data">
+        /// String returned via webhook in the postback.data property of the postback event
+        /// Max: 300 characters
+        /// </param>
+        /// <param name="mode">
+        /// Action mode
+        /// date: Pick date
+        /// time: Pick time
+        /// datetime: Pick date and time
+        /// </param>
+        /// <param name="initial">
+        /// Initial value of date or time
+        /// </param>
+        /// <param name="min">
+        /// Smallest date or time value that can be selected.
+        /// Must be less than the max value.
+        /// </param>
+        /// <param name="max">
+        /// Largest date or time value that can be selected.
+        /// Must be greater than the min value.
+        /// </param>
         public DateTimePickerTemplateAction(string label, string data, DateTimePickerMode mode, DateTime? initial = null, DateTime? min = null, DateTime? max = null)
         {
             var format = GetDateTimeFormat(mode);
