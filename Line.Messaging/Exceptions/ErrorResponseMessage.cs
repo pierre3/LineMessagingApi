@@ -19,11 +19,12 @@ namespace Line.Messaging
         public IList<ErrorDetails> Details { get; set; }
 
         public ErrorResponseMessage()
-        { }
+        {
+        }
 
         public override string ToString()
         {
-            return $"{Message},[{string.Join(",", Details)}]";
+            return (Details == null) ? Message : $"{Message},[{string.Join(",", Details)}]";
         }
 
         /// <summary>
@@ -42,7 +43,8 @@ namespace Line.Messaging
             public string Property { get; set; }
 
             public ErrorDetails()
-            { }
+            {
+            }
 
             public override string ToString()
             {
