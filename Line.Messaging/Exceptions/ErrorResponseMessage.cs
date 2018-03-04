@@ -19,8 +19,7 @@ namespace Line.Messaging
         public IList<ErrorDetails> Details { get; set; }
 
         public ErrorResponseMessage()
-        {
-        }
+        {}
 
         public override string ToString()
         {

@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>SDK for the LINE Messaging API for C#</Description>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <Copyright>© 2018 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -36,8 +36,8 @@
 3. Property for accessibility released
   - Now you can specify text to be spoken using the label property for imagemap messages and rich menus when the accessibility feature is enabled on the client device. 
     This feature is supported on LINE iOS version 8.2.0 and later.</PackageReleaseNotes>
-    <AssemblyVersion>1.2.3.0</AssemblyVersion>
-    <FileVersion>1.2.3.0</FileVersion>
+    <AssemblyVersion>1.2.4.0</AssemblyVersion>
+    <FileVersion>1.2.4.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
