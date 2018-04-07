@@ -11,6 +11,7 @@
         Join,
         Leave,
         Postback,
-        Beacon
+        Beacon,
+        AccountLink
     }
 }
