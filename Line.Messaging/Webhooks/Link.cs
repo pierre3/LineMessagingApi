@@ -44,7 +44,8 @@
         /// </param>
         public Link(string result, string nonce)
         {
-
+            Result = result;
+            Nonce = nonce;
         }
 
     }
