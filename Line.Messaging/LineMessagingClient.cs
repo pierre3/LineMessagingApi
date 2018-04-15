@@ -563,7 +563,7 @@ namespace Line.Messaging
         /// Returns the status code 200 and a link token. Link tokens are valid for 10 minutes and can only be used once.
         /// Note: The validity period may change without notice.
         /// </returns>
-        public async Task<string> IssueLinkToken(string userId)
+        public async Task<string> IssueLinkTokenAsync(string userId)
         {
             var response = await _client.PostAsync($"{_uri}/bot/user/{userId}/linkToken", null);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);

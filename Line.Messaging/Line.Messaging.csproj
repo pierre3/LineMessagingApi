@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>SDK for the LINE Messaging API for C#</Description>
-    <Version>1.2.4</Version>
+    <Version>1.2.5</Version>
     <Copyright>© 2018 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,27 +15,9 @@
     <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/pierre3/LineMessagingApi/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Supports API update at 2018-02-08 and 2018-02-22
-( https://developers.line.me/en/docs/messaging-api/release-notes/ )
+    <PackageReleaseNotes>Supports API update at 2018-03-29
 
-1. Default actions can now be set for template messages
-
-2.  displayText property for postback actions released
-  - We have released the displayText property and have deprecated the text property for postback actions. 
-    We recommend using displayText instead of the text property. 
-  - (Breaking changes) In the constructor of PostbackTemplateAction, 
-    the value of the text parameter is now set to the DisplayText property by default.
-    If you want to use the Text property as before, please set "useDisplayText" parameter to "false".
-
-    //Use the DisplayText property
-    PostbackTemplateAction("label", "data", "text");
-
-    //Use the Text property (Behavior of previous versions)
-    PostbackTemplateAction("label", "data", "text", useDisplayText : false);
-
-3. Property for accessibility released
-  - Now you can specify text to be spoken using the label property for imagemap messages and rich menus when the accessibility feature is enabled on the client device. 
-    This feature is supported on LINE iOS version 8.2.0 and later.</PackageReleaseNotes>
+- Supports the account link feature.</PackageReleaseNotes>
     <AssemblyVersion>1.2.4.0</AssemblyVersion>
     <FileVersion>1.2.4.0</FileVersion>
   </PropertyGroup>
