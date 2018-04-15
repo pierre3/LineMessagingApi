@@ -16,7 +16,7 @@
         /// </item>
         /// </list>
         /// </summary>
-        public string Result { get; }
+        public LinkResult Result { get; }
 
         /// <summary>
         /// Specified nonce when verifying the user ID
@@ -44,7 +44,7 @@
         /// </param>
         public Link(string result, string nonce)
         {
-            Result = result;
+            Result = (result == "ok") ? LinkResult.OK : LinkResult.Failed;
             Nonce = nonce;
         }
 
