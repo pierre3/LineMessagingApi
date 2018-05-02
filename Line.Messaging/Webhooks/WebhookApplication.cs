@@ -35,6 +35,9 @@ namespace Line.Messaging.Webhooks
                     case WebhookEventType.Beacon:
                         await OnBeaconAsync((BeaconEvent)ev).ConfigureAwait(false);
                         break;
+                    case WebhookEventType.AccountLink:
+                        await OnAccountLinkAsync((AccountLinkEvent)ev).ConfigureAwait(false);
+                        break;
                 }
             }
         }
@@ -52,5 +55,7 @@ namespace Line.Messaging.Webhooks
         protected virtual Task OnBeaconAsync(BeaconEvent ev) => Task.CompletedTask;
 
         protected virtual Task OnPostbackAsync(PostbackEvent ev) => Task.CompletedTask;
+
+        protected virtual Task OnAccountLinkAsync(AccountLinkEvent ev) => Task.CompletedTask;
     }
 }

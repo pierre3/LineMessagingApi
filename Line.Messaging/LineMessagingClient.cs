@@ -101,7 +101,7 @@ namespace Line.Messaging
         }
 
         #endregion
-        
+
         #region Message 
         // https://developers.line.me/en/docs/messaging-api/reference/#message
 
@@ -549,6 +549,27 @@ namespace Line.Messaging
             return menus;
         }
 
+        #endregion
+
+        #region Account Link
+        /// <summary>
+        /// Issues a link token used for the account link feature.
+        /// <para>https://developers.line.me/en/docs/messaging-api/linking-accounts</para>
+        /// </summary>
+        /// <param name="userId">
+        /// User ID for the LINE account to be linked. Found in the source object of account link event objects. Do not use the LINE ID used in the LINE app.
+        /// </param>
+        /// <returns>
+        /// Returns the status code 200 and a link token. Link tokens are valid for 10 minutes and can only be used once.
+        /// Note: The validity period may change without notice.
+        /// </returns>
+        public async Task<string> IssueLinkTokenAsync(string userId)
+        {
+            var response = await _client.PostAsync($"{_uri}/bot/user/{userId}/linkToken", null);
+            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeAnonymousType(content, new { linkToken = "" }).linkToken;
+        }
         #endregion
 
         public void Dispose()

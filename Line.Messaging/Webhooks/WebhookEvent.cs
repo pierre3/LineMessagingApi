@@ -73,6 +73,10 @@ namespace Line.Messaging.Webhooks
                     }
                     return new BeaconEvent(eventSource, (long)dynamicObject.timestamp, (string)dynamicObject.replyToken,
                         (string)dynamicObject.beacon.hwid, beaconType, (string)dynamicObject.beacon.dm);
+                case WebhookEventType.AccountLink:
+                    var link = new Link((string)dynamicObject.link?.result, (string)dynamicObject.link?.nonce);
+                    return new AccountLinkEvent(eventSource, (long)dynamicObject.timestamp, (string)dynamicObject.replyToken, link);
+
                 default:
                     return null;
             }
