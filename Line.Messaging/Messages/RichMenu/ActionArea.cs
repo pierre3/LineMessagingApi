@@ -33,7 +33,7 @@ namespace Line.Messaging
 
         public static ITemplateAction ParseTemplateAction(dynamic dynamicObject)
         {
-            var type = (TemplateActionType)System.Enum.Parse(typeof(TemplateActionType), (string)dynamicObject?.type);
+            var type = (TemplateActionType)System.Enum.Parse(typeof(TemplateActionType), (string)dynamicObject?.type, true);
             switch (type)
             {
                 case TemplateActionType.Message:

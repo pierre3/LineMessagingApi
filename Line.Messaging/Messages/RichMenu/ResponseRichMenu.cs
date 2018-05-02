@@ -1,4 +1,7 @@
-﻿namespace Line.Messaging
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Line.Messaging
 {
     /// <summary>
     /// Rich menu response object.
@@ -32,13 +35,20 @@
 
         internal static ResponseRichMenu CreateFrom(dynamic dynamicObject)
         {
+
+            var areas = new List<ActionArea>();
+            foreach (var area in dynamicObject?.areas ?? Enumerable.Empty<dynamic>())
+            {
+                areas.Add(ActionArea.CreateFrom(area));
+            }
+
             var menu = new RichMenu()
             {
                 Name = (string)dynamicObject?.name,
                 Size = new ImagemapSize((int)(dynamicObject?.size?.width ?? 0), (int)(dynamicObject?.size?.height ?? 0)),
                 Selected = (bool)(dynamicObject?.selected ?? false),
                 ChatBarText = (string)dynamicObject?.chatBarText,
-                Areas = ActionArea.CreateFrom(dynamicObject?.areas)
+                Areas = areas
             };
             return new ResponseRichMenu((string)dynamicObject?.richMenuId, menu);
         }
