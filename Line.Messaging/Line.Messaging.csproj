@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>SDK for the LINE Messaging API for C#</Description>
-    <Version>1.3.0-preview-1</Version>
+    <Version>1.3.0</Version>
     <Copyright>© 2018 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,12 +15,12 @@
     <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/pierre3/LineMessagingApi/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Added the LINE Front-end Framework (LIFF) feature. (preview)
+    <PackageReleaseNotes>Added the LINE Front-end Framework (LIFF) feature.
 
 - LIFF: https://developers.line.me/en/docs/liff/overview/
 </PackageReleaseNotes>
-    <AssemblyVersion>1.3.0.1</AssemblyVersion>
-    <FileVersion>1.3.0.1</FileVersion>
+    <AssemblyVersion>1.3.0.2</AssemblyVersion>
+    <FileVersion>1.3.0.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
