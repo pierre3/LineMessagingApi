@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppSample", "WebAppSampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppWithBotFrameworkSample", "WebAppWithBotFrameworkSample\WebAppWithBotFrameworkSample.csproj", "{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiffManager", "LiffManager\LiffManager.csproj", "{48EC0A76-C311-4A20-9AC2-14CF655485C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6AB02A3-0B99-4529-8195-F8AAAD8C0CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48EC0A76-C311-4A20-9AC2-14CF655485C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48EC0A76-C311-4A20-9AC2-14CF655485C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48EC0A76-C311-4A20-9AC2-14CF655485C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48EC0A76-C311-4A20-9AC2-14CF655485C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
