@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Line.Messaging.Liff
 {
@@ -32,11 +29,7 @@ namespace Line.Messaging.Liff
         {
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", channelAccessToken);
-            _jsonSerializerSettings = new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
-            _jsonSerializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            _jsonSerializerSettings = new CamelCaseJsonSerializerSettings();
             _requestUri = requestUri;
         }
 
@@ -52,14 +45,14 @@ namespace Line.Messaging.Liff
         /// <returns>
         /// LIFF app ID
         /// </returns>
-        public async Task<string> AddLiffApp(ViewType viewType, string url)
+        public async Task<string> AddLiffAppAsync(ViewType viewType, string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, _requestUri);
-            var content = JsonConvert.SerializeObject(new View(viewType, url), _jsonSerializerSettings);
+            var content = JsonConvert.SerializeObject(new { view = new View(viewType, url) }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            await response.EnsureSuccessStatusCodeAsync();
             var result = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeAnonymousType(result, new { liffId = "" }).liffId;
         }
@@ -74,31 +67,31 @@ namespace Line.Messaging.Liff
         /// <param name="url">
         /// URL of the LIFF app. Must start with HTTPS.    
         /// </param>
-        public async Task UpdateLiffApp(string liffId, ViewType viewType, string url)
+        public async Task UpdateLiffAppAsync(string liffId, ViewType viewType, string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"{_requestUri}/{liffId}/view");
-            var content = JsonConvert.SerializeObject(new View(viewType, url), _jsonSerializerSettings);
+            var content = JsonConvert.SerializeObject(new { view = new View(viewType, url) }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            await response.EnsureSuccessStatusCodeAsync();
         }
 
         /// <summary>
         /// Gets information on all the LIFF apps registered in the channel.
         /// </summary>
         /// <returns>A JSON object with the following properties.</returns>
-        public async Task<IList<LiffApp>> GetAllLiffApp()
+        public async Task<IList<LiffApp>> GetAllLiffAppAsync()
         {
             var content = await _client.GetStringAsync(_requestUri);
-            return JsonConvert.DeserializeObject<IList<LiffApp>>(content);
+            return JsonConvert.DeserializeAnonymousType(content, new { apps = new LiffApp[0] }).apps;
         }
 
         /// <summary>
         /// Deletes a LIFF app.
         /// </summary>
         /// <param name="liffId">ID of the LIFF app to be deleted</param>
-        public Task DeleteLiffApp(string liffId)
+        public Task DeleteLiffAppAsync(string liffId)
         {
             return _client.DeleteAsync($"{_requestUri}/{liffId}");
         }
