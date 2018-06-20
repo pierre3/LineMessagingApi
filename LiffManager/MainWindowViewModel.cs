@@ -8,6 +8,7 @@ using Line.Messaging.Liff;
 using System.Windows.Input;
 using Prism.Commands;
 using Line.Messaging;
+using System.Collections.ObjectModel;
 
 namespace LiffManager
 {
@@ -25,7 +26,7 @@ namespace LiffManager
 
         private IList<LiffApp> _liffApps;
         private LiffApp _selectedLiffApp;
-
+        
         private LiffClient LiffClient
         {
             get
@@ -61,6 +62,8 @@ namespace LiffManager
             }
         }
 
+        public ObservableCollection<string> Errors { get; } = new ObservableCollection<string>();
+
         public string SiteUrl { get => _siteUrl; set => SetProperty(ref _siteUrl, value); }
 
         public string ChannelAccessToken { get => _channelAccessToken; set => SetProperty(ref _channelAccessToken, value); }
@@ -79,6 +82,8 @@ namespace LiffManager
 
         public ICommand DeleteLiffAppCommand { get; }
 
+        public ICommand UpdateLiffAppCommand { get; }
+
         public MainWindowViewModel()
         {
             AddLiffAppCommand = new DelegateCommand(async () => await AddLiffAppAsync(),
@@ -87,8 +92,9 @@ namespace LiffManager
                 .ObservesProperty(() => SiteUrl);
 
             PushLinkMessageCommand = new DelegateCommand(async () => await PushLinkMessagAsync(),
-                () => !string.IsNullOrWhiteSpace(ChannelAccessToken) && SelectedLiffApp != null)
+                () => !string.IsNullOrWhiteSpace(ChannelAccessToken) && !string.IsNullOrWhiteSpace(UserId) && SelectedLiffApp != null)
                 .ObservesProperty(() => ChannelAccessToken)
+                .ObservesProperty(()=> UserId)
                 .ObservesProperty(() => SelectedLiffApp);
 
             ListLiffAppsCommand = new DelegateCommand(async () => await ListLiffAppAsync(),
@@ -100,25 +106,73 @@ namespace LiffManager
                 .ObservesProperty(() => ChannelAccessToken)
                 .ObservesProperty(() => SelectedLiffApp);
 
+            UpdateLiffAppCommand = new DelegateCommand(async () => await UpdateLffAppAsync(),
+                () => !string.IsNullOrWhiteSpace(ChannelAccessToken) && !string.IsNullOrWhiteSpace(SiteUrl) && SelectedLiffApp != null)
+                .ObservesProperty(() => ChannelAccessToken)
+                .ObservesProperty(() => SiteUrl)
+                .ObservesProperty(() => SelectedLiffApp);
         }
 
         private async Task AddLiffAppAsync()
         {
-            await LiffClient.AddLiffAppAsync(SelectedViewType, SiteUrl);
-            LiffApps = await _liffClient.GetAllLiffAppAsync();
+            try
+            {
+                await LiffClient.AddLiffAppAsync(SelectedViewType, SiteUrl);
+                LiffApps = await _liffClient.GetAllLiffAppAsync();
+            }
+            catch (Exception e)
+            {
+                Errors.Add(e.ToString());
+            }
         }
 
-        private Task PushLinkMessagAsync() => LineClient.PushMessageAsync(_userId, $"line://app/{SelectedLiffApp.LiffId}");
+        private async Task PushLinkMessagAsync()
+        {
+            try
+            {
+                await LineClient.PushMessageAsync(_userId, $"line://app/{SelectedLiffApp.LiffId}");
+            }
+            catch (Exception e)
+            {
+                Errors.Add(e.ToString());
+            }
+        }
 
         private async Task ListLiffAppAsync()
         {
-            LiffApps = await LiffClient.GetAllLiffAppAsync();
+            try
+            {
+                LiffApps = await LiffClient.GetAllLiffAppAsync();
+            }
+            catch (Exception e)
+            {
+                Errors.Add(e.ToString());
+            }
         }
 
         private async Task DeleteLiffAppAsync()
         {
-            await LiffClient.DeleteLiffAppAsync(SelectedLiffApp.LiffId);
-            LiffApps = await _liffClient.GetAllLiffAppAsync();
+            try
+            {
+                await LiffClient.DeleteLiffAppAsync(SelectedLiffApp.LiffId);
+                LiffApps = await _liffClient.GetAllLiffAppAsync();
+            }
+            catch (Exception e)
+            {
+                Errors.Add(e.ToString());
+            }
+        }
+
+        private async Task UpdateLffAppAsync()
+        {
+            try
+            {
+                await LiffClient.UpdateLiffAppAsync(SelectedLiffApp.LiffId, SelectedViewType, SiteUrl);
+                LiffApps = await _liffClient.GetAllLiffAppAsync();
+            }catch(Exception e)
+            {
+                Errors.Add(e.ToString());
+            }
         }
     }
 }
