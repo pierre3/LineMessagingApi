@@ -70,7 +70,7 @@ namespace Line.Messaging.Liff
         public async Task UpdateLiffAppAsync(string liffId, ViewType viewType, string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"{_requestUri}/{liffId}/view");
-            var content = JsonConvert.SerializeObject(new { view = new View(viewType, url) }, _jsonSerializerSettings);
+            var content = JsonConvert.SerializeObject(new { type = viewType, url }, _jsonSerializerSettings);
             request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request);
