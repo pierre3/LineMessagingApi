@@ -10,6 +10,7 @@
         Sticker,
         Imagemap,
         Template,
-        File
+        File,
+        Flex,
     }
 }
