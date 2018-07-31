@@ -44,7 +44,7 @@ namespace FunctionAppSample
         private async Task UploadImageAsync(string replyToken, string messageId, string blobDirectoryName)
         {
             var imageStream = await MessagingClient.GetContentStreamAsync(messageId);
-            var image = Image.FromStream(imageStream);
+            var image = System.Drawing.Image.FromStream(imageStream);
 
             var imageCount = BlobStorage.ListBlobUri(blobDirectoryName).Count();
             if (imageCount == 5)
