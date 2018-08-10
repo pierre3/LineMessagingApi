@@ -133,7 +133,7 @@ namespace WebAppSample
             if (userMessage == "buttons")
             {
                 replyMessage = new TemplateMessage("Button Template",
-                    new ButtonsTemplate(text:"ButtonsTemplate", title:"Click Buttons.",
+                    new ButtonsTemplate(text: "ButtonsTemplate", title: "Click Buttons.",
                     actions: new List<ITemplateAction> {
                         new MessageTemplateAction("Message Label", "sample data"),
                         new PostbackTemplateAction("Postback Label", "sample data", "sample data"),
@@ -245,6 +245,23 @@ namespace WebAppSample
                     await messagingClient.DeleteRichMenuAsync(richMenu.RichMenuId);
                 }
                 replyMessage = new TextMessage("All rich menu added");
+            }
+            else if (userMessage == "quickreply")
+            {
+                var quickReply = new QuickReply();
+                quickReply.Items.Add(new QuickReplyButtonObject(
+                    new PostbackTemplateAction("postback", "postback_data", "postback display", true), "https://github.com/apple-touch-icon.png"));
+                quickReply.Items.Add(new QuickReplyButtonObject(
+                    new MessageTemplateAction("message", "message"), "https://github.com/apple-touch-icon.png"));
+                quickReply.Items.Add(new QuickReplyButtonObject(
+                    new DateTimePickerTemplateAction("timepicker", "DATETIME", DateTimePickerMode.Datetime, DateTime.Now), "https://github.com/apple-touch-icon.png"));
+                quickReply.Items.Add(new QuickReplyButtonObject(
+                    new CameraTemplateAction("Launch Camera")));
+                quickReply.Items.Add(new QuickReplyButtonObject(
+                    new CameraRollTemplateAction("Launch Camera Roll")));
+                quickReply.Items.Add(new QuickReplyButtonObject(
+                    new LocationTemplateAction("Launch Location")));
+                replyMessage = new TextMessage("Select menu from Quick Reply", quickReply);
             }
             else
             {

@@ -9,6 +9,11 @@
         public MessageType Type { get; } = MessageType.Video;
 
         /// <summary>
+        /// These properties are used for the quick reply feature
+        /// </summary>
+        public QuickReply QuickReply { get; set; }
+
+        /// <summary>
         /// URL of video file (Max: 1000 characters)
         /// HTTPS
         /// mp4
@@ -43,10 +48,11 @@
         /// Max: 240 x 240
         /// Max: 1 MB
         /// </param>
-        public VideoMessage(string originalContentUrl, string previerImageUrl)
+        public VideoMessage(string originalContentUrl, string previerImageUrl, QuickReply quickReply = null)
         {
             OriginalContentUrl = originalContentUrl;
             PreviewImageUrl = previerImageUrl;
+            QuickReply = quickReply;
         }
     }
 }
