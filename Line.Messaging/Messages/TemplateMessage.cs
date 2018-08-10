@@ -9,6 +9,13 @@ namespace Line.Messaging
     {
         public MessageType Type { get; } = MessageType.Template;
 
+
+        /// <summary>
+        /// These properties are used for the quick reply feature
+        /// </summary>
+        public QuickReply QuickReply { get; set; }
+
+
         /// <summary>
         /// A Buttons, Confirm, Carousel, or Image Carousel object.
         /// </summary>
@@ -30,10 +37,11 @@ namespace Line.Messaging
         /// <param name="template">
         /// A Buttons, Confirm, Carousel, or Image Carousel object.
         /// </param>
-        public TemplateMessage(string altText, ITemplate template)
+        public TemplateMessage(string altText, ITemplate template, QuickReply quickReply = null)
         {
             AltText = altText.Substring(0, Math.Min(altText.Length, 400));
             Template = template;
+            QuickReply = quickReply;
         }
     }
 }
