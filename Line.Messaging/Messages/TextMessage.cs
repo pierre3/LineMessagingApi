@@ -11,6 +11,11 @@ namespace Line.Messaging
         public MessageType Type { get; } = MessageType.Text;
 
         /// <summary>
+        /// These properties are used for the quick reply feature
+        /// </summary>
+        public QuickReply QuickReply { get; set; }
+
+        /// <summary>
         /// Message text
         /// Max: 2000 characters
         /// </summary>
@@ -23,9 +28,10 @@ namespace Line.Messaging
         /// Message text
         /// Max: 2000 characters
         /// </param>
-        public TextMessage(string text)
+        public TextMessage(string text, QuickReply quickReply = null)
         {
             Text = text.Substring(0, Math.Min(text.Length, 2000));
+            QuickReply = quickReply;
         }
     }
 }

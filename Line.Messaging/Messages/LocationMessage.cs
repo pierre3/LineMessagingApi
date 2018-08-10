@@ -11,6 +11,11 @@ namespace Line.Messaging
         public MessageType Type { get; } = MessageType.Location;
 
         /// <summary>
+        /// These properties are used for the quick reply feature
+        /// </summary>
+        public QuickReply QuickReply { get; set; }
+
+        /// <summary>
         /// Title
         /// Max: 100 characters
         /// </summary>
@@ -49,12 +54,13 @@ namespace Line.Messaging
         /// <param name="longitude">
         /// Longitude
         /// </param>
-        public LocationMessage(string title, string address, decimal latitude, decimal longitude)
+        public LocationMessage(string title, string address, decimal latitude, decimal longitude, QuickReply quickReply = null)
         {
             Title = title.Substring(0, Math.Min(title.Length, 100));
             Address = address.Substring(0, Math.Min(address.Length, 100));
             Latitude = latitude;
             Longitude = longitude;
+            QuickReply = quickReply;
         }
     }
 }

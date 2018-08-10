@@ -6,5 +6,8 @@
         Message,
         Uri,
         Datetimepicker,
+        Camera,
+        CameraRoll,
+        Location
     }
 }

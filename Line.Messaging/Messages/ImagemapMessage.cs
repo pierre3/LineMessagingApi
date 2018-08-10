@@ -12,6 +12,11 @@ namespace Line.Messaging
         public MessageType Type { get; } = MessageType.Imagemap;
 
         /// <summary>
+        /// These properties are used for the quick reply feature
+        /// </summary>
+        public QuickReply QuickReply { get; set; }
+
+        /// <summary>
         /// Base URL of image (Max: 1000 characters)
         /// HTTPS
         /// </summary>
@@ -54,12 +59,13 @@ namespace Line.Messaging
         /// Action when tapped.
         /// Max: 50
         /// </param>
-        public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions)
+        public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions, QuickReply quickReply = null)
         {
             BaseUrl = baseUrl;
             AltText = altText.Substring(0, Math.Min(altText.Length, 400)); ;
             BaseSize = baseSize;
             Actions = actions;
+            QuickReply = quickReply;
         }
     }
 }
