@@ -16,6 +16,7 @@ namespace Line.Messaging
         _3xl,
         _4xl,
         _5xl,
+        Full
     }
 
     internal class ComponentSizeEnumConverter : CustomStringEnumConverter<ComponentSize>
