@@ -20,6 +20,6 @@ namespace Line.Messaging
         /// <summary>
         /// Components are placed in the same way as horizontal is specified except the baselines of the components are aligned.
         /// </summary>
-        BaseLine,
+        Baseline,
     }
 }

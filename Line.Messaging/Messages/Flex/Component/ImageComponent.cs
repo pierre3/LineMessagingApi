@@ -91,5 +91,21 @@ namespace Line.Messaging
         /// </summary>
         public ITemplateAction Action { get; set; }
 
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="url">
+        /// Image URL (Required)<para>
+        /// / Protocol: HTTPS
+        /// / Image format: JPEG or PNG
+        /// / Maximum image size: 1024×1024 pixels
+        /// / Maximum data size: 1 MB</para> 
+        /// </param>
+        public ImageComponent(string url)
+        {
+            Url = url;
+        }
+
     }
 }

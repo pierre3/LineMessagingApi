@@ -55,7 +55,7 @@ namespace Line.MessagingTest
 
             foreach (var size in iconSize.Zip(expectedSizes, (test, exp) => new { Test = test, Expected = exp }))
             {
-                var test = new IconComponent() { Size = size.Test, Margin=null, Url = testUrl };
+                var test = new IconComponent(testUrl) { Size = size.Test, Margin = null };
                 var json = JsonConvert.SerializeObject(test);
 
                 Assert.AreEqual(string.Format(expectedJson, testUrl, size.Expected), json);

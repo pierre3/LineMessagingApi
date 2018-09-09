@@ -14,5 +14,18 @@ namespace Line.Messaging
         /// The size increases in the order of listing. The default value is md.</para>
         /// </summary>
         public ComponentSize Size { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="size">
+        /// /// Size of the space.(Required) <para> 
+        /// You can specify one of the following values: xs, sm, md, lg, xl, or xxl. 
+        /// The size increases in the order of listing. The default value is md.</para>
+        /// </param>
+        public SpacerComponent(ComponentSize size)
+        {
+            Size = size;
+        }
     }
 }

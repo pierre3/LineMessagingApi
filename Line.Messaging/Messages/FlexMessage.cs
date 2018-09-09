@@ -38,9 +38,9 @@ namespace Line.Messaging
             AltText = altText.Substring(0, Math.Min(altText.Length, 400));
         }
 
-        public static FlexMessage CreateBubbleMessage(string altText)
+        public static BubbleContainerFlexMessage CreateBubbleMessage(string altText)
         {
-            var message = new FlexMessage(altText);
+            var message = new BubbleContainerFlexMessage(altText);
             message.Container = new BubbleContainer();
             return message;
         }
@@ -53,46 +53,5 @@ namespace Line.Messaging
             };
         }
     }
-
-    public class BubbleContainerFlexMessage : FlexMessage
-    {
-        public BubbleContainerFlexMessage AddBubbleContainer(BubbleContainer bubbleContainer)
-        {
-            Container = bubbleContainer ?? throw new ArgumentNullException(nameof(bubbleContainer));
-            return this;
-        }
-        public BubbleContainerFlexMessage(string altText) : base(altText)
-        {
-
-        }
-
-        public BubbleContainerFlexMessage AddQuickReply(QuickReply quickReply)
-        {
-            QuickReply = quickReply;
-            return this;
-        }
-    }
-
-    public class CarouselContainerFlexMessage : FlexMessage
-    {
-        private IList<BubbleContainer> contents;
-
-        public CarouselContainerFlexMessage(string altText) : base(altText)
-        {
-            contents = (Container as CarouselContainer).Contents;
-        }
-
-        public CarouselContainerFlexMessage AddBubbleContainer(BubbleContainer bubbleContainer)
-        {
-            if (bubbleContainer == null) { throw new ArgumentNullException(nameof(bubbleContainer)); }
-            contents.Add(bubbleContainer);
-            return this;
-        }
-
-        public CarouselContainerFlexMessage AddQuickReply(QuickReply quickReply)
-        {
-            QuickReply = quickReply;
-            return this;
-        }
-    }
+    
 }

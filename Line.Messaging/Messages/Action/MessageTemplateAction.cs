@@ -39,7 +39,7 @@ namespace Line.Messaging
         /// </param>
         public MessageTemplateAction(string label, string text)
         {
-            Label = label.Substring(0, Math.Min(label.Length, 20));
+            Label = label?.Substring(0, Math.Min(label.Length, 20));
             Text = text.Substring(0, Math.Min(text.Length, 300));
         }
 

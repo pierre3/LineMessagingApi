@@ -17,6 +17,19 @@ namespace Line.Messaging
         /// <summary>
         /// The placement style of components in this box. Specify one of the following values
         /// </summary>
+        /// <param name="layout">
+        /// 
+        /// </param>
+        public BoxComponent(BoxLayout layout)
+        {
+            Layout = layout;
+        }
+
+        public BoxComponent() { }
+
+        /// <summary>
+        /// The placement style of components in this box. Specify one of the following values
+        /// </summary>
         public BoxLayout Layout { get; set; }
 
         /// <summary>
@@ -24,7 +37,7 @@ namespace Line.Messaging
         /// - When the layout property is horizontal or vertical: Box, button, filler, image, separator, and text components</para><para>
         /// - When the layout property is baseline: filler, icon, and text components</para>
         /// </summary>
-        public IList<IFlexComponent> Contents { get; set; }
+        public IList<IFlexComponent> Contents { get; set; } = new List<IFlexComponent>();
 
         /// <summary>
         /// The ratio of the width or height of this box within the parent box. 
@@ -48,6 +61,6 @@ namespace Line.Messaging
         /// The default value is the value of the spacing property of the parent box. 
         /// If this box is the first component in the parent box, the margin property will be ignored.</para>
         /// </summary>
-        public Spacing? Mergin { get; set; }
+        public Spacing? Margin { get; set; }
     }
 }

@@ -34,20 +34,14 @@ namespace FunctionAppSample
 
             switch (msg.Text)
             {
-                
-            }
 
-            FlexMessage.CreateCarouselMessage("sample")
-                .AddQuickReply(new QuickReply())
-                .AddBubbleContainer(new BubbleContainer() {  })
-                .AddBubbleContainer(new BubbleContainer())
-                .AddBubbleContainer(new BubbleContainer());
+            }
 
         }
 
     }
 
-    
 
-    
+
+
 }

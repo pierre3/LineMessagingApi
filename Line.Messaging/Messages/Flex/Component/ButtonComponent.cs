@@ -63,6 +63,15 @@ namespace Line.Messaging
         /// </summary>
         public Gravity? Gravity { get; set; }
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="action">
+        /// Action performed when this button is tapped. Specify an action object.
+        /// </param>
+        public ButtonComponent(ITemplateAction action)
+        {
+            Action = action;
+        }
     }
 }

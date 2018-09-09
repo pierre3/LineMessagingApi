@@ -125,7 +125,7 @@ namespace Line.Messaging
 
         internal void Initialize(string label, string data, DateTimePickerMode mode, string initial, string min, string max)
         {
-            Label = label.Substring(0, Math.Min(label.Length, 20));
+            Label = label?.Substring(0, Math.Min(label.Length, 20));
             Data = data.Substring(0, Math.Min(data.Length, 300));
             Mode = mode;
             Initial = initial;

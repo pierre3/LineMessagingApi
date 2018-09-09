@@ -39,7 +39,7 @@ namespace Line.Messaging
         /// </param>
         public UriTemplateAction(string label, string uri)
         {
-            Label = label.Substring(0, Math.Min(label.Length, 20));
+            Label = label?.Substring(0, Math.Min(label.Length, 20));
             Uri = uri;
         }
 

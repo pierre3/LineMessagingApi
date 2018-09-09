@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Line.Messaging.Messages
+namespace Line.Messaging
 {
-    public class ColorCOde
+    public class ColorCode
     {
         public static string FromRgb(byte r, byte g, byte b)
         {

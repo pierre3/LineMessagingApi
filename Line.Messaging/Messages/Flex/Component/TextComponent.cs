@@ -61,7 +61,7 @@ namespace Line.Messaging
         /// <summary>
         /// true to wrap text. The default value is false. If set to true, you can use a new line character (\n) to begin on a new line.
         /// </summary>
-        public bool? Warp { get; set; }
+        public bool? Wrap { get; set; }
 
         /// <summary>
         /// Max number of lines. <para>
@@ -88,6 +88,16 @@ namespace Line.Messaging
         /// Action performed when this text is tapped. Specify an action object.
         /// </summary>
         public ITemplateAction Action { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="text">Text</param>
+        public TextComponent(string text)
+        {
+            Text = text;
+        }
+        
     }
     
 }

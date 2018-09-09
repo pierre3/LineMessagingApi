@@ -37,6 +37,22 @@ namespace Line.Messaging
         /// <summary>
         /// Aspect ratio of the icon. You can specify one of the following values: 1:1, 2:1, or 3:1. The default value is 1:1.
         /// </summary>
-        public AspectRatio AspectRatio { get; set; }
+        public AspectRatio? AspectRatio { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="url">
+        /// Image URL<para>
+        /// Protocol: HTTPS
+        /// / Image format: JPEG or PNG
+        /// / Maximum image size: 240×240 pixels
+        /// / Maximum data size: 1 MB
+        /// </para>
+        /// </param>
+        public IconComponent(string url)
+        {
+            Url = url;
+        }
     }
 }
