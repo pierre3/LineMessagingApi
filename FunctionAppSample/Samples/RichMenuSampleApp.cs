@@ -128,7 +128,7 @@ namespace FunctionAppSample
             menuList.Clear();
         }
 
-        private async Task UploadRichMenuImageAsync(Image image, string richMenuId)
+        private async Task UploadRichMenuImageAsync(System.Drawing.Image image, string richMenuId)
         {
             using (var stream = new MemoryStream())
             {
@@ -138,7 +138,7 @@ namespace FunctionAppSample
             }
         }
 
-        private Image CreateRichMenuImage(RichMenu menu)
+        private System.Drawing.Image CreateRichMenuImage(RichMenu menu)
         {
             var bitmap = new Bitmap(menu.Size.Width, menu.Size.Height);
             var g = Graphics.FromImage(bitmap);

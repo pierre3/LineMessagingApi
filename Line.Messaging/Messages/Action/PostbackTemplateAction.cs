@@ -64,7 +64,7 @@ namespace Line.Messaging
         public PostbackTemplateAction(string label, string data, string text = null, bool useDisplayText = true)
         {
             Data = data.Substring(0, Math.Min(data.Length, 300));
-            Label = label.Substring(0, Math.Min(label.Length, 20));
+            Label = label?.Substring(0, Math.Min(label.Length, 20));
 
             if (useDisplayText)
             {

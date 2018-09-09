@@ -10,6 +10,7 @@ namespace Line.Messaging
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver();
             Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            NullValueHandling = NullValueHandling.Ignore;
         }
     }
 }

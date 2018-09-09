@@ -123,7 +123,7 @@ namespace FunctionAppSample
 
             var imageStream = await MessagingClient.GetContentStreamAsync(messageId);
 
-            var image = Image.FromStream(imageStream);
+            var image = System.Drawing.Image.FromStream(imageStream);
             var previewImage = image.GetThumbnailImage((int)(image.Width * 0.25), (int)(image.Height * 0.25), () => false, IntPtr.Zero);
 
             var blobImagePath = await BlobStorage.UploadImageAsync(image, blobDirectoryName, imageName);

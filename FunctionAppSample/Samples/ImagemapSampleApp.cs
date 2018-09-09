@@ -40,7 +40,7 @@ namespace FunctionAppSample
         private async Task ReplyImagemapAsync(string replyToken, string messageId, string blobDirectoryName)
         {
             var imageStream = await MessagingClient.GetContentStreamAsync(messageId);
-            var image = Image.FromStream(imageStream);
+            var image = System.Drawing.Image.FromStream(imageStream);
 
             using (var g = Graphics.FromImage(image))
             {
