@@ -28,6 +28,9 @@ namespace Line.Messaging
         /// Message text
         /// Max: 2000 characters
         /// </param>
+        /// <param name="quickReply">
+        /// QuickReply
+        /// </param>
         public TextMessage(string text, QuickReply quickReply = null)
         {
             Text = text.Substring(0, Math.Min(text.Length, 2000));

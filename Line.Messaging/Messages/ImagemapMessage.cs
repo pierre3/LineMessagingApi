@@ -59,6 +59,9 @@ namespace Line.Messaging
         /// Action when tapped.
         /// Max: 50
         /// </param>
+        /// <param name="quickReply">
+        /// QuickReply
+        /// </param>
         public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions, QuickReply quickReply = null)
         {
             BaseUrl = baseUrl;

@@ -9,22 +9,22 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a BoxComponent to the BubbleContainer header
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="header">BoxComponent</param>
-        /// <returns></returns>
+        /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetHeader(this BubbleContainer self, BoxComponent header)
         {
             self.Header = header;
             return self;
         }
 
-        
-        
         /// <summary>
         /// Sets a BoxComponent to the BubbleContainer header
         /// </summary>
         /// <param name="boxLayout">
         /// The placement style of components in this box. Specify one of the following values
         /// </param>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="flex">
         /// The ratio of the width or height of this box within the parent box. 
         /// The default value for the horizontal parent box is 1, and the default value for the vertical parent box is 0. 
@@ -59,6 +59,7 @@ namespace Line.Messaging
         /// <summary>
         /// Add a flex component to BubbleContainer header
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="component">Flex Conmonent</param>
         /// <returns></returns>
         public static BubbleContainer AddHeaderContents(this BubbleContainer self, IFlexComponent component)
@@ -71,6 +72,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a BoxComponent to the BubbleContainer body
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="body">Box Component</param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetBody(this BubbleContainer self, BoxComponent body)
@@ -82,6 +84,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a BoxComponent to the BubbleContainer body
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="boxLayout">
         /// The placement style of components in this box. Specify one of the following values
         /// </param>
@@ -119,6 +122,7 @@ namespace Line.Messaging
         /// <summary>
         /// Add a flex component to BubbleContainer body
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="component">Flex Component</param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer AddBodyContents(this BubbleContainer self, IFlexComponent component)
@@ -131,6 +135,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a BoxComponent to the BubbleContainer footer
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="footer">BoxComponent</param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetFooter(this BubbleContainer self, BoxComponent footer)
@@ -142,6 +147,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a BoxComponent to the BubbleContainer footer
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="boxLayout">
         /// The placement style of components in this box. Specify one of the following values
         /// </param>
@@ -179,6 +185,7 @@ namespace Line.Messaging
         /// <summary>
         /// Add a flexComponent to BubbleContainer footer
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="component">Flex Comopnent</param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer AddFooterContents(this BubbleContainer self, IFlexComponent component)
@@ -191,6 +198,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a ImageComponent to the BobbleContainer hero 
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="hero">
         /// ImageComponent
         /// </param>
@@ -204,6 +212,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a ImageComponent to the BobbleContainer hero 
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="imageUrl">
         /// Image URL (Required)<para>
         /// / Protocol: HTTPS
@@ -284,6 +293,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets a action to the BubbleContainer hero
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="action">ITemplateAction object</param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetHeroAction(this BubbleContainer self, ITemplateAction action)
@@ -296,6 +306,7 @@ namespace Line.Messaging
         /// <summary>
         /// Sets styles to a BubbleContainer
         /// </summary>
+        /// <param name="self">BubbleContainer</param>
         /// <param name="styles">Bubble container style</param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetStyles(this BubbleContainer self, BubbleStyles styles)

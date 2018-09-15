@@ -8,7 +8,7 @@ namespace Line.Messaging
     {
         public BubbleContainerFlexMessage AddBubbleContainer(BubbleContainer bubbleContainer)
         {
-            Container = bubbleContainer ?? throw new ArgumentNullException(nameof(bubbleContainer));
+            Contents = bubbleContainer ?? throw new ArgumentNullException(nameof(bubbleContainer));
             return this;
         }
         public BubbleContainerFlexMessage(string altText) : base(altText)

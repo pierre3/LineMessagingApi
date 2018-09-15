@@ -40,6 +40,9 @@
         /// <param name="duration">
         /// Length of audio file (milliseconds)
         /// </param>
+        /// <param name="quickReply">
+        /// QuickReply
+        /// </param>
         public AudioMessage(string originalContentUrl, long duration, QuickReply quickReply = null)
         {
             OriginalContentUrl = originalContentUrl;

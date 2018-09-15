@@ -48,6 +48,9 @@
         /// Max: 240 x 240
         /// Max: 1 MB
         /// </param>
+        /// <param name="quickReply">
+        /// QuickReply
+        /// </param>
         public VideoMessage(string originalContentUrl, string previerImageUrl, QuickReply quickReply = null)
         {
             OriginalContentUrl = originalContentUrl;

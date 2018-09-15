@@ -54,6 +54,9 @@ namespace Line.Messaging
         /// <param name="longitude">
         /// Longitude
         /// </param>
+        /// <param name="quickReply">
+        /// QuickReply
+        /// </param>
         public LocationMessage(string title, string address, decimal latitude, decimal longitude, QuickReply quickReply = null)
         {
             Title = title.Substring(0, Math.Min(title.Length, 100));
