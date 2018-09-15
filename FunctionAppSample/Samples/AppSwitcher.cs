@@ -75,6 +75,9 @@ namespace FunctionAppSample
                 case "@richmenu":
                     app = new RichMenuSampleApp(line, log);
                     break;
+                case "@flex":
+                    app = new FlexMessageSampleApp(line, log);
+                    break;
                 default:
                     text = "@";
                     app = new LineBotApp(line, botStatus, blobStorage, log);

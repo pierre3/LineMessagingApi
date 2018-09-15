@@ -71,7 +71,7 @@ namespace Line.MessagingTest
             flex = new FlexMessage("Restrant")
             {
 
-                Container = new BubbleContainer()
+                Contents = new BubbleContainer()
                 {
                     Hero = new ImageComponent(url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png")
                     {
