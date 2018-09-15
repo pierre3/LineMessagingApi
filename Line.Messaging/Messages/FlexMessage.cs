@@ -18,7 +18,7 @@ namespace Line.Messaging
         /// <summary>
         /// Flex Message container object
         /// </summary>
-        public IFlexContainer Container { get; set; }
+        public IFlexContainer Contents { get; set; }
 
         /// <summary>
         /// Alternative text.
@@ -41,7 +41,7 @@ namespace Line.Messaging
         public static BubbleContainerFlexMessage CreateBubbleMessage(string altText)
         {
             var message = new BubbleContainerFlexMessage(altText);
-            message.Container = new BubbleContainer();
+            message.Contents = new BubbleContainer();
             return message;
         }
 
@@ -49,7 +49,7 @@ namespace Line.Messaging
         {
             return new CarouselContainerFlexMessage(altText)
             {
-                Container = new CarouselContainer()
+                Contents = new CarouselContainer()
             };
         }
     }
