@@ -10,6 +10,7 @@ namespace Line.Messaging
 
         /// <summary>
         /// Array of bubble containers. Max: 10 bubbles
+        /// <para>(Required)</para>
         /// </summary>
         public IList<BubbleContainer> Contents { get; set; } = new List<BubbleContainer>();
 

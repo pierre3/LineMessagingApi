@@ -8,9 +8,9 @@ using Newtonsoft.Json.Converters;
 namespace Line.MessagingTest
 {
     [TestClass]
-    public class FlexObjectSerializeText
+    public class FlexObjectSerializeTest
     {
-        static FlexObjectSerializeText()
+        static FlexObjectSerializeTest()
         {
             JsonConvert.DefaultSettings = () =>
             {
@@ -27,11 +27,11 @@ namespace Line.MessagingTest
         }
 
         [TestMethod]
-        public void SerializeTest()
+        public void RestrantTest()
         {
 
             FlexMessage flex = FlexMessage.CreateBubbleMessage("Restrant")
-                .AddBubbleContainer(new BubbleContainer()
+                .SetBubbleContainer(new BubbleContainer()
                     .SetHero(imageUrl: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
                             flex: null,
                             margin: null,
@@ -50,6 +50,7 @@ namespace Line.MessagingTest
                             .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png") { Size = ComponentSize.Sm })
                             .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png") { Size = ComponentSize.Sm })
                             .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png") { Size = ComponentSize.Sm })
+                            .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png") { Size = ComponentSize.Sm })
                             .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png") { Size = ComponentSize.Sm })
                             .AddContents(new TextComponent("4.0") { Size = ComponentSize.Sm, Margin = Spacing.Md, Flex = 0, Color = "#999999" }))
                         .AddBodyContents(new BoxComponent(BoxLayout.Vertical) { Margin = Spacing.Lg, Spacing = Spacing.Sm }
@@ -64,9 +65,9 @@ namespace Line.MessagingTest
                         .AddContents(new ButtonComponent(new UriTemplateAction("WEBSITE", "https://linecorp.com")) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
                         .AddContents(new SpacerComponent(ComponentSize.Sm))));
 
-            var json = JsonConvert.SerializeObject(flex);
-
-            //Console.WriteLine(json);
+            var jsonA = JsonConvert.SerializeObject(flex);
+            Console.WriteLine(jsonA);
+            Console.WriteLine("-----------------------------------------------------");
 
             flex = new FlexMessage("Restrant")
             {
@@ -194,8 +195,8 @@ namespace Line.MessagingTest
                 }
             };
 
-            json = JsonConvert.SerializeObject(flex);
-            Console.WriteLine(json);
+            var jsonB = JsonConvert.SerializeObject(flex);
+            Console.WriteLine(jsonB);            
         }
     }
 }

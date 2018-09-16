@@ -61,7 +61,7 @@ namespace Line.Messaging
         /// </summary>
         /// <param name="self">BubbleContainer</param>
         /// <param name="component">Flex Conmonent</param>
-        /// <returns></returns>
+        /// <returns>BubbleContainer</returns>
         public static BubbleContainer AddHeaderContents(this BubbleContainer self, IFlexComponent component)
         {
             if (self.Header == null) { throw new InvalidOperationException("Header not exists."); }
@@ -202,7 +202,7 @@ namespace Line.Messaging
         /// <param name="hero">
         /// ImageComponent
         /// </param>
-        /// <remarks>BubbleContainer</remarks>
+        /// <para>BubbleContainer</para>
         public static BubbleContainer SetHero(this BubbleContainer self, ImageComponent hero)
         {
             self.Hero = hero;

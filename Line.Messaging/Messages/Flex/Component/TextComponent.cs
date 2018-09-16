@@ -10,6 +10,7 @@ namespace Line.Messaging
 
         /// <summary>
         /// Text
+        /// <para>(Required)</para>
         /// </summary>
         public string Text { get; set; }
 
@@ -17,6 +18,7 @@ namespace Line.Messaging
         /// The ratio of the width or height of this component within the parent box.<para>
         /// The default value for the horizontal parent box is 1, and the default value for the vertical parent box is 0. 
         /// For more information, see Width and height of components.</para>
+        /// <para>(Optional)</para>
         /// </summary>
         public int? Flex { get; set; }
 
@@ -26,6 +28,7 @@ namespace Line.Messaging
         /// none does not set a space while the other values set a space whose size increases in the order of listing. 
         /// The default value is the value of the spacing property of the parent box. 
         /// If this component is the first component in the parent box, the margin property will be ignored.</para>
+        /// <para>(Optional)</para>
         /// </summary>
         public Spacing? Margin { get; set; }
 
@@ -34,6 +37,7 @@ namespace Line.Messaging
         /// You can specify one of the following values: xxs, xs, sm, md, lg, xl, xxl, 3xl, 4xl, or 5xl. 
         /// The size increases in the order of listing. 
         /// The default value is md.</para>
+        /// <para>(Optional)</para>
         /// </summary>
         public ComponentSize? Size { get; set; }
 
@@ -44,6 +48,7 @@ namespace Line.Messaging
         /// / end: Right-aligned
         /// / center: Center-aligned
         /// , The default value is start.</para>
+        /// <para>(Optional)</para>
         /// </summary>
         public Align? Align { get; set; }
 
@@ -55,11 +60,13 @@ namespace Line.Messaging
         /// / center: Center-aligned
         /// The default value is top.</para>
         /// If the layout property of the parent box is baseline, the gravity property will be ignored.
+        /// <para>(Optional)</para>
         /// </summary>
         public Gravity? Gravity { get; set; }
 
         /// <summary>
         /// true to wrap text. The default value is false. If set to true, you can use a new line character (\n) to begin on a new line.
+        /// <para>(Optional)</para>
         /// </summary>
         public bool? Wrap { get; set; }
 
@@ -71,21 +78,25 @@ namespace Line.Messaging
         /// This property is supported on the following versions of LINE.
         /// LINE for iOS and Android: 8.11.0 and later
         /// LINE for Windows and macOS: 5.9.0 and later
+        /// <para>(Optional)</para>
         /// </summary>
         public int? MaxLines { get; set; }
 
         /// <summary>
         /// Font weight. You can specify one of the following values: regular, or bold. Specifying bold makes the font bold. The default value is regular.
+        /// <para>(Optional)</para>
         /// </summary>
         public Weight? Weight { get; set; }
 
         /// <summary>
         /// Font weight. You can specify one of the following values: regular, or bold. Specifying bold makes the font bold. The default value is regular.
+        /// <para>(Optional)</para>
         /// </summary>
         public string Color { get; set; }
 
         /// <summary>
         /// Action performed when this text is tapped. Specify an action object.
+        /// <para>(Optional)</para>
         /// </summary>
         public ITemplateAction Action { get; set; }
 
@@ -96,6 +107,14 @@ namespace Line.Messaging
         public TextComponent(string text)
         {
             Text = text;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public TextComponent()
+        {
+
         }
         
     }

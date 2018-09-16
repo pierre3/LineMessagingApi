@@ -66,7 +66,7 @@ namespace Line.Messaging.Webhooks
         /// <summary>
         /// Compares two-byte arrays in length-constant time. 
         /// This comparison method is used so that password hashes cannot be extracted from on-line systems using a timing attack and then attacked off-line.
-        /// <remarks> http://bryanavery.co.uk/cryptography-net-avoiding-timing-attack/#comment-85　</remarks>
+        /// <para> http://bryanavery.co.uk/cryptography-net-avoiding-timing-attack/#comment-85　</para>
         /// </summary>
         private static bool SlowEquals(byte[] a, byte[] b)
         {

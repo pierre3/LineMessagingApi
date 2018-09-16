@@ -19,15 +19,188 @@ namespace FunctionAppSample
             Log = log;
         }
 
+        private static readonly string FlexJson =
+@"{
+  ""type"": ""flex"",
+  ""contents"": {
+    ""type"": ""bubble"",
+    ""direction"": ""ltr"",
+    ""hero"": {
+      ""type"": ""image"",
+      ""url"": ""https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"",
+      ""size"": ""full"",
+      ""aspectRatio"": ""20:13"",
+      ""aspectMode"": ""cover"",
+      ""action"": {
+        ""type"": ""uri"",
+        ""uri"": ""http://linecorp.com/""
+      }
+    },
+    ""body"": {
+      ""type"": ""box"",
+      ""layout"": ""vertical"",
+      ""contents"": [
+        {
+          ""type"": ""text"",
+          ""text"": ""Broun Cafe"",
+          ""size"": ""xl"",
+          ""weight"": ""bold""
+        },
+        {
+          ""type"": ""box"",
+          ""layout"": ""baseline"",
+          ""contents"": [
+            {
+              ""type"": ""icon"",
+              ""url"": ""https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"",
+              ""size"": ""sm""
+            },
+            {
+              ""type"": ""icon"",
+              ""url"": ""https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"",
+              ""size"": ""sm""
+            },
+            {
+              ""type"": ""icon"",
+              ""url"": ""https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"",
+              ""size"": ""sm""
+            },
+            {
+              ""type"": ""icon"",
+              ""url"": ""https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"",
+              ""size"": ""sm""
+            },
+            {
+              ""type"": ""icon"",
+              ""url"": ""https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png"",
+              ""size"": ""sm""
+            },
+            {
+              ""type"": ""text"",
+              ""text"": ""4.0"",
+              ""flex"": 0,
+              ""margin"": ""md"",
+              ""size"": ""sm"",
+              ""color"": ""#999999""
+            }
+          ],
+          ""margin"": ""md""
+        },
+        {
+          ""type"": ""box"",
+          ""layout"": ""vertical"",
+          ""contents"": [
+            {
+              ""type"": ""box"",
+              ""layout"": ""baseline"",
+              ""contents"": [
+                {
+                  ""type"": ""text"",
+                  ""text"": ""Place"",
+                  ""flex"": 1,
+                  ""size"": ""sm"",
+                  ""color"": ""#aaaaaa""
+                },
+                {
+                  ""type"": ""text"",
+                  ""text"": ""Miraina Tower, 4-1-6 Shinjuku, Tokyo"",
+                  ""flex"": 5,
+                  ""size"": ""sm"",
+                  ""wrap"": true,
+                  ""color"": ""#666666""
+                }
+              ],
+              ""spacing"": ""sm""
+            }
+          ],
+          ""spacing"": ""sm"",
+          ""margin"": ""lg""
+        },
+        {
+          ""type"": ""box"",
+          ""layout"": ""baseline"",
+          ""contents"": [
+            {
+              ""type"": ""text"",
+              ""text"": ""Time"",
+              ""flex"": 1,
+              ""size"": ""sm"",
+              ""color"": ""#aaaaaa""
+            },
+            {
+              ""type"": ""text"",
+              ""text"": ""10:00 - 23:00"",
+              ""flex"": 5,
+              ""size"": ""sm"",
+              ""wrap"": true,
+              ""color"": ""#666666""
+            }
+          ],
+          ""spacing"": ""sm""
+        }
+      ]
+    },
+    ""footer"": {
+      ""type"": ""box"",
+      ""layout"": ""vertical"",
+      ""contents"": [
+        {
+          ""type"": ""button"",
+          ""action"": {
+            ""type"": ""uri"",
+            ""label"": ""Call"",
+            ""uri"": ""https://linecorp.com""
+          },
+          ""height"": ""sm"",
+          ""style"": ""link""
+        },
+        {
+          ""type"": ""button"",
+          ""action"": {
+            ""type"": ""uri"",
+            ""label"": ""WEBSITE"",
+            ""uri"": ""https://linecorp.com""
+          },
+          ""height"": ""sm"",
+          ""style"": ""link""
+        },
+        {
+          ""type"": ""spacer"",
+          ""size"": ""sm""
+        }
+      ],
+      ""flex"": 0,
+      ""spacing"": ""sm""
+    }
+  },
+  ""altText"": ""Restrant""
+}";
 
         protected override async Task OnMessageAsync(MessageEvent ev)
         {
 
-            var msg = ev.Message as TextEventMessage;
-            if (msg == null) { return; }
+            if (!(ev.Message is TextEventMessage msg)) { return; }
 
+            if (msg.Text == "s")
+            {
+                await ReplyFlexWithStringJson(ev);
+            }
+            else
+            {
+                await ReplyFlexWithMethodChane(ev);
+            }
+
+        }
+
+        private async Task ReplyFlexWithStringJson(MessageEvent ev)
+        {
+            await MessagingClient.ReplyMessageWithJsonAsync(ev.ReplyToken, FlexJson);
+        }
+
+        private async Task ReplyFlexWithMethodChane(MessageEvent ev)
+        {
             FlexMessage flex = FlexMessage.CreateBubbleMessage("Restrant")
-                .AddBubbleContainer(new BubbleContainer()
+                .SetBubbleContainer(new BubbleContainer()
                     .SetHero(imageUrl: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
                             flex: null,
                             margin: null,
@@ -61,8 +234,6 @@ namespace FunctionAppSample
                         .AddContents(new SpacerComponent(ComponentSize.Sm))));
 
             await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new[] { flex });
-
         }
-
     }
 }

@@ -32,11 +32,11 @@ namespace FunctionAppSample
                 var botStatus = await TableStorage<BotStatus>.CreateAsync(connectionString, "botstatus");
                 var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
 
-                var app = new LineBotApp(lineMessagingClient, botStatus, blobStorage, log);
+                //var app = new LineBotApp(lineMessagingClient, botStatus, blobStorage, log);
 
-                /* To run sample apps in the samples directory, comment out the above line and cancel this comment out.
+                ///* To run sample apps in the samples directory, comment out the above line and cancel this comment out.
                 var app = await AppSwitcher.SwitchAppsAsync(events,lineMessagingClient, botStatus, blobStorage, log);
-                //*/
+                // */
 
                 await app.RunAsync(events);
 

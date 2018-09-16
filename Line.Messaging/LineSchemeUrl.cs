@@ -104,20 +104,20 @@ namespace Line.Messaging
         /// <summary>
         /// Opens the "Location" screen. Users can share the current location or drop a pin on the map to select the location they want to share.
         /// </summary>
-        /// <remarks>
+        /// <para>
         /// Note: This scheme is only supported in one-on-one chats between a user and a bot(LINE@ account). 
         /// Not supported on external apps or other types of LINE chats.
-        ///</remarks>
+        ///</para>
         /// <returns>String of LINE Scheme URL</returns>
         public static string GetLocationUrl() => location;
 
         /// <summary>
         /// Opens the "Location" screen. Users can share the current location or drop a pin on the map to select the location they want to share.
         /// </summary>
-        /// <remarks>
+        /// <para>
         /// Note: This scheme is only supported in one-on-one chats between a user and a bot(LINE@ account). 
         /// Not supported on external apps or other types of LINE chats.
-        /// </remarks>
+        /// </para>
         /// <param name = "label" > Template action label text</param>
         /// <returns>URI template action object</returns>
         public static UriTemplateAction GetLocationUriTemplateAction(string label) => new UriTemplateAction(label, GetLocationUrl());
@@ -127,7 +127,7 @@ namespace Line.Messaging
         /// Friend of bot: Opens the chat with the bot.</para><para>
         /// Not a friend or blocked by user: Opens the "Add friend" screen for your bot.</para>
         /// </summary>
-        /// <remarks>Line://ti/p/{LINE_Id}</remarks>
+        /// <para>Line://ti/p/{LINE_Id}</para>
         /// <param name="lineId">
         /// Find the LINE ID of your bot on the LINE@ Manager. Make sure you include the "@" symbol in the LINE ID.
         /// </param>
@@ -773,9 +773,9 @@ namespace Line.Messaging
         /// <summary>
         /// Opens the "LINE Out" dial pad screen with a preset phone number. 
         /// </summary>
-        /// <remarks>
+        /// <para>
         /// For example, line://call/81/1022223333 sets the country calling code to "+81" and the local phone number to "1022223333".
-        /// </remarks>
+        /// </para>
         /// <param name="countryCallingCode">
         /// Specify the country calling code and the phone number as path parameters. Do not include the "+" symbol in the URL. 
         /// </param>
@@ -788,9 +788,9 @@ namespace Line.Messaging
         /// <summary>
         /// Opens the "LINE Out" dial pad screen with a preset phone number. 
         /// </summary>
-        /// <remarks>
+        /// <para>
         /// For example, line://call/81/1022223333 sets the country calling code to "+81" and the local phone number to "1022223333".
-        /// </remarks>
+        /// </para>
         /// <param name="countryCallingCode">
         /// Specify the country calling code and the phone number as path parameters. Do not include the "+" symbol in the URL. 
         /// </param>
@@ -858,18 +858,18 @@ namespace Line.Messaging
         /// <summary>
         /// Opens the "Spots" screen. The "Spots" screen displays a map where users can search for information on nearby landmarks.
         /// </summary>
-        /// <remarks>
+        /// <para>
         /// Not supported on Android.
-        /// </remarks>
+        /// </para>
         /// <returns>String of LINE scheme URL</returns>
         public static string GetCallSpotUrl() => callSpot;
 
         /// <summary>
         /// Opens the "Spots" screen. The "Spots" screen displays a map where users can search for information on nearby landmarks.
         /// </summary>
-        /// <remarks>
+        /// <para>
         /// Not supported on Android.
-        /// </remarks>
+        /// </para>
         /// <param name = "label" > Template action label text</param>
         /// <returns>URI template action object</returns>
         public static UriTemplateAction GetCallSpotUriTemplateAction(string label) => new UriTemplateAction(label, GetCallSpotUrl());
