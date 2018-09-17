@@ -11,9 +11,9 @@ namespace Line.Messaging
         /// <summary>
         /// Quick reply button objects. Max: 13 objects
         /// </summary>
-        public List<QuickReplyButtonObject> Items { get; set; }
+        public IList<QuickReplyButtonObject> Items { get; set; }
 
-        public QuickReply(List<QuickReplyButtonObject> items = null)
+        public QuickReply(IList<QuickReplyButtonObject> items = null)
         {
             Items = items ?? new List<QuickReplyButtonObject>();
         }

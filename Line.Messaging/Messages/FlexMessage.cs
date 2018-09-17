@@ -40,9 +40,10 @@ namespace Line.Messaging
 
         public static BubbleContainerFlexMessage CreateBubbleMessage(string altText)
         {
-            var message = new BubbleContainerFlexMessage(altText);
-            message.Contents = new BubbleContainer();
-            return message;
+            return new BubbleContainerFlexMessage(altText)
+            {
+                Contents = new BubbleContainer()
+            };
         }
 
         public static CarouselContainerFlexMessage CreateCarouselMessage(string altText)
@@ -53,5 +54,5 @@ namespace Line.Messaging
             };
         }
     }
-    
+
 }

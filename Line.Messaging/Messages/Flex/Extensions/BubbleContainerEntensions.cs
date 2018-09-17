@@ -112,9 +112,9 @@ namespace Line.Messaging
         {
             self.Body = new BoxComponent(boxLayout)
             {
-                 Flex = flex,
-                 Spacing = spacing,
-                 Margin = margin
+                Flex = flex,
+                Spacing = spacing,
+                Margin = margin
             };
             return self;
         }
@@ -272,8 +272,8 @@ namespace Line.Messaging
         /// </param>
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetHero(this BubbleContainer self, string imageUrl,
-            int? flex = null, Spacing? margin = null, Align? align = null, 
-            Gravity? gravity = null, ComponentSize? size = null, AspectRatio? aspectRatio = null, 
+            int? flex = null, Spacing? margin = null, Align? align = null,
+            Gravity? gravity = null, ComponentSize? size = null, AspectRatio? aspectRatio = null,
             AspectMode? aspectMode = null, string backgroundColor = null)
         {
             self.Hero = new ImageComponent(imageUrl)
@@ -298,13 +298,13 @@ namespace Line.Messaging
         /// <returns>BubbleContainer</returns>
         public static BubbleContainer SetHeroAction(this BubbleContainer self, ITemplateAction action)
         {
-            if(self.Hero == null) { throw new InvalidOperationException("Hero not exists."); }
+            if (self.Hero == null) { throw new InvalidOperationException("Hero not exists."); }
             self.Hero.Action = action;
             return self;
         }
 
         /// <summary>
-        /// Sets styles to a BubbleContainer
+        /// Sets styles to the BubbleContainer
         /// </summary>
         /// <param name="self">BubbleContainer</param>
         /// <param name="styles">Bubble container style</param>
@@ -312,6 +312,70 @@ namespace Line.Messaging
         public static BubbleContainer SetStyles(this BubbleContainer self, BubbleStyles styles)
         {
             self.Styles = styles;
+            return self;
+        }
+
+        /// <summary>
+        /// Sets style to the header of BubbleContainer
+        /// </summary>
+        /// <param name="self">BubbleContainer</param>
+        /// <param name="style">BlockStlye</param>
+        /// <returns>BubbleContainer</returns>
+        public static BubbleContainer SetHeaderStyle(this BubbleContainer self, BlockStyle style)
+        {
+            if (self.Styles == null)
+            {
+                self.Styles = new BubbleStyles();
+            }
+            self.Styles.Header = style;
+            return self;
+        }
+
+        /// <summary>
+        /// Sets style to the hero of BubbleContainer
+        /// </summary>
+        /// <param name="self">BubbleContainer</param>
+        /// <param name="style">BlockStlye</param>
+        /// <returns>BubbleContainer</returns>
+        public static BubbleContainer SetHeroStyle(this BubbleContainer self, BlockStyle style)
+        {
+            if (self.Styles == null)
+            {
+                self.Styles = new BubbleStyles();
+            }
+            self.Styles.Hero = style;
+            return self;
+        }
+
+        /// <summary>
+        /// Sets style to the body of BubbleContainer
+        /// </summary>
+        /// <param name="self">BubbleContainer</param>
+        /// <param name="style">BlockStlye</param>
+        /// <returns>BubbleContainer</returns>
+        public static BubbleContainer SetBodyStyle(this BubbleContainer self, BlockStyle style)
+        {
+            if (self.Styles == null)
+            {
+                self.Styles = new BubbleStyles();
+            }
+            self.Styles.Body = style;
+            return self;
+        }
+
+        /// <summary>
+        /// Sets style to the footer of BubbleContainer
+        /// </summary>
+        /// <param name="self">BubbleContainer</param>
+        /// <param name="style">BlockStlye</param>
+        /// <returns>BubbleContainer</returns>
+        public static BubbleContainer SetFooterStyle(this BubbleContainer self, BlockStyle style)
+        {
+            if (self.Styles == null)
+            {
+                self.Styles = new BubbleStyles();
+            }
+            self.Styles.Footer = style;
             return self;
         }
     }

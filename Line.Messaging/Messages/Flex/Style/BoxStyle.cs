@@ -13,7 +13,7 @@ namespace Line.Messaging
         /// Background color of the block. Use a hexadecimal color code.
         /// <para>(Optional)</para>
         /// </summary>
-        public string BackgroundColor { get; }
+        public string BackgroundColor { get; set; }
 
         /// <summary>
         /// true to place a separator above the block.<para> 
@@ -22,12 +22,12 @@ namespace Line.Messaging
         /// <para>(Optional)</para>
         /// </summary>
         
-        public bool Separator { get; }
+        public bool Separator { get; set; }
 
         /// <summary>
         /// Color of the separator. Use a hexadecimal color code.
         /// <para>(Optional)</para>
         /// </summary>
-        public string SeparatorColor { get; }
+        public string SeparatorColor { get; set; }
     }
 }

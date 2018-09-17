@@ -137,11 +137,16 @@ namespace Line.Messaging
         /// https://developers.line.me/en/docs/messaging-api/reference/#send-reply-message
         /// </summary>
         /// <param name="replyToken">ReplyToken</param>
-        /// <param name="jsonMessage">Reply messages. Up to 5 messages.</param>
-        public async Task ReplyMessageWithJsonAsync(string replyToken, string jsonMessage)
+        /// <param name="messages">Set an array of reply messages with Json string.</param>
+        public async Task ReplyMessageWithJsonAsync(string replyToken, string messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/reply");
-            request.Content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
+            var json =
+$@"{{ 
+    ""replyToken"" : ""{replyToken}"", 
+    ""messages"" : {messages} 
+}}";
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -168,11 +173,16 @@ namespace Line.Messaging
         /// Note: Use of push messages are limited to certain plans.
         /// </summary>
         /// <param name="to">ID of the receiver</param>
-        /// <param name="jsonMessages">Reply messages. Up to 5 messages.</param>
-        public async Task PushMessageWithJsonAsync(string to, string jsonMessages)
+        /// <param name="messages">Set an array of reply messages with Json string.</param>
+        public async Task PushMessageWithJsonAsync(string to, string messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/push");
-            request.Content = new StringContent(jsonMessages, Encoding.UTF8, "application/json");
+            var json =
+$@"{{ 
+    ""to"" : ""{to}"", 
+    ""messages"" : {messages} 
+}}";
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -212,11 +222,17 @@ namespace Line.Messaging
         /// https://developers.line.me/en/docs/messaging-api/reference/#send-multicast-messages
         /// </summary>
         /// <param name="to">IDs of the receivers. Max: 150 users</param>
-        /// <param name="jsonMessages">Reply messages. Up to 5 messages.</param>
-        public async Task MultiCastMessageWithJsonAsync(IList<string> to, string jsonMessages)
+        /// <param name="messages">Set an array of reply messages with Json string.</param>
+        public async Task MultiCastMessageWithJsonAsync(IList<string> to, string messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/multicast");
-            request.Content = new StringContent(jsonMessages, Encoding.UTF8, "application/json");
+            var json =
+$@"{{ 
+    ""to"" : [{string.Join(", ", to.Select(x => "\"" + x + "\""))}], 
+    ""messages"" : {messages} 
+}}";
+
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
         }
