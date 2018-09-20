@@ -1,7 +1,6 @@
 using Line.Messaging;
 using Line.Messaging.Webhooks;
 using Microsoft.Azure.WebJobs.Host;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FunctionAppSample
@@ -261,69 +260,66 @@ namespace FunctionAppSample
         {
             return new BubbleContainer()
                 .SetHeader(BoxLayout.Horizontal)
-                    .AddHeaderContents(new TextComponent("NEWS DIGEST")
-                    {
-                        Weight = Weight.Bold,
-                        Color = "#aaaaaa",
-                        Size = ComponentSize.Sm
-                    })
+                    .AddHeaderContents(new TextComponent("NEWS DIGEST") { Weight = Weight.Bold, Color = "#aaaaaa", Size = ComponentSize.Sm })
                 .SetHero(imageUrl: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_4_news.png",
-                        size: ComponentSize.Full,
-                        aspectRatio: AspectRatio._20_13,
-                        aspectMode: AspectMode.Cover)
+                        size: ComponentSize.Full, aspectRatio: AspectRatio._20_13, aspectMode: AspectMode.Cover)
                     .SetHeroAction(new UriTemplateAction(null, "http://linecorp.com/"))
-                .SetBody(boxLayout: BoxLayout.Horizontal,
-                         spacing: Spacing.Md)
-                    .AddBodyContents(
-                        new BoxComponent(BoxLayout.Vertical) { Flex = 1 }
+                .SetBody(boxLayout: BoxLayout.Horizontal, spacing: Spacing.Md)
+                    .AddBodyContents(new BoxComponent(BoxLayout.Vertical) { Flex = 1 }
                         .AddContents(new ImageComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/02_1_news_thumbnail_1.png")
-                        {
-                            AspectMode = AspectMode.Cover,
-                            AspectRatio = AspectRatio._4_3,
-                            Size = ComponentSize.Sm,
-                            Gravity = Gravity.Bottom
-                        })
+                        { AspectMode = AspectMode.Cover, AspectRatio = AspectRatio._4_3, Size = ComponentSize.Sm, Gravity = Gravity.Bottom })
                         .AddContents(new ImageComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/02_1_news_thumbnail_2.png")
-                        {
-                            AspectMode = AspectMode.Cover,
-                            AspectRatio = AspectRatio._4_3,
-                            Size = ComponentSize.Sm,
-                            Gravity = Gravity.Bottom
-                        }))
+                        { AspectMode = AspectMode.Cover, AspectRatio = AspectRatio._4_3, Size = ComponentSize.Sm, Gravity = Gravity.Bottom }))
                     .AddBodyContents(new BoxComponent(BoxLayout.Vertical) { Flex = 2 }
-                        .AddContents(new TextComponent("7 Things to Know for Today")
-                        {
-                            Gravity = Gravity.Top,
-                            Size = ComponentSize.Xs,
-                            Flex = 1
-                        })
+                        .AddContents(new TextComponent("7 Things to Know for Today") { Gravity = Gravity.Top, Size = ComponentSize.Xs, Flex = 1 })
                         .AddContents(new SeparatorComponent())
-                        .AddContents(new TextComponent("Hay fever goes wild")
-                        {
-                            Gravity = Gravity.Center,
-                            Size = ComponentSize.Xs,
-                            Flex = 2
-                        })
+                        .AddContents(new TextComponent("Hay fever goes wild") { Gravity = Gravity.Center, Size = ComponentSize.Xs, Flex = 2 })
                         .AddContents(new SeparatorComponent())
-                        .AddContents(new TextComponent("LINE Pay Begins Barcode Payment Service")
-                        {
-                            Gravity = Gravity.Center,
-                            Size = ComponentSize.Xs,
-                            Flex = 2
-                        })
+                        .AddContents(new TextComponent("LINE Pay Begins Barcode Payment Service") { Gravity = Gravity.Center, Size = ComponentSize.Xs, Flex = 2 })
                         .AddContents(new SeparatorComponent())
-                        .AddContents(new TextComponent("LINE Adds LINE Wallet")
-                        {
-                            Gravity = Gravity.Bottom,
-                            Size = ComponentSize.Xs,
-                            Flex = 1
-                        }))
+                        .AddContents(new TextComponent("LINE Adds LINE Wallet") { Gravity = Gravity.Bottom, Size = ComponentSize.Xs, Flex = 1 }))
                 .SetFooter(BoxLayout.Horizontal)
-                    .AddFooterContents(new ButtonComponent()
-                    {
-                        Action = new UriTemplateAction("More", "https://linecorp.com")
-                    });
+                    .AddFooterContents(new ButtonComponent() { Action = new UriTemplateAction("More", "https://linecorp.com") });
         }
+
+        private static BubbleContainer CreateReceiptWithExtensions()
+        {
+            return new BubbleContainer()
+                .SetFooterStyle(new BlockStyle() { Separator = true })
+                .SetBody(BoxLayout.Vertical)
+                    .AddBodyContents(new TextComponent("RECEIPT") { Weight = Weight.Bold, Color = "#1DB446", Size = ComponentSize.Sm })
+                    .AddBodyContents(new TextComponent("Brown Store") { Weight = Weight.Bold, Size = ComponentSize.Xxl, Margin = Spacing.Md })
+                    .AddBodyContents(new TextComponent("Miraina Tower, 4 - 1 - 6 Shinjuku, Tokyo") { Size = ComponentSize.Xs, Color = "#aaaaaa", Wrap = true })
+                    .AddBodyContents(new SeparatorComponent() { Margin = Spacing.Xxl })
+                    .AddBodyContents(new BoxComponent(BoxLayout.Vertical) { Margin = Spacing.Xxl, Spacing = Spacing.Sm }
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("Energy Drink") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("$2.99") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End }))
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("Chewing Gum") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("$0.99") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End }))
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("Bottled Water") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("$3.33") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End }))
+                        .AddContents(new SeparatorComponent() { Margin = Spacing.Xxl })
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("ITEMS") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("3") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End }))
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("TOTAL") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("$7.31") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End }))
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("CASH") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("$8.0") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End }))
+                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
+                            .AddContents(new TextComponent("CHANGE") { Size = ComponentSize.Sm, Color = "#555555", Flex = 0 })
+                            .AddContents(new TextComponent("$0.69") { Size = ComponentSize.Sm, Color = "#111111", Align = Align.End })))
+                    .AddBodyContents(new SeparatorComponent() { Margin = Spacing.Xl })
+                    .AddBodyContents(new BoxComponent(BoxLayout.Horizontal) { Margin = Spacing.Md }
+                        .AddContents(new TextComponent("PAYMENT ID") { Size = ComponentSize.Xs, Color = "#aaaaaa", Flex = 0 })
+                        .AddContents(new TextComponent("#743289384279") { Size = ComponentSize.Xs, Color = "#aaaaaa", Align = Align.End }));
+        }
+
 
         private static BubbleContainer CreateRestrantWithObjectInitializer()
         {
@@ -485,145 +481,6 @@ namespace FunctionAppSample
                 }
             };
         }
-
-        private static BubbleContainer CreateReceiptWithExtensions()
-        {
-            return new BubbleContainer()
-                .SetFooterStyle(new BlockStyle() { Separator = true })
-                .SetBody(BoxLayout.Vertical)
-                    .AddBodyContents(new TextComponent("RECEIPT")
-                    {
-                        Weight = Weight.Bold,
-                        Color = "#1DB446",
-                        Size = ComponentSize.Sm
-                    })
-                    .AddBodyContents(new TextComponent("Brown Store")
-                    {
-                        Weight = Weight.Bold,
-                        Size = ComponentSize.Xxl,
-                        Margin = Spacing.Md
-                    })
-                    .AddBodyContents(new TextComponent("Miraina Tower, 4 - 1 - 6 Shinjuku, Tokyo")
-                    {
-                        Size = ComponentSize.Xs,
-                        Color = "#aaaaaa",
-                        Wrap = true
-                    })
-                    .AddBodyContents(new SeparatorComponent() { Margin = Spacing.Xxl })
-                    .AddBodyContents(new BoxComponent(BoxLayout.Vertical)
-                    {
-                        Margin = Spacing.Xxl,
-                        Spacing = Spacing.Sm
-                    }
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("Energy Drink")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("$2.99")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            }))
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("Chewing Gum")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("$0.99")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            }))
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("Bottled Water")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("$3.33")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            }))
-                        .AddContents(new SeparatorComponent() { Margin = Spacing.Xxl })
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("ITEMS")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("3")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            }))
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("TOTAL")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("$7.31")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            }))
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("CASH")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("$8.0")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            }))
-                        .AddContents(new BoxComponent(BoxLayout.Horizontal)
-                            .AddContents(new TextComponent("CHANGE")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#555555",
-                                Flex = 0
-                            })
-                            .AddContents(new TextComponent("$0.69")
-                            {
-                                Size = ComponentSize.Sm,
-                                Color = "#111111",
-                                Align = Align.End
-                            })))
-                    .AddBodyContents(new SeparatorComponent() { Margin = Spacing.Xl })
-                    .AddBodyContents(new BoxComponent(BoxLayout.Horizontal) { Margin = Spacing.Md }
-                        .AddContents(new TextComponent("PAYMENT ID")
-                        {
-                            Size = ComponentSize.Xs,
-                            Color = "#aaaaaa",
-                            Flex = 0
-                        })
-                        .AddContents(new TextComponent("#743289384279")
-                        {
-                            Size = ComponentSize.Xs,
-                            Color = "#aaaaaa",
-                            Align = Align.End
-                        }));
-
-        }
-
 
     }
 }
