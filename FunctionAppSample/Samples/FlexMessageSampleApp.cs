@@ -198,7 +198,7 @@ namespace FunctionAppSample
 
         private async Task ReplyFlexWithJson(MessageEvent ev)
         {
-            await MessagingClient.ReplyMessageWithJsonAsync(ev.ReplyToken, $"[{FlexJson}]");
+            await MessagingClient.ReplyMessageWithJsonAsync(ev.ReplyToken, FlexJson,"{ \"type\" : \"text\", \"text\" : \"I Sent a flex message with json string.\" }");
         }
 
         private async Task ReplyFlexWithMethodChaine(MessageEvent ev)

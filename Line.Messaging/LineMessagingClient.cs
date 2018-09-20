@@ -137,14 +137,14 @@ namespace Line.Messaging
         /// https://developers.line.me/en/docs/messaging-api/reference/#send-reply-message
         /// </summary>
         /// <param name="replyToken">ReplyToken</param>
-        /// <param name="messages">Set an array of reply messages with Json string.</param>
-        public async Task ReplyMessageWithJsonAsync(string replyToken, string messages)
+        /// <param name="messages">Set reply messages with Json string.</param>
+        public async Task ReplyMessageWithJsonAsync(string replyToken, params string[] messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/reply");
             var json =
 $@"{{ 
     ""replyToken"" : ""{replyToken}"", 
-    ""messages"" : {messages} 
+    ""messages"" : [{string.Join(", ", messages)}]
 }}";
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -173,14 +173,14 @@ $@"{{
         /// Note: Use of push messages are limited to certain plans.
         /// </summary>
         /// <param name="to">ID of the receiver</param>
-        /// <param name="messages">Set an array of reply messages with Json string.</param>
-        public async Task PushMessageWithJsonAsync(string to, string messages)
+        /// <param name="messages">Set reply messages with Json string.</param>
+        public async Task PushMessageWithJsonAsync(string to, params string[] messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/push");
             var json =
 $@"{{ 
     ""to"" : ""{to}"", 
-    ""messages"" : {messages} 
+    ""messages"" : [{string.Join(", ", messages)}]
 }}";
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -222,14 +222,14 @@ $@"{{
         /// https://developers.line.me/en/docs/messaging-api/reference/#send-multicast-messages
         /// </summary>
         /// <param name="to">IDs of the receivers. Max: 150 users</param>
-        /// <param name="messages">Set an array of reply messages with Json string.</param>
-        public async Task MultiCastMessageWithJsonAsync(IList<string> to, string messages)
+        /// <param name="messages">Set reply messages with Json string.</param>
+        public async Task MultiCastMessageWithJsonAsync(IList<string> to, params string[] messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/multicast");
             var json =
 $@"{{ 
     ""to"" : [{string.Join(", ", to.Select(x => "\"" + x + "\""))}], 
-    ""messages"" : {messages} 
+    ""messages"" : [{string.Join(", ", messages)}] 
 }}";
 
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
