@@ -175,6 +175,7 @@ namespace FunctionAppSample
   },
   ""altText"": ""Restrant""
 }";
+        private static readonly string TextMessageJson = "{ \"type\" : \"text\", \"text\" : \"I Sent a flex message with json string.\" }";
 
         protected override async Task OnMessageAsync(MessageEvent ev)
         {
@@ -185,9 +186,9 @@ namespace FunctionAppSample
             {
                 await ReplyFlexWithJson(ev);
             }
-            else if (msg.Text == "m")
+            else if (msg.Text == "e")
             {
-                await ReplyFlexWithMethodChaine(ev);
+                await ReplyFlexWithExtensions(ev);
             }
             else
             {
@@ -198,16 +199,19 @@ namespace FunctionAppSample
 
         private async Task ReplyFlexWithJson(MessageEvent ev)
         {
-            await MessagingClient.ReplyMessageWithJsonAsync(ev.ReplyToken, FlexJson,"{ \"type\" : \"text\", \"text\" : \"I Sent a flex message with json string.\" }");
+            await MessagingClient.ReplyMessageWithJsonAsync(ev.ReplyToken, FlexJson, TextMessageJson);
         }
 
-        private async Task ReplyFlexWithMethodChaine(MessageEvent ev)
+        private async Task ReplyFlexWithExtensions(MessageEvent ev)
         {
-            var restrant = CreateRestrantBubbleContainer();
-            var news = CreateNewsBubbleContainer();
-            var receipt = CreateReceiptBubbleContainer();
+            var restrant = CreateRestrantWithObjectInitializer();
+            var news = CreateNewsWithExtensions();
+            var receipt = CreateReceiptWithExtensions();
 
-            var flex = FlexMessage.CreateCarouselMessage("Carousel Message")
+            var bubble = FlexMessage.CreateBubbleMessage("Bubble Message")
+                .SetBubbleContainer(restrant);
+
+            var carousel = FlexMessage.CreateCarouselMessage("Carousel Message")
                 .AddBubbleContainer(restrant)
                 .AddBubbleContainer(news)
                 .AddBubbleContainer(receipt)
@@ -217,10 +221,43 @@ namespace FunctionAppSample
                     new QuickReplyButtonObject(new LocationTemplateAction("Location"))
                 }));
 
-            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new[] { flex });
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new FlexMessage[] { bubble, carousel });
         }
 
-        private static BubbleContainer CreateNewsBubbleContainer()
+        private async Task ReplyFlexWithObjectInitializer(MessageEvent ev)
+        {
+            var restrant = CreateRestrantWithObjectInitializer();
+            var news = CreateNewsWithExtensions();
+            var receipt = CreateReceiptWithExtensions();
+
+            var bubble = new FlexMessage("Bubble Message")
+            {
+                Contents = restrant
+            };
+
+            var carousel = new FlexMessage("Carousel Message")
+            {
+                Contents = new CarouselContainer()
+                {
+                    Contents = new BubbleContainer[]
+                    {
+                        restrant,
+                        news,
+                        receipt
+                    }
+                },
+                QuickReply = new QuickReply(new[]
+                {
+                    new QuickReplyButtonObject(new CameraRollTemplateAction("CameraRoll")),
+                    new QuickReplyButtonObject(new CameraTemplateAction("Camera")),
+                    new QuickReplyButtonObject(new LocationTemplateAction("Location"))
+                })
+            };
+
+            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new FlexMessage[] { bubble, carousel });
+        }
+
+        private static BubbleContainer CreateNewsWithExtensions()
         {
             return new BubbleContainer()
                 .SetHeader(BoxLayout.Horizontal)
@@ -288,77 +325,168 @@ namespace FunctionAppSample
                     });
         }
 
-        private static BubbleContainer CreateRestrantBubbleContainer()
+        private static BubbleContainer CreateRestrantWithObjectInitializer()
         {
             return new BubbleContainer()
-                .SetHero(
-                    imageUrl: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
-                    size: ComponentSize.Full,
-                    aspectRatio: AspectRatio._20_13,
-                    aspectMode: AspectMode.Cover)
-                    .SetHeroAction(new UriTemplateAction(null, "http://linecorp.com/"))
-                .SetBody(BoxLayout.Vertical)
-                    .AddBodyContents(new TextComponent("Broun Cafe")
+            {
+                Hero = new ImageComponent()
+                {
+                    Url = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                    Size = ComponentSize.Full,
+                    AspectRatio = AspectRatio._20_13,
+                    AspectMode = AspectMode.Cover,
+                    Action = new UriTemplateAction(null, "http://linecorp.com/")
+                },
+                Body = new BoxComponent()
+                {
+                    Layout = BoxLayout.Vertical,
+                    Contents = new IFlexComponent[]
                     {
-                        Weight = Weight.Bold,
-                        Size = ComponentSize.Xl
-                    })
-                    .AddBodyContents(new BoxComponent(BoxLayout.Baseline) { Margin = Spacing.Md }
-                        .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
+                        new TextComponent()
                         {
-                            Size = ComponentSize.Sm
-                        })
-                        .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
+                            Text = "Broun Cafe",
+                            Weight = Weight.Bold,
+                            Size = ComponentSize.Xl
+                        },
+                        new BoxComponent()
                         {
-                            Size = ComponentSize.Sm
-                        })
-                        .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
-                        {
-                            Size = ComponentSize.Sm
-                        })
-                        .AddContents(new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png")
-                        {
-                            Size = ComponentSize.Sm
-                        })
-                        .AddContents(new TextComponent("4.0")
-                        {
-                            Size = ComponentSize.Sm,
+                            Layout = BoxLayout.Baseline,
                             Margin = Spacing.Md,
-                            Flex = 0,
-                            Color = "#999999"
-                        }))
-                    .AddBodyContents(new BoxComponent(BoxLayout.Vertical) { Margin = Spacing.Lg, Spacing = Spacing.Sm }
-                        .AddContents(new BoxComponent(BoxLayout.Baseline)
-                        {
-                            Spacing = Spacing.Sm
-                        }
-                            .AddContents(new TextComponent("Place")
+                            Contents = new IFlexComponent[]
                             {
-                                Size = ComponentSize.Sm,
-                                Color = "#aaaaaa",
-                                Flex = 1
-                            })
-                            .AddContents(new TextComponent("Miraina Tower, 4-1-6 Shinjuku, Tokyo") { Size = ComponentSize.Sm, Wrap = true, Color = "#666666", Flex = 5 }))
-                    .AddContents(new BoxComponent(BoxLayout.Baseline) { Spacing = Spacing.Sm }
-                            .AddContents(new TextComponent("Time") { Size = ComponentSize.Sm, Color = "#aaaaaa", Flex = 1 })
-                            .AddContents(new TextComponent("10:00 - 23:00") { Size = ComponentSize.Sm, Wrap = true, Color = "#666666", Flex = 5 })))
-                .SetFooter(new BoxComponent(BoxLayout.Vertical) { Spacing = Spacing.Sm, Flex = 0 }
-                    .AddContents(new ButtonComponent(new UriTemplateAction("Call", "https://linecorp.com")) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
-                    .AddContents(new ButtonComponent(new UriTemplateAction("WEBSITE", "https://linecorp.com")) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
-                    .AddContents(new SpacerComponent(ComponentSize.Sm)))
-                .SetBodyStyle(new BlockStyle()
+                                new IconComponent()
+                                {
+                                    Url = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                    Size = ComponentSize.Sm
+                                },
+                                new IconComponent()
+                                {
+                                    Url = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                    Size = ComponentSize.Sm
+                                },
+                                new IconComponent()
+                                {
+                                    Url = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                    Size = ComponentSize.Sm
+                                },
+                                new IconComponent()
+                                {
+                                    Url = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                    Size = ComponentSize.Sm
+                                },
+                                new IconComponent()
+                                {
+                                    Url = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
+                                    Size = ComponentSize.Sm
+                                },
+                                new TextComponent()
+                                {
+                                    Text = "4.0",
+                                    Size = ComponentSize.Sm,
+                                    Margin = Spacing.Md,
+                                    Flex = 0,
+                                    Color = "#999999"
+                                }
+                            }
+                        },
+                        new BoxComponent()
+                        {
+                            Layout = BoxLayout.Vertical,
+                            Margin = Spacing.Lg,
+                            Spacing = Spacing.Sm,
+                            Contents = new IFlexComponent[]
+                            {
+                                new BoxComponent()
+                                {
+                                    Layout = BoxLayout.Baseline,
+                                    Spacing = Spacing.Sm,
+                                    Contents = new IFlexComponent[]
+                                    {
+                                        new TextComponent()
+                                        {
+                                            Text = "Place",
+                                            Size = ComponentSize.Sm,
+                                            Color = "#aaaaaa",
+                                            Flex = 1
+                                        },
+                                        new TextComponent()
+                                        {
+                                            Text = "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
+                                            Size = ComponentSize.Sm,
+                                            Wrap = true,
+                                            Color = "#666666",
+                                            Flex = 5
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new BoxComponent(BoxLayout.Baseline)
+                        {
+                            Spacing = Spacing.Sm,
+                            Contents = new IFlexComponent[]
+                            {
+                                new TextComponent()
+                                {
+                                    Text = "Time",
+                                    Size = ComponentSize.Sm,
+                                    Color = "#aaaaaa",
+                                    Flex = 1
+                                },
+                                new TextComponent()
+                                {
+                                    Text = "10:00 - 23:00",
+                                    Size = ComponentSize.Sm,
+                                    Wrap = true,
+                                    Color = "#666666",
+                                    Flex=5
+                                }
+                            }
+                        }
+                    }
+                },
+                Footer = new BoxComponent()
                 {
-                    BackgroundColor = ColorCode.LightSlateGrey,
-                    Separator = true,
-                    SeparatorColor = ColorCode.DarkSlateGray
-                })
-                .SetFooterStyle(new BlockStyle()
+                    Layout = BoxLayout.Vertical,
+                    Spacing = Spacing.Sm,
+                    Flex = 0,
+                    Contents = new IFlexComponent[]
+                        {
+                            new ButtonComponent()
+                            {
+                                Action = new UriTemplateAction("Call", "https://linecorp.com"),
+                                Style = ButtonStyle.Link,
+                                Height = ButtonHeight.Sm
+                            },
+                            new ButtonComponent()
+                            {
+                                Action = new UriTemplateAction("WEBSITE", "https://linecorp.com"),
+                                Style = ButtonStyle.Link,
+                                Height = ButtonHeight.Sm
+                            },
+                            new SpacerComponent()
+                            {
+                                Size = ComponentSize.Sm
+                            }
+                        }
+                },
+                Styles = new BubbleStyles()
                 {
-                    BackgroundColor = ColorCode.Azure
-                });
+                    Body = new BlockStyle()
+                    {
+                        BackgroundColor = ColorCode.FromRgb(192, 200, 200),
+                        Separator = true,
+                        SeparatorColor = ColorCode.DarkViolet
+                    },
+                    Footer = new BlockStyle()
+                    {
+                        BackgroundColor = ColorCode.Ivory
+                    }
+                }
+            };
         }
 
-        private static BubbleContainer CreateReceiptBubbleContainer()
+        private static BubbleContainer CreateReceiptWithExtensions()
         {
             return new BubbleContainer()
                 .SetFooterStyle(new BlockStyle() { Separator = true })
@@ -496,148 +624,6 @@ namespace FunctionAppSample
 
         }
 
-        private async Task ReplyFlexWithObjectInitializer(MessageEvent ev)
-        {
-            var flex = new FlexMessage("Restrant")
-            {
 
-                Contents = new BubbleContainer()
-                {
-                    Hero = new ImageComponent(url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png")
-                    {
-                        Size = ComponentSize.Full,
-                        AspectRatio = AspectRatio._20_13,
-                        AspectMode = AspectMode.Cover,
-                        Action = new UriTemplateAction(null, "http://linecorp.com/")
-                    },
-                    Body = new BoxComponent(layout: BoxLayout.Vertical)
-                    {
-                        Contents = new IFlexComponent[] {
-                        new TextComponent("Broun Cafe")
-                        {
-                            Weight = Weight.Bold,
-                            Size = ComponentSize.Xl
-                        },
-                        new BoxComponent(layout: BoxLayout.Baseline)
-                        {
-                            Margin = Spacing.Md,
-                            Contents = new IFlexComponent[]
-                            {
-                                new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
-                                {
-                                    Size = ComponentSize.Sm
-                                },
-                                new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
-                                {
-                                    Size = ComponentSize.Sm
-                                },
-                                new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
-                                {
-                                    Size = ComponentSize.Sm
-                                },
-                                new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png")
-                                {
-                                    Size = ComponentSize.Sm
-                                },
-                                new IconComponent("https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png")
-                                {
-                                    Size = ComponentSize.Sm
-                                },
-                                new TextComponent("4.0")
-                                {
-                                    Size = ComponentSize.Sm,
-                                    Margin = Spacing.Md,
-                                    Flex = 0,
-                                    Color = "#999999"
-                                }
-                            }
-                        },
-                        new BoxComponent(BoxLayout.Vertical)
-                        {
-                            Margin = Spacing.Lg,
-                            Spacing = Spacing.Sm,
-                            Contents = new IFlexComponent[]
-                            {
-                                new BoxComponent(BoxLayout.Baseline)
-                                {
-                                    Spacing = Spacing.Sm,
-                                    Contents = new IFlexComponent[]
-                                    {
-                                        new TextComponent("Place")
-                                        {
-                                            Size = ComponentSize.Sm,
-                                            Color = "#aaaaaa",
-                                            Flex = 1
-                                        },
-                                        new TextComponent("Miraina Tower, 4-1-6 Shinjuku, Tokyo")
-                                        {
-                                            Size = ComponentSize.Sm,
-                                            Wrap = true,
-                                            Color = "#666666",
-                                            Flex = 5
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        new BoxComponent(BoxLayout.Baseline)
-                        {
-                            Spacing = Spacing.Sm,
-                            Contents = new IFlexComponent[]
-                            {
-                                new TextComponent("Time")
-                                {
-                                    Size = ComponentSize.Sm,
-                                    Color = "#aaaaaa",
-                                    Flex = 1
-                                },
-                                new TextComponent("10:00 - 23:00")
-                                {
-                                    Size = ComponentSize.Sm,
-                                    Wrap = true,
-                                    Color = "#666666",
-                                    Flex=5
-                                }
-                            }
-                        }
-                    }
-                    },
-                    Footer = new BoxComponent(BoxLayout.Vertical)
-                    {
-                        Spacing = Spacing.Sm,
-                        Flex = 0,
-                        Contents = new IFlexComponent[]
-                        {
-                            new ButtonComponent(new UriTemplateAction("Call", "https://linecorp.com"))
-                            {
-                                Style = ButtonStyle.Link,
-                                Height = ButtonHeight.Sm
-                            },
-                            new ButtonComponent(new UriTemplateAction("WEBSITE", "https://linecorp.com"))
-                            {
-                                Style = ButtonStyle.Link,
-                                Height = ButtonHeight.Sm
-                            },
-                            new SpacerComponent(ComponentSize.Sm)
-                        }
-                    },
-                    Styles = new BubbleStyles()
-                    {
-                        Body = new BlockStyle()
-                        {
-                            BackgroundColor = ColorCode.FromRgb(192, 200, 200),
-                            Separator = true,
-                            SeparatorColor = ColorCode.DarkViolet
-                        },
-                        Footer = new BlockStyle()
-                        {
-                            BackgroundColor = ColorCode.Ivory
-                        }
-                    }
-                }
-            };
-
-            await MessagingClient.ReplyMessageAsync(ev.ReplyToken, new[] { flex });
-        }
     }
 }
