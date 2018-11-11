@@ -27,14 +27,15 @@ namespace FunctionAppSample
             try
             {
                 var channelSecret = System.Configuration.ConfigurationManager.AppSettings["ChannelSecret"];
-                var events = await req.GetWebhookEventsAsync(channelSecret);
+                var botUserId = System.Configuration.ConfigurationManager.AppSettings["BotUserId"];
+                var events = await req.GetWebhookEventsAsync(channelSecret, botUserId);
                 var connectionString = System.Configuration.ConfigurationManager.AppSettings["AzureWebJobsStorage"];
                 var botStatus = await TableStorage<BotStatus>.CreateAsync(connectionString, "botstatus");
                 var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
 
-                //var app = new LineBotApp(lineMessagingClient, botStatus, blobStorage, log);
+                var app = new LineBotApp(lineMessagingClient, botStatus, blobStorage, log);
 
-                ///* To run sample apps in the samples directory, comment out the above line and cancel this comment out.
+                /* To run sample apps in the samples directory, comment out the above line and cancel this comment out.
                 var app = await AppSwitcher.SwitchAppsAsync(events,lineMessagingClient, botStatus, blobStorage, log);
                 // */
 
@@ -63,11 +64,8 @@ namespace FunctionAppSample
                     await lineMessagingClient.PushMessageAsync(debugUserId, e.Message);
                 }
             }
-
             return req.CreateResponse(HttpStatusCode.OK);
         }
-
-        
     }
 
 }

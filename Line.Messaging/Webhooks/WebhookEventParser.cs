@@ -17,5 +17,16 @@ namespace Line.Messaging.Webhooks
                 yield return webhookEvent;
             }
         }
+
+        public static IEnumerable<WebhookEvent> ParseEvents(dynamic events)
+        {
+            foreach (var ev in events)
+            {
+                var webhookEvent = WebhookEvent.CreateFrom(ev);
+                if (webhookEvent == null) { continue; }
+                yield return webhookEvent;
+            }
+        }
+        
     }
 }

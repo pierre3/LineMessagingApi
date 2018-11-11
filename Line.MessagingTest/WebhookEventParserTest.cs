@@ -58,6 +58,27 @@ namespace Line.MessagingTest
             var beacon_beacon_type = "enter";
             var beacon_beacon_dm = "beacon_dm";
 
+            var videoMessage_replyToken = "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA";
+            var videoMessage_type = "message";
+            var videoMessage_timestamp = 1462629479859L;
+            var videoMessage_source_type = "user";
+            var videoMessage_source_userId = "U206d25c2ea6bd87c17655609a1c37cb8";
+            var videoMessage_message_id = "325708";
+            var videoMessage_message_type = "video";
+            var videoMessage_duration = 1000;
+            var videoMessage_provider_type = "external";
+            var videoMessage_provider_url = "https://sample.com/video/a001.mp4";
+            var videoMessage_provider_preUrl = "https://sample.com/video/a001pre.jpeg";
+
+            var imageMessage_replyToken = "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA";
+            var imageMessage_type = "message";
+            var imageMessage_timestamp = 1462629479859L;
+            var imageMessage_source_type = "user";
+            var imageMessage_source_userId = "U206d25c2ea6bd87c17655609a1c37cb8";
+            var imageMessage_message_id = "325708";
+            var imageMessage_message_type = "image";
+            var imageMessage_provider_type = "line";
+            
             var json = $@"{{
     ""events"": [
         {{
@@ -133,7 +154,42 @@ namespace Line.MessagingTest
                 ""type"": ""{beacon_beacon_type}"",
                 ""dm"" : ""{beacon_beacon_dm}""
             }}
-         }}
+         }},
+        {{
+            ""replyToken"": ""{videoMessage_replyToken}"",
+            ""type"": ""{videoMessage_type}"",
+            ""timestamp"": {videoMessage_timestamp},
+            ""source"": {{
+                 ""type"": ""{videoMessage_source_type}"",
+                ""userId"": ""{videoMessage_source_userId}""
+             }},
+             ""message"": {{
+                 ""id"": ""{videoMessage_message_id}"",
+                 ""type"": ""{videoMessage_message_type}"",
+                 ""duration"": ""{videoMessage_duration}"",
+                 ""contentProvider"": {{ 
+                    ""type"": ""{videoMessage_provider_type}"",
+                    ""originalContentUrl"": ""{videoMessage_provider_url}"",
+                    ""previewContentUrl"": ""{videoMessage_provider_preUrl}"",
+                 }}
+            }}
+        }},
+        {{
+            ""replyToken"": ""{imageMessage_replyToken}"",
+            ""type"": ""{imageMessage_type}"",
+            ""timestamp"": {imageMessage_timestamp},
+            ""source"": {{
+                 ""type"": ""{imageMessage_source_type}"",
+                ""userId"": ""{imageMessage_source_userId}""
+             }},
+             ""message"": {{
+                 ""id"": ""{imageMessage_message_id}"",
+                 ""type"": ""{imageMessage_message_type}"",
+                 ""contentProvider"": {{ 
+                    ""type"": ""{imageMessage_provider_type}""
+                 }}
+            }}
+        }},
     ]
 }}";
 
@@ -188,6 +244,20 @@ namespace Line.MessagingTest
             Assert.AreEqual(beaconEvent.Beacon.Hwid, beacon_beacon_hwid);
             Assert.AreEqual(beaconEvent.Beacon.Type.ToString().ToLower(), beacon_beacon_type);
             Assert.AreEqual(beaconEvent.Beacon.Dm, beacon_beacon_dm);
+
+            var videoMessageEvent = (MessageEvent)events[7];
+            Assert.AreEqual(videoMessageEvent.ReplyToken, videoMessage_replyToken);
+            Assert.AreEqual(videoMessageEvent.Type.ToString().ToLower(), videoMessage_type);
+            Assert.AreEqual(videoMessageEvent.Timestamp, videoMessage_timestamp);
+            Assert.AreEqual(videoMessageEvent.Source.Type.ToString().ToLower(), videoMessage_source_type);
+            Assert.AreEqual(videoMessageEvent.Source.Id, videoMessage_source_userId);
+            Assert.AreEqual(videoMessageEvent.Message.Id, videoMessage_message_id);
+            Assert.AreEqual(videoMessageEvent.Message.Type.ToString().ToLower(), videoMessage_message_type);
+            var media = (MediaEventMessage)(videoMessageEvent.Message);
+            Assert.AreEqual(media.Duration, videoMessage_duration);
+            Assert.AreEqual(media.ContentProvider.Type.ToString().ToLower(), videoMessage_provider_type);
+            Assert.AreEqual(media.ContentProvider.OriginalContentUrl, videoMessage_provider_url);
+            Assert.AreEqual(media.ContentProvider.PreviewImageUrl, videoMessage_provider_preUrl);
 
         }
     }

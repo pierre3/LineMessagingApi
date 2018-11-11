@@ -70,5 +70,14 @@ namespace Line.Messaging
         /// <para>(Optional)</para>
         /// </summary>
         public Spacing? Margin { get; set; }
+
+        /// <summary>
+        /// Action performed when this box is tapped.
+        /// Specify an action object. This property is supported on the following versions of LINE.<para>
+        /// / LINE for iOS and Android: 8.11.0 and later
+        /// / LINE for Windows and macOS: 5.9.0 and later
+        /// </para>
+        /// </summary>
+        public ITemplateAction Action { get; set; }
     }
 }

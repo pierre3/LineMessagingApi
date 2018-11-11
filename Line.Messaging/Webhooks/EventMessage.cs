@@ -38,9 +38,16 @@ namespace Line.Messaging.Webhooks
                 case EventMessageType.Image:
                 case EventMessageType.Audio:
                 case EventMessageType.Video:
-                    return new EventMessage(messageType, (string)message.id);
+                    ContentProvider contentProvider = null;
+                    if (Enum.TryParse((string)message.contentProvider?.type,true, out ContentProviderType providerType))
+                    {
+                        contentProvider = new ContentProvider(providerType,
+                                (string)message.contentProvider?.originalContentUrl,
+                                (string)message.contentProvider?.previewContentUrl);
+                    }
+                    return new MediaEventMessage(messageType, (string)message.id, contentProvider, (int?)message.duration);
                 case EventMessageType.Location:
-                    return new LocationEventMessage((string)message.id, (string)message.title, (string) message.address,
+                    return new LocationEventMessage((string)message.id, (string)message.title, (string)message.address,
                         (decimal)message.latitude, (decimal)message.longitude);
                 case EventMessageType.Sticker:
                     return new StickerEventMessage((string)message.id, (string)message.packageId, (string)message.stickerId);

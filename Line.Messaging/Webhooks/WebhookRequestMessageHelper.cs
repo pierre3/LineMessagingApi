@@ -1,4 +1,5 @@
 ﻿#if !NETSTANDARD1_4
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,9 @@ namespace Line.Messaging.Webhooks
         /// </summary>
         /// <param name="request">HttpRequestMessage</param>
         /// <param name="channelSecret">ChannelSecret</param>
+        /// <param name="botUserId">BotUserId</param>
         /// <returns>List of WebhookEvent</returns>
-        public static async Task<IEnumerable<WebhookEvent>> GetWebhookEventsAsync(this HttpRequestMessage request, string channelSecret)
+        public static async Task<IEnumerable<WebhookEvent>> GetWebhookEventsAsync(this HttpRequestMessage request, string channelSecret, string botUserId = null)
         {
             if (request == null) { throw new ArgumentNullException(nameof(request)); }
             if (channelSecret == null) { throw new ArgumentNullException(nameof(channelSecret)); }
@@ -29,7 +31,17 @@ namespace Line.Messaging.Webhooks
             {
                 throw new InvalidSignatureException("Signature validation faild.");
             }
-            return WebhookEventParser.Parse(content);
+            
+            dynamic json = JsonConvert.DeserializeObject(content);
+            
+            if (!string.IsNullOrEmpty(botUserId))
+            {
+                if(botUserId != (string)json.destination)
+                {
+                    throw new UserIdMismatchException("Bot user ID does not match.");
+                }
+            }
+            return WebhookEventParser.ParseEvents(json.events);
         }
 
         /// <summary>
