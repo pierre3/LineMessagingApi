@@ -16,16 +16,18 @@ namespace Line.Messaging
     /// </summary>
     public class LineMessagingClient : IDisposable
     {
+        private const string DEFAULT_URI = "https://api.line.me/v2";
+
         private HttpClient _client;
         private JsonSerializerSettings _jsonSerializerSettings;
-        static private string _uri;
+        private string _uri;
 
         /// <summary>
         /// Constructor 
         /// </summary>
         /// <param name="channelAccessToken">ChannelAccessToken</param>
         /// <param name="uri">Request URI</param>
-        public LineMessagingClient(string channelAccessToken, string uri = "https://api.line.me/v2")
+        public LineMessagingClient(string channelAccessToken, string uri = DEFAULT_URI)
         {
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", channelAccessToken);
@@ -44,10 +46,11 @@ namespace Line.Messaging
         /// <param name="httpClient">HttpClient</param>
         /// <param name="channelId">ChannelId</param>
         /// <param name="channelAccessToken">ChannelAccessToken</param>
+        /// <param name="uri">URI</param>
         /// <returns>ChannelAccessToken</returns>
-        public static async Task<ChannelAccessToken> IssueChannelAccessTokenAsync(HttpClient httpClient, string channelId, string channelAccessToken)
+        public static async Task<ChannelAccessToken> IssueChannelAccessTokenAsync(HttpClient httpClient, string channelId, string channelAccessToken, string uri = DEFAULT_URI)
         {
-            var response = await httpClient.PostAsync($"{_uri}/oauth/accessToken",
+            var response = await httpClient.PostAsync($"{uri}/oauth/accessToken",
                 new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     ["grant_type"] = "client_credentials",
@@ -72,9 +75,10 @@ namespace Line.Messaging
         /// </summary>
         /// <param name="httpClient">HttpClient</param>
         /// <param name="channelAccessToken">ChannelAccessToken</param>
-        public static async Task RevokeChannelAccessTokenAsync(HttpClient httpClient, string channelAccessToken)
+        /// <param name="uri">URI</param>
+        public static async Task RevokeChannelAccessTokenAsync(HttpClient httpClient, string channelAccessToken, string uri = DEFAULT_URI)
         {
-            var response = await httpClient.PostAsync($"{_uri}/oauth/revoke",
+            var response = await httpClient.PostAsync($"{uri}/oauth/revoke",
                 new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     ["access_token"] = channelAccessToken
@@ -88,15 +92,16 @@ namespace Line.Messaging
         /// </summary>
         /// <param name="channelId">ChannelId</param>
         /// <param name="channelSecret">ChannelSecret</param>
+        /// <param name="uri">URI</param>
         /// <returns></returns>
-        public static async Task<LineMessagingClient> CreateAsync(string channelId, string channelSecret)
+        public static async Task<LineMessagingClient> CreateAsync(string channelId, string channelSecret, string uri = DEFAULT_URI)
         {
             if (string.IsNullOrEmpty(channelId)) { throw new ArgumentNullException(nameof(channelId)); }
             if (string.IsNullOrEmpty(channelSecret)) { throw new ArgumentNullException(nameof(channelSecret)); }
             using (var client = new HttpClient())
             {
-                var accessToken = await IssueChannelAccessTokenAsync(client, channelId, channelSecret);
-                return new LineMessagingClient(accessToken.AccessToken);
+                var accessToken = await IssueChannelAccessTokenAsync(client, channelId, channelSecret, uri);
+                return new LineMessagingClient(accessToken.AccessToken, uri);
             }
         }
 
