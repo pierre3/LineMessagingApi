@@ -35,6 +35,11 @@ namespace Line.Messaging
         public ImagemapSize BaseSize { get; }
 
         /// <summary>
+        /// Video to play on imagemap
+        /// </summary>
+        public Video Video { get; }
+
+        /// <summary>
         /// Action when tapped.
         /// Max: 50
         /// </summary>
@@ -62,7 +67,10 @@ namespace Line.Messaging
         /// <param name="quickReply">
         /// QuickReply
         /// </param>
-        public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions, QuickReply quickReply = null)
+        /// <param name="video">
+        /// Video to play on imagemap
+        /// </param>
+        public ImagemapMessage(string baseUrl, string altText, ImagemapSize baseSize, IList<IImagemapAction> actions, QuickReply quickReply = null, Video video = null)
         {
             BaseUrl = baseUrl;
             AltText = altText.Substring(0, Math.Min(altText.Length, 400)); ;
