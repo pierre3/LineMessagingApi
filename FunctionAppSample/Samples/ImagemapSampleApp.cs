@@ -3,6 +3,7 @@ using Line.Messaging.Webhooks;
 using Microsoft.Azure.WebJobs.Host;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FunctionAppSample
@@ -31,11 +32,15 @@ namespace FunctionAppSample
                 case EventMessageType.Image:
                     await ReplyImagemapAsync(ev.ReplyToken, ev.Message.Id, ev.Source.Type + "_" + ev.Source.Id);
                     break;
+                case EventMessageType.Video:
+                    await UploadVideoAsync(ev.ReplyToken, ev.Message.Id ,ev.Source.Type + "_" + ev.Source.Id);
+                    break;
                 case EventMessageType.Text:
                     await MessagingClient.ReplyMessageAsync(ev.ReplyToken, ((TextEventMessage)ev.Message).Text);
                     break;
             }
         }
+
 
         private async Task ReplyImagemapAsync(string replyToken, string messageId, string blobDirectoryName)
         {
@@ -56,6 +61,14 @@ namespace FunctionAppSample
             var imageSize = new ImagemapSize(1024, (int)(1040 * (double)image.Height / image.Width));
             var areaWidth = imageSize.Width / 2;
             var areaHeight = imageSize.Height / 2;
+            Video video = null;
+            var videoUrl = BlobStorage.ListBlobUri(blobDirectoryName).FirstOrDefault(x => x.ToString().EndsWith("video.mp4"));
+            if (videoUrl!=null)
+            {
+                video = new Video(videoUrl.ToString(), videoUrl.ToString().Replace("video.mp4","300"),
+                    new ImagemapArea(0, 0, areaWidth, areaHeight),
+                    new ExternalLink("https://google.com", "google"));
+            }
             var imagemapMessage = new ImagemapMessage(uri.ToString().Replace("/1040", ""),
                 "Sample Imagemap",
                 imageSize,
@@ -64,15 +77,24 @@ namespace FunctionAppSample
                     new MessageImagemapAction(new ImagemapArea(areaWidth, 0, areaWidth,areaHeight),"Area Top-Right"),
                     new MessageImagemapAction(new ImagemapArea(0, areaHeight, areaWidth,areaHeight),"Area Bottom-Left"),
                     new MessageImagemapAction(new ImagemapArea(areaWidth, areaHeight, areaWidth,areaHeight),"Area Bottom-Right"),
-                });
+                },
+                video: video);
 
             await MessagingClient.ReplyMessageAsync(replyToken, new[] { imagemapMessage });
 
             async Task<Uri> UploadImageAsync(int baseSize)
             {
                 var img = image.GetThumbnailImage(baseSize, image.Height * baseSize / image.Width, () => false, IntPtr.Zero);
-                return await BlobStorage.UploadImageAsync(img, blobDirectoryName + "/" + messageId, baseSize.ToString());
+                return await BlobStorage.UploadImageAsync(img, blobDirectoryName, baseSize.ToString());
             }
+        }
+
+        private async Task UploadVideoAsync(string replyToken, string messageId, string blobDirectoryName)
+        {
+            var videoStream = await MessagingClient.GetContentStreamAsync(messageId);
+            var url = await BlobStorage.UploadFromStreamAsync(videoStream, blobDirectoryName, "video.mp4");
+
+            await MessagingClient.ReplyMessageAsync(replyToken, url.ToString());
         }
 
     }

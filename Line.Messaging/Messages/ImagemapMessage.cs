@@ -77,6 +77,7 @@ namespace Line.Messaging
             BaseSize = baseSize;
             Actions = actions;
             QuickReply = quickReply;
+            Video = video;
         }
     }
 }
