@@ -515,6 +515,18 @@ $@"{{
         }
 
         /// <summary>
+        /// Sets a default ritch menu
+        /// </summary>
+        /// <param name="richMenuId">
+        /// ID of an uploaded rich menu
+        /// </param>
+        public async Task SetDefaultRichMenuAsync(string richMenuId)
+        {
+            var response = await _client.PostAsync($"{_uri}/bot/user/all/richmenu/{richMenuId}", null);
+            await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Links a rich menu to a user.
         /// Note: Only one rich menu can be linked to a user at one time.
         /// https://developers.line.me/en/docs/messaging-api/reference/#link-rich-menu-to-user
