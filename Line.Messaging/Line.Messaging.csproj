@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>SDK for the LINE Messaging API for C#</Description>
-    <Version>1.4.2</Version>
+    <Version>1.4.3</Version>
     <Copyright>© 2018 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -21,8 +21,8 @@
 - Member leave event
 - Device link event
 - Device unlink event</PackageReleaseNotes>
-    <AssemblyVersion>1.4.2.0</AssemblyVersion>
-    <FileVersion>1.4.2.0</FileVersion>
+    <AssemblyVersion>1.4.3.0</AssemblyVersion>
+    <FileVersion>1.4.3.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
