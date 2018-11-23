@@ -122,22 +122,26 @@ Create a class which inherits WebhookApplication class, then overrides the metho
 ```cs
 public abstract class WebhookApplication
 {
-  protected virtual Task OnMessageAsync(MessageEvent ev);
-  protected virtual Task OnJoinAsync(JoinEvent ev);
-  protected virtual Task OnLeaveAsync(LeaveEvent ev);
-  protected virtual Task OnFollowAsync(FollowEvent ev);
-  protected virtual Task OnUnfollowAsync(UnfollowEvent ev);
-  protected virtual Task OnBeaconAsync(BeaconEvent ev);
-  protected virtual Task OnPostbackAsync(PostbackEvent ev);
+    public async Task RunAsync(IEnumerable<WebhookEvent> events);
+    
+    protected virtual Task OnMessageAsync(MessageEvent ev);
+    protected virtual Task OnJoinAsync(JoinEvent ev);
+    protected virtual Task OnLeaveAsync(LeaveEvent ev);
+    protected virtual Task OnFollowAsync(FollowEvent ev);
+    protected virtual Task OnUnfollowAsync(UnfollowEvent ev);
+    protected virtual Task OnBeaconAsync(BeaconEvent ev);
+    protected virtual Task OnPostbackAsync(PostbackEvent ev);
+    protected virtual Task OnAccountLinkAsync(AccountLinkEvent ev);
+    protected virtual Task OnMemberJoinAsync(MemberJoinEvent ev);
+    protected virtual Task OnMemberLeaveAsync(MemberLeaveEvent ev);
+    protected virtual Task OnDeviceLinkAsync(DeviceLinkEvent ev);
+    protected virtual Task OnDeviceUnlinkAsync(DeviceUnlinkEvent ev);
 }
-
 ```
 
 Finally, instantiate the class and run RunAsync method by giving the parsed LINE events as shown above. 
 
 See [Line.Messaging/Webhooks/WebhookApplication.cs](https://github.com/pierre3/LineMessagingApi/blob/master/Line.Messaging/Webhooks/WebhookApplication.cs) as processing event class. 
-
-
 
 
 ```cs
@@ -155,53 +159,31 @@ class LineBotApp : WebhookApplication
   protected override async Task OnMessageAsync(MessageEvent ev)
   {
     Log.Info($"SourceType:{ev.Source.Type},SourceId:{ev.Source.Id}");
-    switch (ev.Message.Type)
+    switch (ev.Message)
     {
-      case EventMessageType.Text:
-        await MessagingClient.ReplyMessageAsync(ev.ReplyToken, ((TextEventMessage)ev.Message).Text);
+      case TextEventMessage textMessage:
+        await MessagingClient.ReplyMessageAsync(ev.ReplyToken, textMessage.Text);
         break;
-
-      case EventMessageType.Image:
-      case EventMessageType.Audio:
-      case EventMessageType.Video:
-      case EventMessageType.File:
-      case EventMessageType.Location:
-      case EventMessageType.Sticker:
+      case ImageEventMessage imageMessage:
+        //...
         break;
-
+      case AudioEventMessage audioEventMessage:
+        //...
+        break;
+      case VideoEventMessage videoMessage:
+        //...
+        break;
+      case FileEventMessage fileMessage:
+        //...
+        break;
+      case LocationEventMessage locationMessage:
+        //...
+        break;
+      case StickerEventMessage stickerMessage:
+        //...         
+        break;
     }
   }
-
-  protected override async Task OnFollowAsync(FollowEvent ev)
-  {
-      throw new NotImplementedException();
-  }
-
-  protected override async Task OnUnfollowAsync(UnfollowEvent ev)
-  {
-      throw new NotImplementedException();
-  }
-
-  protected override async Task OnJoinAsync(JoinEvent ev)
-  {
-    throw new NotImplementedException();
-  }
-
-  protected override async Task OnLeaveAsync(LeaveEvent ev)
-  {
-    throw new NotImplementedException();
-  }
-
-  protected override Task OnBeaconAsync(BeaconEvent ev)
-  {
-    throw new NotImplementedException();
-  }
-
-  protected override async Task OnPostbackAsync(PostbackEvent ev)
-  {
-    throw new NotImplementedException();
-  }
-
 }
 ```
 See each samples for more detail.
