@@ -12,6 +12,9 @@
         Leave,
         Postback,
         Beacon,
-        AccountLink
+        AccountLink,
+        MemberJoined,
+        MemberLeft,
+        Things
     }
 }

@@ -66,7 +66,7 @@ namespace FunctionAppSample
             if (videoUrl!=null)
             {
                 video = new Video(videoUrl.ToString(), videoUrl.ToString().Replace("video.mp4","300"),
-                    new ImagemapArea(0, 0, areaWidth, areaHeight),
+                    new ImagemapArea(areaWidth/2, areaHeight/2, areaWidth, areaHeight),
                     new ExternalLink("https://google.com", "google"));
             }
             var imagemapMessage = new ImagemapMessage(uri.ToString().Replace("/1040", ""),

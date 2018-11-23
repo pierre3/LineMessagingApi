@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Line.Messaging.Webhooks
 {
@@ -34,7 +35,7 @@ namespace Line.Messaging.Webhooks
         {
             if (dynamicObject == null) { throw new ArgumentNullException(nameof(dynamicObject)); }
 
-            var eventSource = WebhookEventSource.CreateFrom(dynamicObject);
+            var eventSource = WebhookEventSource.CreateFrom(dynamicObject?.source);
 
             if (eventSource == null)
             {
@@ -76,7 +77,26 @@ namespace Line.Messaging.Webhooks
                 case WebhookEventType.AccountLink:
                     var link = new Link((string)dynamicObject.link?.result, (string)dynamicObject.link?.nonce);
                     return new AccountLinkEvent(eventSource, (long)dynamicObject.timestamp, (string)dynamicObject.replyToken, link);
+                case WebhookEventType.Things:
+                    var thingsType = (ThingsType)Enum.Parse(typeof(ThingsType), (string)dynamicObject.things?.type, true);
+                    var things = new Things((string)dynamicObject.things?.deviceId, thingsType);
+                    return DeviceEvent.Create(eventSource, (long)dynamicObject.timestamp, things);
+                case WebhookEventType.MemberJoined:
 
+                    var joinedMembers = new List<WebhookEventSource>();
+                    foreach (var member in dynamicObject.joined.members)
+                    {
+                        joinedMembers.Add(WebhookEventSource.CreateFrom(member));
+                    }
+                    return new MemberJoinEvent(eventSource, (long)dynamicObject.timestamp, (string)dynamicObject.replyToken, joinedMembers);
+
+                case WebhookEventType.MemberLeft:
+                    var leftMembers = new List<WebhookEventSource>();
+                    foreach (var member in dynamicObject.left.members)
+                    {
+                        leftMembers.Add(WebhookEventSource.CreateFrom(member));
+                    }
+                    return new MemberLeaveEvent(eventSource, (long)dynamicObject.timestamp, leftMembers);
                 default:
                     return null;
             }

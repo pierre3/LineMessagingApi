@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Line.Messaging.Webhooks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Line.MessagingTest
 {
@@ -9,7 +10,7 @@ namespace Line.MessagingTest
     public class WebhookEventParserTest
     {
         [TestMethod]
-        public void ParseTest()
+        public async Task ParseTest()
         {
             var message_replyToken = "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA";
             var message_type = "message";
@@ -78,8 +79,43 @@ namespace Line.MessagingTest
             var imageMessage_message_id = "325708";
             var imageMessage_message_type = "image";
             var imageMessage_provider_type = "line";
-            
-            var json = $@"{{
+
+            var memberJoin_replyToken = "0f3779fba3b349968c5d07db31eabf65";
+            var memberJoin_type = "memberJoined";
+            var memberJoin_timestamp = 1462629479859L;
+            var memberJoin_source_type = "group";
+            var memberJoin_source_id = "C4af4980629...";
+            var memberJoin_joined_0_type = "user";
+            var memberJoin_joined_0_userId = "U4af4980629...";
+            var memberJoin_joined_1_type = "user";
+            var memberJoin_joined_1_userId = "U91eeaf62d9...";
+
+            var memberLeave_type = "memberLeft";
+            var memberLeave_timestamp = 1462629479960L;
+            var memberLeave_source_type = "group";
+            var memberLeave_source_id = "C4af4980629...";
+            var memberLeave_left_0_type = "user";
+            var memberLeave_left_0_userId = "U4af4980629...";
+            var memberLeave_left_1_type = "user";
+            var memberLeave_left_1_userId = "U91eeaf62d9...";
+
+            var deviceLink_type = "things";
+            var deviceLink_timestamp = 1462629479859;
+            var deviceLink_source_type = "user";
+            var deviceLink_source_id = "U91eeaf62d...";
+            var deviceLink_things_deviceId = "t2c449c9d1...";
+            var deviceLink_things_type = "link";
+
+            var deviceUnlink_type = "things";
+            var deviceUnlink_timestamp = 1462629479859;
+            var deviceUnlink_source_type = "user";
+            var deviceUnlink_source_id = "U91eeaf62d...";
+            var deviceUnlink_things_deviceId = "t2c449c9d1...";
+            var deviceUnlink_things_type = "unlink";
+
+
+            var json =
+$@"{{
     ""events"": [
         {{
             ""replyToken"": ""{message_replyToken}"",
@@ -190,6 +226,71 @@ namespace Line.MessagingTest
                  }}
             }}
         }},
+        {{
+            ""replyToken"": ""{memberJoin_replyToken}"",
+            ""type"": ""{memberJoin_type}"",
+            ""timestamp"": {memberJoin_timestamp},
+            ""source"": {{
+                ""type"": ""{memberJoin_source_type}"",
+                ""groupId"": ""{memberJoin_source_id}""
+            }},
+            ""joined"": {{
+                ""members"": [
+                    {{
+                        ""type"": ""{memberJoin_joined_0_type}"",
+                        ""userId"": ""{memberJoin_joined_0_userId}""
+                    }},
+                    {{
+                        ""type"": ""{memberJoin_joined_1_type}"",
+                        ""userId"": ""{memberJoin_joined_1_userId}""
+                    }}
+                ]
+            }}
+         }},
+        {{
+            ""type"": ""{memberLeave_type}"",
+            ""timestamp"": {memberLeave_timestamp},
+            ""source"": {{
+                ""type"": ""{memberLeave_source_type}"",
+                ""groupId"": ""{memberLeave_source_id}""
+            }},
+            ""left"": {{
+                ""members"": [
+                    {{
+                        ""type"": ""{memberLeave_left_0_type}"",
+                        ""userId"": ""{memberLeave_left_0_userId}""
+                    }},
+                    {{  
+                        ""type"": ""{memberLeave_left_1_type}"",
+                        ""userId"": ""{memberLeave_left_1_userId}""
+                    }}
+                ]
+            }}
+        }},
+        {{
+            ""type"": ""{deviceLink_type}"",
+            ""timestamp"": {deviceLink_timestamp},
+            ""source"": {{
+                ""type"": ""{deviceLink_source_type}"",
+                ""userId"": ""{deviceLink_source_id}""
+            }},
+            ""things"": {{
+                ""deviceId"": ""{deviceLink_things_deviceId}"",
+                ""type"": ""{deviceLink_things_type}""
+            }}
+        }},
+        {{
+            ""type"": ""{deviceUnlink_type}"",
+            ""timestamp"": {deviceUnlink_timestamp},
+            ""source"": {{
+                ""type"": ""{deviceUnlink_source_type}"",
+                ""userId"": ""{deviceUnlink_source_id}""
+            }},
+            ""things"": {{
+                ""deviceId"": ""{deviceUnlink_things_deviceId}"",
+                ""type"": ""{deviceUnlink_things_type}""
+            }}
+        }}
     ]
 }}";
 
@@ -259,6 +360,85 @@ namespace Line.MessagingTest
             Assert.AreEqual(media.ContentProvider.OriginalContentUrl, videoMessage_provider_url);
             Assert.AreEqual(media.ContentProvider.PreviewImageUrl, videoMessage_provider_preUrl);
 
+            var imageMessageEvent = (MessageEvent)events[8];
+            Assert.AreEqual(imageMessageEvent.ReplyToken, imageMessage_replyToken);
+            Assert.AreEqual(imageMessageEvent.Type.ToString().ToLower(), imageMessage_type);
+            Assert.AreEqual(imageMessageEvent.Timestamp, imageMessage_timestamp);
+            Assert.AreEqual(imageMessageEvent.Source.Type.ToString().ToLower(), imageMessage_source_type);
+            Assert.AreEqual(imageMessageEvent.Source.Id, imageMessage_source_userId);
+            Assert.AreEqual(imageMessageEvent.Message.Id, imageMessage_message_id);
+            Assert.AreEqual(imageMessageEvent.Message.Type.ToString().ToLower(), imageMessage_message_type);
+            var mediaImage = (MediaEventMessage)(imageMessageEvent.Message);
+            Assert.AreEqual(mediaImage.ContentProvider.Type.ToString().ToLower(), imageMessage_provider_type);
+            Assert.AreEqual(mediaImage.ContentProvider.OriginalContentUrl, null);
+            Assert.AreEqual(mediaImage.ContentProvider.PreviewImageUrl, null);
+
+            var memberJoinEvent = (MemberJoinEvent)events[9];
+            Assert.AreEqual(memberJoinEvent.ReplyToken, memberJoin_replyToken);
+            Assert.AreEqual(memberJoinEvent.Type.ToString().ToLower(), memberJoin_type.ToLower());
+            Assert.AreEqual(memberJoinEvent.Timestamp, memberJoin_timestamp);
+            Assert.AreEqual(memberJoinEvent.Source.Type.ToString().ToLower(), memberJoin_source_type);
+            Assert.AreEqual(memberJoinEvent.Source.Id, memberJoin_source_id);
+            Assert.AreEqual(memberJoinEvent.Joined.Members[0].Type.ToString().ToLower(), memberJoin_joined_0_type);
+            Assert.AreEqual(memberJoinEvent.Joined.Members[0].UserId, memberJoin_joined_0_userId);
+            Assert.AreEqual(memberJoinEvent.Joined.Members[1].Type.ToString().ToLower(), memberJoin_joined_1_type);
+            Assert.AreEqual(memberJoinEvent.Joined.Members[1].UserId, memberJoin_joined_1_userId);
+
+            var memberLeaveEvent = (MemberLeaveEvent)events[10];
+            Assert.AreEqual(memberLeaveEvent.Type.ToString().ToLower(), memberLeave_type.ToLower());
+            Assert.AreEqual(memberLeaveEvent.Timestamp, memberLeave_timestamp);
+            Assert.AreEqual(memberLeaveEvent.Source.Type.ToString().ToLower(), memberLeave_source_type);
+            Assert.AreEqual(memberLeaveEvent.Source.Id, memberLeave_source_id);
+            Assert.AreEqual(memberLeaveEvent.Left.Members[0].Type.ToString().ToLower(), memberLeave_left_0_type);
+            Assert.AreEqual(memberLeaveEvent.Left.Members[0].UserId, memberLeave_left_0_userId);
+            Assert.AreEqual(memberLeaveEvent.Left.Members[1].Type.ToString().ToLower(), memberLeave_left_1_type);
+            Assert.AreEqual(memberLeaveEvent.Left.Members[1].UserId, memberLeave_left_1_userId);
+
+            var deviceLink = (DeviceLinkEvent)events[11];
+            Assert.AreEqual(deviceLink.Type.ToString().ToLower(), deviceLink_type);
+            Assert.AreEqual(deviceLink.Timestamp, deviceLink_timestamp);
+            Assert.AreEqual(deviceLink.Source.Type.ToString().ToLower(), deviceLink_source_type);
+            Assert.AreEqual(deviceLink.Source.Id, deviceLink_source_id);
+            Assert.AreEqual(deviceLink.Things.DeviceId, deviceLink_things_deviceId);
+            Assert.AreEqual(deviceLink.Things.Type.ToString().ToLower(), deviceLink_things_type);
+
+            var deviceUnlink = (DeviceUnlinkEvent)events[12];
+            Assert.AreEqual(deviceUnlink.Type.ToString().ToLower(), deviceUnlink_type);
+            Assert.AreEqual(deviceUnlink.Timestamp, deviceUnlink_timestamp);
+            Assert.AreEqual(deviceUnlink.Source.Type.ToString().ToLower(), deviceUnlink_source_type);
+            Assert.AreEqual(deviceUnlink.Source.Id, deviceUnlink_source_id);
+            Assert.AreEqual(deviceUnlink.Things.DeviceId, deviceUnlink_things_deviceId);
+            Assert.AreEqual(deviceUnlink.Things.Type.ToString().ToLower(), deviceUnlink_things_type);
+
+            var testApp = new TestApp();
+            await testApp.RunAsync(events);
+        }
+    }
+
+    class TestApp : WebhookApplication
+    {
+        protected override Task OnDeviceLinkAsync(DeviceLinkEvent ev)
+        {
+            Console.WriteLine($"OnDeviceLinkAsync( DeviceId: {ev.Things.DeviceId} )");
+            return base.OnDeviceLinkAsync(ev);
+        }
+
+        protected override Task OnDeviceUnlinkAsync(DeviceUnlinkEvent ev)
+        {
+            Console.WriteLine($"OnDeviceUnlinkAsync( DeviceId: {ev.Things.DeviceId} )");
+            return base.OnDeviceUnlinkAsync(ev);
+        }
+
+        protected override Task OnMemberJoinAsync(MemberJoinEvent ev)
+        {
+            Console.WriteLine($"OnMemberJoinAsync( Members: [{string.Join(",",ev.Joined.Members.Select(m=>m.UserId))}]");
+            return base.OnMemberJoinAsync(ev);
+        }
+
+        protected override Task OnMemberLeaveAsync(MemberLeaveEvent ev)
+        {
+            Console.WriteLine($"OnMemberJoinAsync( Members: [{string.Join(",", ev.Left.Members.Select(m => m.UserId))}]");
+            return base.OnMemberLeaveAsync(ev);
         }
     }
 }

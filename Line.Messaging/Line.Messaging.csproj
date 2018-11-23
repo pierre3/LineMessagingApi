@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>SDK for the LINE Messaging API for C#</Description>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <Copyright>© 2018 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,12 +15,14 @@
     <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/pierre3/LineMessagingApi/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Added the Flex Message and Quick Reply feature.
+    <PackageReleaseNotes>Added new webhook events
 
-- https://developers.line.me/en/docs/messaging-api/using-quick-reply/
-- https://developers.line.me/en/docs/messaging-api/using-flex-messages/</PackageReleaseNotes>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+- Member join event
+- Member leave event
+- Device link event
+- Device unlink event</PackageReleaseNotes>
+    <AssemblyVersion>1.4.2.0</AssemblyVersion>
+    <FileVersion>1.4.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

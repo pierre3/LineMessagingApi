@@ -12,32 +12,45 @@ namespace Line.Messaging.Webhooks
         {
             foreach (var ev in events)
             {
-                switch (ev.Type)
+                switch (ev)
                 {
-                    case WebhookEventType.Message:
-                        await OnMessageAsync((MessageEvent)ev).ConfigureAwait(false);
+                    case MessageEvent message:
+                        await OnMessageAsync(message).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.Join:
-                        await OnJoinAsync((JoinEvent)ev).ConfigureAwait(false);
+                    case JoinEvent join:
+                        await OnJoinAsync(join).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.Leave:
-                        await OnLeaveAsync((LeaveEvent)ev).ConfigureAwait(false);
+                    case LeaveEvent leave:
+                        await OnLeaveAsync(leave).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.Follow:
-                        await OnFollowAsync((FollowEvent)ev).ConfigureAwait(false);
+                    case FollowEvent follow:
+                        await OnFollowAsync(follow).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.Unfollow:
-                        await OnUnfollowAsync((UnfollowEvent)ev).ConfigureAwait(false);
+                    case UnfollowEvent unFollow:
+                        await OnUnfollowAsync(unFollow).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.Postback:
-                        await OnPostbackAsync((PostbackEvent)ev).ConfigureAwait(false);
+                    case PostbackEvent postback:
+                        await OnPostbackAsync(postback).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.Beacon:
-                        await OnBeaconAsync((BeaconEvent)ev).ConfigureAwait(false);
+                    case BeaconEvent beacon:
+                        await OnBeaconAsync(beacon).ConfigureAwait(false);
                         break;
-                    case WebhookEventType.AccountLink:
-                        await OnAccountLinkAsync((AccountLinkEvent)ev).ConfigureAwait(false);
+                    case AccountLinkEvent accountLink:
+                        await OnAccountLinkAsync(accountLink).ConfigureAwait(false);
                         break;
+                    case MemberJoinEvent memberJoin:
+                        await OnMemberJoinAsync(memberJoin).ConfigureAwait(false);
+                        break;
+                    case MemberLeaveEvent memberLeave:
+                        await OnMemberLeaveAsync(memberLeave).ConfigureAwait(false);
+                        break;
+                    case DeviceLinkEvent deviceLink:
+                        await OnDeviceLinkAsync(deviceLink).ConfigureAwait(false);
+                        break;
+                    case DeviceUnlinkEvent deviceUnlink:
+                        await OnDeviceUnlinkAsync(deviceUnlink).ConfigureAwait(false);
+                        break;
+
                 }
             }
         }
@@ -57,5 +70,13 @@ namespace Line.Messaging.Webhooks
         protected virtual Task OnPostbackAsync(PostbackEvent ev) => Task.CompletedTask;
 
         protected virtual Task OnAccountLinkAsync(AccountLinkEvent ev) => Task.CompletedTask;
+
+        protected virtual Task OnMemberJoinAsync(MemberJoinEvent ev) => Task.CompletedTask;
+
+        protected virtual Task OnMemberLeaveAsync(MemberLeaveEvent ev) => Task.CompletedTask;
+
+        protected virtual Task OnDeviceLinkAsync(DeviceLinkEvent ev) => Task.CompletedTask;
+
+        protected virtual Task OnDeviceUnlinkAsync(DeviceUnlinkEvent ev) => Task.CompletedTask;
     }
 }

@@ -26,9 +26,8 @@ namespace Line.Messaging.Webhooks
             UserId = userId;
         }
 
-        internal static WebhookEventSource CreateFrom(dynamic dynamicObject)
+        internal static WebhookEventSource CreateFrom(dynamic source)
         {
-            var source = dynamicObject?.source;
             if (source == null) { return null; }
             if (!Enum.TryParse((string)source.type, true, out EventSourceType sourceType))
             {
