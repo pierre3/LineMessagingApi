@@ -164,7 +164,7 @@ class LineBotApp : WebhookApplication
       case TextEventMessage textMessage:
         await MessagingClient.ReplyMessageAsync(ev.ReplyToken, textMessage.Text);
         break;
-      case ImageEventMessage imageMessage
+      case ImageEventMessage imageMessage:
         //...
         break;
       case AudioEventMessage audioEventMessage:
