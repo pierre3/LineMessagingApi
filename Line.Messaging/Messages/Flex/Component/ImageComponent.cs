@@ -77,7 +77,7 @@ namespace Line.Messaging
         /// The default value is 1:1.</para>
         /// <para>(Optional)</para>
         /// </summary>
-        public AspectRatio? AspectRatio { get; set; }
+        public AspectRatio AspectRatio { get; set; }
 
         /// <summary>
         /// Style of the image.<para> 

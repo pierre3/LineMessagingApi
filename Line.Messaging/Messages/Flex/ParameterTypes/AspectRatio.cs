@@ -5,42 +5,35 @@ using Newtonsoft.Json;
 
 namespace Line.Messaging
 {
-    [JsonConverter(typeof(AspectRatioStringEnumConverter))]
-    public enum AspectRatio
+    [JsonConverter(typeof(ToStringJsonConverter))]
+    public class AspectRatio
     {
-        _1_1,
-        _151_1,
-        _191_1,
-        _4_3,
-        _16_9,
-        _20_13,
-        _2_1,
-        _3_1,
-        _3_4,
-        _9_16,
-        _1_2,
-        _1_3
-    }
+        public static readonly AspectRatio _1_1 = new AspectRatio(1, 1);
+        public static readonly AspectRatio _151_1 = new AspectRatio(151, 100);
+        public static readonly AspectRatio _191_1 = new AspectRatio(191, 100);
+        public static readonly AspectRatio _4_3 = new AspectRatio(4, 3);
+        public static readonly AspectRatio _16_9 = new AspectRatio(16, 9);
+        public static readonly AspectRatio _20_13 = new AspectRatio(20, 13);
+        public static readonly AspectRatio _2_1 = new AspectRatio(2, 1);
+        public static readonly AspectRatio _3_1 = new AspectRatio(3, 1);
+        public static readonly AspectRatio _3_4 = new AspectRatio(3, 4);
+        public static readonly AspectRatio _9_16 = new AspectRatio(9, 16);
+        public static readonly AspectRatio _1_2 = new AspectRatio(1, 2);
+        public static readonly AspectRatio _1_3 = new AspectRatio(1, 3);
 
-    internal class AspectRatioStringEnumConverter : CustomStringEnumConverter<AspectRatio>
-    {
-        public AspectRatioStringEnumConverter()
-            : base(new Dictionary<AspectRatio, string>()
-            {
-                [AspectRatio._1_1] = "1:1",
-                [AspectRatio._151_1] = "1.51:1",
-                [AspectRatio._191_1] = "1.91:1",
-                [AspectRatio._4_3] = "4:3",
-                [AspectRatio._16_9] = "16:9",
-                [AspectRatio._20_13] = "20:13",
-                [AspectRatio._2_1] = "2:1",
-                [AspectRatio._3_1] = "3:1",
-                [AspectRatio._3_4] = "3:4",
-                [AspectRatio._9_16] = "9:16",
-                [AspectRatio._1_2] = "1:2",
-                [AspectRatio._1_3] = "1:3",
-            })
+        private readonly int _width;
+        private readonly int _height;
+
+        public AspectRatio(int width, int height)
         {
+            _width = width;
+            _height = height;
+        }
+        public override string ToString()
+        {
+            return _width + ":" + _height;
         }
     }
+
+    
 }

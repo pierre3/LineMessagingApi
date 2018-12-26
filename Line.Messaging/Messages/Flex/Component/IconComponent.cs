@@ -41,7 +41,7 @@ namespace Line.Messaging
         /// Aspect ratio of the icon. You can specify one of the following values: 1:1, 2:1, or 3:1. The default value is 1:1.
         /// <para>(Optional)</para>
         /// </summary>
-        public AspectRatio? AspectRatio { get; set; }
+        public AspectRatio AspectRatio { get; set; }
 
         /// <summary>
         /// Constructor
