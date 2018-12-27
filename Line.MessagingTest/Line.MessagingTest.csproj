@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomStringEnumConverterTest.cs" />
-    <Compile Include="FlexObjectSerializeText.cs" />
+    <Compile Include="FlexObjectSerializeTest.cs" />
     <Compile Include="WebhookEventParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -61,8 +61,8 @@ namespace Line.MessagingTest
                                 .AddContents(new TextComponent("Time") { Size = ComponentSize.Sm, Color = "#aaaaaa", Flex = 1 })
                                 .AddContents(new TextComponent("10:00 - 23:00") { Size = ComponentSize.Sm, Wrap = true, Color = "#666666", Flex = 5 })))
                     .SetFooter(new BoxComponent(BoxLayout.Vertical) { Spacing = Spacing.Sm, Flex = 0 }
-                        .AddContents(new ButtonComponent(new UriTemplateAction("Call", "https://linecorp.com")) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
-                        .AddContents(new ButtonComponent(new UriTemplateAction("WEBSITE", "https://linecorp.com")) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
+                        .AddContents(new ButtonComponent(new UriTemplateAction("Call", "https://linecorp.com", new AltUri("https://linecorp.com/en/"))) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
+                        .AddContents(new ButtonComponent(new UriTemplateAction("WEBSITE", "https://linecorp.com", new AltUri("https://linecorp.com/en/"))) { Style = ButtonStyle.Link, Height = ButtonHeight.Sm })
                         .AddContents(new SpacerComponent(ComponentSize.Sm))));
 
             var jsonA = JsonConvert.SerializeObject(flex);
