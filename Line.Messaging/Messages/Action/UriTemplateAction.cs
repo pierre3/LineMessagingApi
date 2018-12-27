@@ -25,6 +25,16 @@ namespace Line.Messaging
         public string Uri { get; }
 
         /// <summary>
+        /// URI opened on LINE for macOS and Windows when the action is performed (Max: 1000 characters) If the altUri.desktop property is set, 
+        /// the uri property is ignored on LINE for macOS and Windows.<para>
+        /// The available schemes are http, https, line, and tel.For more information about the LINE URL scheme, see Using the LINE URL scheme. 
+        /// This property is supported on the following version of LINE.
+        /// LINE 5.12.0 or later for macOS and Windows</para>
+        /// Note: The altUri.desktop property is supported only when you set URI actions in Flex Messages.
+        /// </summary>
+        public AltUri AltUri { get; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="label">
@@ -37,15 +47,26 @@ namespace Line.Messaging
         /// URI opened when the action is performed (Max: 1000 characters)
         /// Must start with http, https, or tel.
         /// </param>
-        public UriTemplateAction(string label, string uri)
+        /// <param name="altUri">
+        /// URI opened on LINE for macOS and Windows when the action is performed (Max: 1000 characters) If the altUri.desktop property is set, 
+        /// the uri property is ignored on LINE for macOS and Windows.<para>
+        /// The available schemes are http, https, line, and tel.For more information about the LINE URL scheme, see Using the LINE URL scheme. 
+        /// This property is supported on the following version of LINE.
+        /// LINE 5.12.0 or later for macOS and Windows</para>
+        /// Note: The altUri.desktop property is supported only when you set URI actions in Flex Messages.
+        /// </param>
+        public UriTemplateAction(string label, string uri, AltUri altUri = null)
         {
             Label = label?.Substring(0, Math.Min(label.Length, 20));
             Uri = uri;
+            AltUri = altUri;
         }
 
         internal static UriTemplateAction CreateFrom(dynamic dynamicObject)
         {
-            return new UriTemplateAction((string)dynamicObject?.label, (string)dynamicObject?.uri);
+            var desktopUri = (string)dynamicObject?.altUri?.desktop;
+            var altUri = (desktopUri == null) ? null : new AltUri(desktopUri);
+            return new UriTemplateAction((string)dynamicObject?.label, (string)dynamicObject?.uri, altUri);
         }
     }
 }
