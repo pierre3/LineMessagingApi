@@ -14,7 +14,7 @@ namespace Line.Messaging
     /// <summary>
     /// LINE Messaging API client, which handles request/response to LINE server.
     /// </summary>
-    public class LineMessagingClient : IDisposable
+    public class LineMessagingClient : ILineMessagingClient, IDisposable
     {
         private const string DEFAULT_URI = "https://api.line.me/v2";
 
@@ -116,7 +116,7 @@ namespace Line.Messaging
         /// </summary>
         /// <param name="replyToken">ReplyToken</param>
         /// <param name="messages">Reply messages. Up to 5 messages.</param>
-        public async Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
+        public virtual async Task ReplyMessageAsync(string replyToken, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/reply");
             var content = JsonConvert.SerializeObject(new { replyToken, messages }, _jsonSerializerSettings);
@@ -132,7 +132,7 @@ namespace Line.Messaging
         /// </summary>
         /// <param name="replyToken">ReplyToken</param>
         /// <param name="messages">Reply Text messages. Up to 5 messages.</param>
-        public Task ReplyMessageAsync(string replyToken, params string[] messages)
+        public virtual Task ReplyMessageAsync(string replyToken, params string[] messages)
         {
             return ReplyMessageAsync(replyToken, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
@@ -143,7 +143,7 @@ namespace Line.Messaging
         /// </summary>
         /// <param name="replyToken">ReplyToken</param>
         /// <param name="messages">Set reply messages with Json string.</param>
-        public async Task ReplyMessageWithJsonAsync(string replyToken, params string[] messages)
+        public virtual async Task ReplyMessageWithJsonAsync(string replyToken, params string[] messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/reply");
             var json =
@@ -163,7 +163,7 @@ $@"{{
         /// </summary>
         /// <param name="to">ID of the receiver</param>
         /// <param name="messages">Reply messages. Up to 5 messages.</param>
-        public async Task PushMessageAsync(string to, IList<ISendMessage> messages)
+        public virtual async Task PushMessageAsync(string to, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/push");
             var content = JsonConvert.SerializeObject(new { to, messages }, _jsonSerializerSettings);
@@ -179,7 +179,7 @@ $@"{{
         /// </summary>
         /// <param name="to">ID of the receiver</param>
         /// <param name="messages">Set reply messages with Json string.</param>
-        public async Task PushMessageWithJsonAsync(string to, params string[] messages)
+        public virtual async Task PushMessageWithJsonAsync(string to, params string[] messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/push");
             var json =
@@ -200,7 +200,7 @@ $@"{{
         /// </summary>
         /// <param name="to">ID of the receiver</param>
         /// <param name="messages">Reply text messages. Up to 5 messages.</param>
-        public Task PushMessageAsync(string to, params string[] messages)
+        public virtual Task PushMessageAsync(string to, params string[] messages)
         {
             return PushMessageAsync(to, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
@@ -212,7 +212,7 @@ $@"{{
         /// </summary>
         /// <param name="to">IDs of the receivers. Max: 150 users</param>
         /// <param name="messages">Reply messages. Up to 5 messages.</param>
-        public async Task MultiCastMessageAsync(IList<string> to, IList<ISendMessage> messages)
+        public virtual async Task MultiCastMessageAsync(IList<string> to, IList<ISendMessage> messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/multicast");
             var content = JsonConvert.SerializeObject(new { to, messages }, _jsonSerializerSettings);
@@ -228,7 +228,7 @@ $@"{{
         /// </summary>
         /// <param name="to">IDs of the receivers. Max: 150 users</param>
         /// <param name="messages">Set reply messages with Json string.</param>
-        public async Task MultiCastMessageWithJsonAsync(IList<string> to, params string[] messages)
+        public virtual async Task MultiCastMessageWithJsonAsync(IList<string> to, params string[] messages)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/message/multicast");
             var json =
@@ -249,7 +249,7 @@ $@"{{
         /// </summary>
         /// <param name="to">IDs of the receivers. Max: 150 users</param>
         /// <param name="messages">Reply text messages. Up to 5 messages.</param>
-        public Task MultiCastMessageAsync(IList<string> to, params string[] messages)
+        public virtual Task MultiCastMessageAsync(IList<string> to, params string[] messages)
         {
             return MultiCastMessageAsync(to, messages.Select(msg => new TextMessage(msg)).ToArray());
         }
@@ -261,7 +261,7 @@ $@"{{
         /// </summary>
         /// <param name="messageId">Message ID</param>
         /// <returns>Content as ContentStream</returns>
-        public async Task<ContentStream> GetContentStreamAsync(string messageId)
+        public virtual async Task<ContentStream> GetContentStreamAsync(string messageId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{_uri}/bot/message/{messageId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -275,7 +275,7 @@ $@"{{
         /// </summary>
         /// <param name="messageId">Message ID</param>
         /// <returns>Content as byte array</returns>
-        public async Task<byte[]> GetContentBytesAsync(string messageId)
+        public virtual async Task<byte[]> GetContentBytesAsync(string messageId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{_uri}/bot/message/{messageId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -294,7 +294,7 @@ $@"{{
         /// </summary>
         /// <param name="userId">User ID</param>
         /// <returns></returns>
-        public async Task<UserProfile> GetUserProfileAsync(string userId)
+        public virtual async Task<UserProfile> GetUserProfileAsync(string userId)
         {
             var content = await GetStringAsync($"{_uri}/bot/profile/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
@@ -313,7 +313,7 @@ $@"{{
         /// <param name="groupId">Identifier of the group</param>
         /// <param name="userId">Identifier of the user</param>
         /// <returns>User Profile</returns>
-        public async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
+        public virtual async Task<UserProfile> GetGroupMemberProfileAsync(string groupId, string userId)
         {
             var content = await GetStringAsync($"{_uri}/bot/group/{groupId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
@@ -329,7 +329,7 @@ $@"{{
         /// <param name="groupId">Identifier of the group</param>
         /// <param name="continuationToken">ContinuationToken</param>
         /// <returns>GroupMemberIds</returns>
-        public async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
+        public virtual async Task<GroupMemberIds> GetGroupMemberIdsAsync(string groupId, string continuationToken)
         {
             var requestUrl = $"{_uri}/bot/group/{groupId}/members/ids";
             if (continuationToken != null)
@@ -348,7 +348,7 @@ $@"{{
         /// </summary>
         /// <param name="groupId">Identifier of the group</param>
         /// <returns>List of UserProfile</returns>
-        public async Task<IList<UserProfile>> GetGroupMemberProfilesAsync(string groupId)
+        public virtual async Task<IList<UserProfile>> GetGroupMemberProfilesAsync(string groupId)
         {
             var result = new List<UserProfile>();
             string continuationToken = null;
@@ -366,7 +366,6 @@ $@"{{
             return result;
         }
 
-
         /// <summary>
         /// Leave a group.
         /// Use the ID that is returned via webhook from the source group. 
@@ -374,7 +373,7 @@ $@"{{
         /// </summary>
         /// <param name="groupId">Group ID</param>
         /// <returns></returns>
-        public async Task LeaveFromGroupAsync(string groupId)
+        public virtual async Task LeaveFromGroupAsync(string groupId)
         {
             var response = await _client.PostAsync($"{_uri}/bot/group/{groupId}/leave", null).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -392,7 +391,7 @@ $@"{{
         /// <param name="roomId">Identifier of the room</param>
         /// <param name="userId">Identifier of the user</param>
         /// <returns></returns>
-        public async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
+        public virtual async Task<UserProfile> GetRoomMemberProfileAsync(string roomId, string userId)
         {
             var content = await GetStringAsync($"{_uri}/bot/room/{roomId}/member/{userId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<UserProfile>(content);
@@ -407,7 +406,7 @@ $@"{{
         /// <param name="roomId">Identifier of the room</param>
         /// <param name="continuationToken">ContinuationToken</param>
         /// <returns>GroupMemberIds</returns>
-        public async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
+        public virtual async Task<GroupMemberIds> GetRoomMemberIdsAsync(string roomId, string continuationToken = null)
         {
             var requestUrl = $"{_uri}/bot/room/{roomId}/members/ids";
             if (continuationToken != null)
@@ -426,7 +425,7 @@ $@"{{
         /// </summary>
         /// <param name="roomId">Identifier of the room</param>
         /// <returns>List of UserProfiles</returns>
-        public async Task<IList<UserProfile>> GetRoomMemberProfilesAsync(string roomId)
+        public virtual async Task<IList<UserProfile>> GetRoomMemberProfilesAsync(string roomId)
         {
             var result = new List<UserProfile>();
             string continuationToken = null;
@@ -449,7 +448,7 @@ $@"{{
         /// Use the ID that is returned via webhook from the source room. 
         /// </summary>
         /// <param name="roomId">Room ID</param>
-        public async Task LeaveFromRoomAsync(string roomId)
+        public virtual async Task LeaveFromRoomAsync(string roomId)
         {
             var response = await _client.PostAsync($"{_uri}/bot/room/{roomId}/leave", null).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -466,7 +465,7 @@ $@"{{
         /// </summary>
         /// <param name="richMenuId">ID of an uploaded rich menu</param>
         /// <returns>RichMenu</returns>
-        public async Task<RichMenu> GetRichMenuAsync(string richMenuId)
+        public virtual async Task<RichMenu> GetRichMenuAsync(string richMenuId)
         {
             var json = await GetStringAsync($"{_uri}/bot/richmenu/{richMenuId}").ConfigureAwait(false);
             return JsonConvert.DeserializeObject<ResponseRichMenu>(json);
@@ -480,7 +479,7 @@ $@"{{
         /// </summary>
         /// <param name="richMenu">RichMenu</param>
         /// <returns>RichMenu Id</returns>
-        public async Task<string> CreateRichMenuAsync(RichMenu richMenu)
+        public virtual async Task<string> CreateRichMenuAsync(RichMenu richMenu)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/richmenu");
             var content = JsonConvert.SerializeObject(richMenu, _jsonSerializerSettings);
@@ -497,7 +496,7 @@ $@"{{
         /// https://developers.line.me/en/docs/messaging-api/reference/#delete-rich-menu
         /// </summary>
         /// <param name="richMenuId">RichMenu Id</param>
-        public async Task DeleteRichMenuAsync(string richMenuId)
+        public virtual async Task DeleteRichMenuAsync(string richMenuId)
         {
             var response = await _client.DeleteAsync($"{_uri}/bot/richmenu/{richMenuId}");
         }
@@ -508,7 +507,7 @@ $@"{{
         /// </summary>
         /// <param name="userId">ID of the user</param>
         /// <returns>RichMenu Id</returns>
-        public async Task<string> GetRichMenuIdOfUserAsync(string userId)
+        public virtual async Task<string> GetRichMenuIdOfUserAsync(string userId)
         {
             var json = await GetStringAsync($"{_uri}/bot/user/{userId}/richmenu");
             return JsonConvert.DeserializeAnonymousType(json, new { richMenuId = "" }).richMenuId;
@@ -520,7 +519,7 @@ $@"{{
         /// <param name="richMenuId">
         /// ID of an uploaded rich menu
         /// </param>
-        public async Task SetDefaultRichMenuAsync(string richMenuId)
+        public virtual async Task SetDefaultRichMenuAsync(string richMenuId)
         {
             var response = await _client.PostAsync($"{_uri}/bot/user/all/richmenu/{richMenuId}", null);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -534,7 +533,7 @@ $@"{{
         /// <param name="userId">ID of the user</param>
         /// <param name="richMenuId">ID of an uploaded rich menu</param>
         /// <returns></returns>
-        public async Task LinkRichMenuToUserAsync(string userId, string richMenuId)
+        public virtual async Task LinkRichMenuToUserAsync(string userId, string richMenuId)
         {
             var response = await _client.PostAsync($"{_uri}/bot/user/{userId}/richmenu/{richMenuId}", null);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -546,7 +545,7 @@ $@"{{
         /// </summary>
         /// <param name="userId">ID of the user</param>
         /// <returns></returns>
-        public async Task UnLinkRichMenuFromUserAsync(string userId)
+        public virtual async Task UnLinkRichMenuFromUserAsync(string userId)
         {
             var response = await _client.DeleteAsync($"{_uri}/bot/user/{userId}/richmenu").ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
@@ -558,7 +557,7 @@ $@"{{
         /// </summary>
         /// <param name="richMenuId">RichMenu Id</param>
         /// <returns>Image as ContentStream</returns>
-        public async Task<ContentStream> DownloadRichMenuImageAsync(string richMenuId)
+        public virtual async Task<ContentStream> DownloadRichMenuImageAsync(string richMenuId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{_uri}/bot/richmenu/{richMenuId}/content");
             var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -574,7 +573,7 @@ $@"{{
         /// </summary>
         /// <param name="stream">Jpeg image for the rich menu</param>
         /// <param name="richMenuId">The ID of the rich menu to attach the image to.</param>
-        public Task UploadRichMenuJpegImageAsync(Stream stream, string richMenuId)
+        public virtual Task UploadRichMenuJpegImageAsync(Stream stream, string richMenuId)
         {
             return UploadRichMenuImageAsync(stream, richMenuId, "image/jpeg");
         }
@@ -587,12 +586,12 @@ $@"{{
         /// </summary>
         /// <param name="stream">Png image for the rich menu</param>
         /// <param name="richMenuId">The ID of the rich menu to attach the image to.</param>
-        public Task UploadRichMenuPngImageAsync(Stream stream, string richMenuId)
+        public virtual Task UploadRichMenuPngImageAsync(Stream stream, string richMenuId)
         {
             return UploadRichMenuImageAsync(stream, richMenuId, "image/png");
         }
 
-        private async Task UploadRichMenuImageAsync(Stream stream, string richMenuId, string mediaType)
+        protected async Task UploadRichMenuImageAsync(Stream stream, string richMenuId, string mediaType)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_uri}/bot/richmenu/{richMenuId}/content");
             request.Content = new StreamContent(stream);
@@ -606,7 +605,7 @@ $@"{{
         /// https://developers.line.me/en/docs/messaging-api/reference/#get-rich-menu-list
         /// </summary>
         /// <returns>List of ResponseRichMenu</returns>
-        public async Task<IList<ResponseRichMenu>> GetRichMenuListAsync()
+        public virtual async Task<IList<ResponseRichMenu>> GetRichMenuListAsync()
         {
             var response = await _client.GetAsync($"{_uri}/bot/richmenu/list").ConfigureAwait(false);
             var menus = new List<ResponseRichMenu>();
@@ -631,6 +630,7 @@ $@"{{
         #endregion
 
         #region Account Link
+
         /// <summary>
         /// Issues a link token used for the account link feature.
         /// <para>https://developers.line.me/en/docs/messaging-api/linking-accounts</para>
@@ -642,13 +642,14 @@ $@"{{
         /// Returns the status code 200 and a link token. Link tokens are valid for 10 minutes and can only be used once.
         /// Note: The validity period may change without notice.
         /// </returns>
-        public async Task<string> IssueLinkTokenAsync(string userId)
+        public virtual async Task<string> IssueLinkTokenAsync(string userId)
         {
             var response = await _client.PostAsync($"{_uri}/bot/user/{userId}/linkToken", null);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeAnonymousType(content, new { linkToken = "" }).linkToken;
         }
+
         #endregion
 
         public void Dispose()
@@ -656,7 +657,7 @@ $@"{{
             _client?.Dispose();
         }
 
-        private async Task<string> GetStringAsync(string requestUri)
+        protected virtual async Task<string> GetStringAsync(string requestUri)
         {
             var response = await _client.GetAsync(requestUri).ConfigureAwait(false);
             await response.EnsureSuccessStatusCodeAsync().ConfigureAwait(false);
