@@ -1,5 +1,8 @@
 # LINE Messaging API
 
+[![NuGet](https://img.shields.io/nuget/v/Line.Messaging.svg)](https://www.nuget.org/packages/Line.Messaging)
+[![NuGet](https://img.shields.io/nuget/dt/Line.Messaging.svg)](https://www.nuget.org/packages/Line.Messaging)
+
 [LINE Messaging API](https://developers.line.me/messaging-api/overview) の C# 用 SDK 実装です。
 
 ## はじめに
