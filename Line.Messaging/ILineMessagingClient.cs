@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Line.Messaging
 {
+    /// <summary>
+    /// LINE Messaging API client, which handles request/response to LINE server.
+    /// </summary>
     public interface ILineMessagingClient
     {
         #region Message 
