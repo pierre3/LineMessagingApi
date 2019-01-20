@@ -72,12 +72,14 @@ namespace Line.Messaging
         public ComponentSize? Size { get; set; }
 
         /// <summary>
-        /// Aspect ratio of the image.<para> 
-        /// You can specify one of the following values: 1:1, 1.51:1, 1.91:1, 4:3, 16:9, 20:13, 2:1, 3:1, 3:4, 9:16, 1:2, or 1:3. 
-        /// The default value is 1:1.</para>
+        /// Aspect ratio of the image. 
+        /// Specify in the {width}:{height} format. <para>
+        /// Specify the value of the {width} property and the {height} property in the range from 1 to 100000. However, 
+        /// you cannot set the {height} property to a value that is more than three times the value of the {width} property. </para>
+        /// The default value is 1:1.
         /// <para>(Optional)</para>
         /// </summary>
-        public AspectRatio? AspectRatio { get; set; }
+        public AspectRatio AspectRatio { get; set; }
 
         /// <summary>
         /// Style of the image.<para> 

@@ -38,10 +38,14 @@ namespace Line.Messaging
         public ComponentSize? Size { get; set; }
 
         /// <summary>
-        /// Aspect ratio of the icon. You can specify one of the following values: 1:1, 2:1, or 3:1. The default value is 1:1.
+        /// Aspect ratio of the image. 
+        /// Specify in the {width}:{height} format. <para>
+        /// Specify the value of the {width} property and the {height} property in the range from 1 to 100000. However, 
+        /// you cannot set the {height} property to a value that is more than three times the value of the {width} property. </para>
+        /// The default value is 1:1.
         /// <para>(Optional)</para>
         /// </summary>
-        public AspectRatio? AspectRatio { get; set; }
+        public AspectRatio AspectRatio { get; set; }
 
         /// <summary>
         /// Constructor
