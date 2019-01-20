@@ -666,7 +666,7 @@ $@"{{
         /// <returns>
         /// <see cref="Line.Messaging.NumberOfSentMessages"/>
         /// </returns>
-        public async Task<NumberOfSentMessages> GetNumberOfSentReplyMessagesAsync(DateTime date)
+        public virtual async Task<NumberOfSentMessages> GetNumberOfSentReplyMessagesAsync(DateTime date)
         {
             var response = await GetStringAsync($"{_uri}/bot/message/delivery/reply?date={date.ToString("yyyyMMdd")}");
             return JsonConvert.DeserializeObject<NumberOfSentMessages>(response);
@@ -684,7 +684,7 @@ $@"{{
         /// <returns>
         /// <see cref="Line.Messaging.NumberOfSentMessages"/>
         /// </returns>
-        public async Task<NumberOfSentMessages> GetNumberOfSentPushMessagesAsync(DateTime date)
+        public virtual async Task<NumberOfSentMessages> GetNumberOfSentPushMessagesAsync(DateTime date)
         {
             var response = await GetStringAsync($"{_uri}/bot/message/delivery/push?date={date.ToString("yyyyMMdd")}");
             return JsonConvert.DeserializeObject<NumberOfSentMessages>(response);
@@ -702,7 +702,7 @@ $@"{{
         /// <returns>
         /// <see cref="Line.Messaging.NumberOfSentMessages"/>
         /// </returns>
-        public async Task<NumberOfSentMessages> GetNumberOfSentMulticastMessagesAsync(DateTime date)
+        public virtual async Task<NumberOfSentMessages> GetNumberOfSentMulticastMessagesAsync(DateTime date)
         {
             var response = await GetStringAsync($"{_uri}/bot/message/delivery/multicast?date={date.ToString("yyyyMMdd")}");
             return JsonConvert.DeserializeObject<NumberOfSentMessages>(response);

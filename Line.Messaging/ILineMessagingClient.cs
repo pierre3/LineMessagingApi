@@ -318,5 +318,52 @@ namespace Line.Messaging
         Task<string> IssueLinkTokenAsync(string userId);
 
         #endregion
+
+        #region Number of sent messages
+
+        /// <summary>
+        /// Gets the number of messages sent with the /bot/message/reply endpoint.
+        /// The number of messages retrieved by this operation does not include the number of messages sent from LINE@ Manager.
+        /// </summary>
+        /// <param name="date">
+        /// - Date the messages were sent
+        /// - Format: yyyyMMdd(Example: 20191231)
+        /// - Timezone: UTC+9
+        /// </param>
+        /// <returns>
+        /// <see cref="Line.Messaging.NumberOfSentMessages"/>
+        /// </returns>
+        Task<NumberOfSentMessages> GetNumberOfSentReplyMessagesAsync(DateTime date);
+
+        /// <summary>
+        /// Gets the number of messages sent with the /bot/message/push endpoint.
+        /// The number of messages retrieved by this operation does not include the number of messages sent from LINE@ Manager.
+        ///</summary>
+        /// <param name="date">
+        /// - Date the messages were sent
+        /// - Format: yyyyMMdd(Example: 20191231)
+        /// - Timezone: UTC+9
+        /// </param>
+        /// <returns>
+        /// <see cref="Line.Messaging.NumberOfSentMessages"/>
+        /// </returns>
+        Task<NumberOfSentMessages> GetNumberOfSentPushMessagesAsync(DateTime date);
+
+        /// <summary>
+        /// Gets the number of messages sent with the /bot/message/push endpoint.
+        /// The number of messages retrieved by this operation does not include the number of messages sent from LINE@ Manager.
+        /// </summary>
+        /// <param name="date">
+        /// - Date the messages were sent
+        /// - Format: yyyyMMdd(Example: 20191231)
+        /// - Timezone: UTC+9
+        /// </param>
+        /// <returns>
+        /// <see cref="Line.Messaging.NumberOfSentMessages"/>
+        /// </returns>
+        Task<NumberOfSentMessages> GetNumberOfSentMulticastMessagesAsync(DateTime date);
+
+        #endregion
+
     }
 }
