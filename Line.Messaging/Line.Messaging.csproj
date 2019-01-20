@@ -6,7 +6,7 @@
     <Company></Company>
     <Product>Line Messaging API</Product>
     <Description>SDK for the LINE Messaging API for C#</Description>
-    <Version>1.4.4</Version>
+    <Version>1.4.5</Version>
     <Copyright>© 2018 pierre3</Copyright>
     <PackageLicenseUrl>https://github.com/pierre3/LineMessagingApi/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,12 +15,15 @@
     <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/pierre3/LineMessagingApi/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Supports the API update at 12/18/2018
+    <PackageReleaseNotes>1. Supports the API update at 1/17/2019
+https://developers.line.biz/en/news/2019/01/
+- New endpoints added to Messaging API
 
-https://developers.line.biz/en/news/2018/12/
-</PackageReleaseNotes>
-    <AssemblyVersion>1.4.4.0</AssemblyVersion>
-    <FileVersion>1.4.4.0</FileVersion>
+2. We reviewed the implementation of the LineMessagingClient class.
+- Added interface ILineMessagingClient.
+- Changed methods of LineMessagingClient class to virtual method.</PackageReleaseNotes>
+    <AssemblyVersion>1.4.5.0</AssemblyVersion>
+    <FileVersion>1.4.5.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
