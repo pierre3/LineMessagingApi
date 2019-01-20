@@ -78,6 +78,9 @@ namespace FunctionAppSample
                 case "@flex":
                     app = new FlexMessageSampleApp(line, log);
                     break;
+                case "@num":
+                    app = new GetNumberOfSentMessagesSampleApp(line, log);
+                    break;
                 default:
                     text = "@";
                     app = new LineBotApp(line, botStatus, blobStorage, log);
