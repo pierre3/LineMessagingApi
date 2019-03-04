@@ -431,7 +431,7 @@ $@"{{
             string continuationToken = null;
             do
             {
-                var ids = await GetGroupMemberIdsAsync(roomId, continuationToken);
+                var ids = await GetRoomMemberIdsAsync(roomId, continuationToken);
 
                 var tasks = ids.MemberIds.Select(async userId => await GetGroupMemberProfileAsync(roomId, userId));
                 var profiles = await Task.WhenAll(tasks.ToArray());
@@ -707,6 +707,7 @@ $@"{{
             var response = await GetStringAsync($"{_uri}/bot/message/delivery/multicast?date={date.ToString("yyyyMMdd")}");
             return JsonConvert.DeserializeObject<NumberOfSentMessages>(response);
         }
+
         #endregion
         
         public void Dispose()
