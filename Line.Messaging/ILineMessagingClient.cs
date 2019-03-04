@@ -364,6 +364,5 @@ namespace Line.Messaging
         Task<NumberOfSentMessages> GetNumberOfSentMulticastMessagesAsync(DateTime date);
 
         #endregion
-
     }
 }
