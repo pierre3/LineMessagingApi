@@ -433,7 +433,7 @@ $@"{{
             {
                 var ids = await GetRoomMemberIdsAsync(roomId, continuationToken);
 
-                var tasks = ids.MemberIds.Select(async userId => await GetGroupMemberProfileAsync(roomId, userId));
+                var tasks = ids.MemberIds.Select(async userId => await GetRoomMemberProfileAsync(roomId, userId));
                 var profiles = await Task.WhenAll(tasks.ToArray());
 
                 result.AddRange(profiles);
