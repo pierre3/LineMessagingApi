@@ -9,6 +9,14 @@ namespace Line.Messaging
         public FlexContainerType Type => FlexContainerType.Bubble;
 
         /// <summary>
+        /// The size of the bubble.
+        /// You can specify one of the following values: nano, micro, kilo, mega, or giga.
+        /// The default value is mega.
+        /// <para>(Optional)</para>
+        /// </summary>
+        public FlexBubbleContainerSize Size => FlexBubbleContainerSize.Mega;
+
+        /// <summary>
         /// Text directionality and the order of components in horizontal boxes in the container. <para>
         /// Specify one of the following values:
         /// / ltr: Left to right
