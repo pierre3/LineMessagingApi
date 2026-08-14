@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> **This repository is no longer actively maintained** and is preserved here as a public archive.
+>
+> 🚀 For ongoing work, please see **[line-openapi-dotnet](https://github.com/pierre3/line-openapi-dotnet)**, a project for generating client code from **LINE's official OpenAPI specifications**.
+
+
 # LINE Messaging API
 
 [![NuGet](https://img.shields.io/nuget/v/Line.Messaging.svg)](https://www.nuget.org/packages/Line.Messaging)
